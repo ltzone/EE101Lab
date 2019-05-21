@@ -1,0 +1,30 @@
+配置工作：
+
+MySQL按照如下配置：
+host='127.0.0.1',
+port=3306,
+user=root,
+passwd为空
+
+随后运行SQLwrite.py
+（运行py文件前请检查pycharm中有关run configuration的目录是否设置正确）
+会创建一个名为FINAL的database
+并且按照所给数据txt相同的格式输入所有数据
+
+solr配置：
+端口8983
+现在Admin中创建名为FINAL的core（记得先复制配置文件夹，见当时PPT solr tutorial P24）
+然后在Admin中手动添加如下schema	配置如下：
+FieldName	Type	Indexed	Stored 	Multi-valued	Required
+PaperID 		string 	Y 	Y 	N 		Y
+PaperName 	text en 	Y 	Y 	N 		Y
+AuthorID 		string 	Y 	Y 	Y 		Y
+AuthorName 	text en 	Y 	Y 	Y 		Y
+ConferenceID 	string 	Y 	Y 	N 		Y
+ConferenceName 	text en 	Y 	Y 	N 		Y
+Year 		string 	Y 	Y 	N 		Y
+
+执行Solrwrite.py 写入所有document
+
+PHP配置，请将htdocs的目录修改到EE101Lab库的根目录下（参考lec6 PPT最后P58）
+
