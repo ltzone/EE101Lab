@@ -6,6 +6,8 @@
 
 同时请参考config_guide中的说明在本地创建名称为FINAL的database和solr core，保持我们以后数据和配置的一致
 
+为避免origin与本地代码的冲突，每个人都在名称为自己缩写的分支上独立开发，在需要的时候merge到master分支上，不允许直接在master分支上的commit
+
 
 ### 有关配置的补充说明：
 git本地，第三步复制SSH链接先跳过，等SSH KEY创建完成后再复制，clone
