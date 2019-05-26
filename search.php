@@ -42,11 +42,15 @@
 			foreach ($result['response']['docs'] as $paper) {
 				echo "<tr>";
 				echo "<td>";
-				$papername2 = ucwords($paper['PaperName']);
-				echo $papername2;
+				
+				
+					$paper_id = $paper['PaperID'];
+					$paper2 = ucwords($paper['PaperName']);
+				echo "<a href=\"paper.php?paper_id=$paper_id\">$paper2; </a>";
+				
 				echo "</td>";
 
-				echo "<td>";
+				echo "<td>";//多值
 				foreach ($paper['AuthorName'] as $idx => $author) {
 					$author_id = substr($paper['AuthorID'][$idx],2,-3);
 					$author2 = ucwords($author);
@@ -54,9 +58,11 @@
 				}
 				echo "</td>";
 
+
 				echo "<td>";
+				$conference_id = $paper['ConferenceID'];
 				$conference = $paper['ConferenceName'];
-				echo $conference;
+				echo "<a href=\"conference.php?conference_id=$conference_id\">$conference; </a>";
 				echo "</td>";
 				echo "</tr>";
 			}
@@ -80,23 +86,30 @@
 			foreach ($result['response']['docs'] as $paper) {
 				echo "<tr>";
 				echo "<td>";
+				$paper_id = $paper['PaperID'];
 				$papername2 = ucwords($paper['PaperName']);
-				echo $papername2;
+				echo "<a href=\"paper.php?paper_id=$paper_id\">$papername2; </a>";
 				echo "</td>";
 
+		
 				echo "<td>";
 				foreach ($paper['AuthorName'] as $idx => $author) {
-					$author_id = $paper['AuthorID'][$idx];
+					$author_id = substr($paper['AuthorID'][$idx],2,-3);
 					$author2 = ucwords($author);
 					echo "<a href=\"author.php?author_id=$author_id\">$author2; </a>";
 				}
 				echo "</td>";
-
+				
+				
+				
+				
 				echo "<td>";
+				$conference_id = $paper['ConferenceID'];
 				$conference = $paper['ConferenceName'];
-				echo $conference;
+				echo "<a href=\"conference.php?conference_id=$conference_id\">$conference; </a>";
 				echo "</td>";
 				echo "</tr>";
+
 			}
 			echo "</table><br><br>";
 		}
@@ -119,26 +132,30 @@
 			foreach ($result['response']['docs'] as $paper) {
 				echo "<tr>";
 				echo "<td>";
+				$paper_id = $paper['PaperID'];
 				$papername2 = ucwords($paper['PaperName']);
-				echo $papername2;
+				echo "<a href=\"paper.php?paper_id=$paper_id\">$papername2; </a>";
 				echo "</td>";
 
 				echo "<td>";
 				foreach ($paper['AuthorName'] as $idx => $author) {
-					$author_id = $paper['AuthorID'][$idx];
+					$author_id = substr($paper['AuthorID'][$idx],2,-3);
 					$author2 = ucwords($author);
 					echo "<a href=\"author.php?author_id=$author_id\">$author2; </a>";
 				}
 				echo "</td>";
 
 				echo "<td>";
+				$conference_id =$paper['ConferenceID'];
 				$conference = $paper['ConferenceName'];
-				echo $conference;
+				echo "<a href=\"conference.php?conference_id=$conference_id\">$conference; </a>";
 				echo "</td>";
 				echo "</tr>";
 			}
 			echo "</table><br><br>";
-		}
+		}echo "<pre>";
+		echo var_dump($result);
+		echo "<\pre>";
 		# 请补充针对AuthorName以及ConferenceName的搜索
 	?>
 </div>

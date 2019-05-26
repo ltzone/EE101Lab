@@ -3,7 +3,7 @@
 <head>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link href="css/style.css" rel="stylesheet" type="text/css" />
-<title>Author Page</title>
+<title>Conference Page</title>
 
 </head>
 
@@ -13,7 +13,7 @@
  	<div class="header">
       <div class="container"> 
   	     <div class="logo">
-			<h1><a href="index.php">Author Page</a></h1>
+			<h1><a href="index.php">Conference Page</a></h1>
 		 </div>
 		 <div class="clearfix">
 		 </div>
@@ -22,25 +22,16 @@
 
 <div class="container">
 	<?php
-		$author_id = $_GET["author_id"];
+		$conference_id = $_GET["conference_id"];
 		$link = mysqli_connect("localhost:3306", 'root', '770528', 'FINAL');
-		$result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$author_id'");
+		$result = mysqli_query($link, "SELECT ConferenceName from conferences where ConferenceID='$conference_id'");
 		if ($result) {
-			$author_name = mysqli_fetch_array($result)['AuthorName'];
-			$author_name2 = ucwords($author_name);
-			echo "<h1 style=\"font-family:Arial Black\"> $author_name2</h1>";
+			$conference_name = mysqli_fetch_array($result)['ConferenceName'];
+			$conference_name2 = ucwords($conference_name);
+			echo "<h1 style=\"font-family:Arial Black\"> $conference_name2</h1>";
 			
-		$result = mysqli_query($link, "SELECT Affiliations.AffiliationID, Affiliations.AffiliationName from (select AffiliationID, count(*) as cnt from paper_author_affiliation where AuthorID='$author_id' and AffiliationID is not null group by AffiliationID order by cnt desc) as tmp inner join Affiliations on tmp.AffiliationID = Affiliations.AffiliationID");
 
-		if ($result->num_rows>0){
-			echo "<p style=\"font-family:Arial;font-size:20px;bold;\">Affiliations: </p>";
-			foreach ($result as $affline){
-				$Affi_name = ucwords($affline['AffiliationName']);
-				echo "<p style=\"font-size:15px;\">$Affi_name</p>";}
-			}
-
-
-		$result = mysqli_query($link, "SELECT PaperID from paper_author_affiliation where AuthorID='$author_id'");
+		$result = mysqli_query($link, "SELECT PaperID from papers where ConferenceID='$conference_id'");
 		if ($result) {
 			echo "<table border=\"0\" frame=\"hsides\"><tr><th>Title</th><th>Authors</th><th>Conference</th></tr>";
 			while ($row = mysqli_fetch_array($result)) {
