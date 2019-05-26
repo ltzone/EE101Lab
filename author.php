@@ -1,6 +1,8 @@
 <!DOCTYPE html> 
 <html>
 <head>
+    <meta charset="utf-8">
+    <script src="echarts.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <title>Author Page</title>
@@ -41,6 +43,7 @@
 
 
 		$result = mysqli_query($link, "SELECT PaperID from paper_author_affiliation where AuthorID='$author_id'");
+
 		if ($result) {
 			echo "<table border=\"0\" frame=\"hsides\"><tr><th>Title</th><th>Authors</th><th>Conference</th></tr>";
 			while ($row = mysqli_fetch_array($result)) {
@@ -74,9 +77,6 @@
 					echo $conference_name2;
 					echo "</td>";
 
-
-
-
 				}
 				# 请增加根据paper id在PaperAuthorAffiliations与Authors两个表中进行联合查询，找到根据AuthorSequenceNumber排序的作者列表，并且显示出来的部分
 
@@ -86,6 +86,12 @@
 				echo "</tr>";
 			}
 			echo "</table>";
+
+			# 有关echarts会议的统计数据
+			$result = mysqli_query($link,"SELECT ConferenceName, count(*) AS ConferenceName FROM (paper_author_affiliation C INNER JOIN (SELECT A.PaperID, B.ConferenceName FROM papers A INNER JOIN conferences B ON A.ConferenceID = B.ConferenceID) D ON D.PaperID = C.PaperID) WHERE C.AuthorID = '$author_id' GROUP BY ConferenceName");
+			$conference_num = json_encode(mysqli_fetch_all($result));
+			echo "<pre>";var_dump($conference_num);echo "<pre>";
+			
 		}
 
 
