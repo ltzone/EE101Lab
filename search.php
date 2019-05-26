@@ -86,7 +86,7 @@
 
 				echo "<td>";
 				foreach ($paper['AuthorName'] as $idx => $author) {
-					$author_id = $paper['AuthorID'][$idx];
+					$author_id = substr($paper['AuthorID'][$idx],2,-3);
 					$author2 = ucwords($author);
 					echo "<a href=\"author.php?author_id=$author_id\">$author2; </a>";
 				}
@@ -125,7 +125,7 @@
 
 				echo "<td>";
 				foreach ($paper['AuthorName'] as $idx => $author) {
-					$author_id = $paper['AuthorID'][$idx];
+					$author_id = substr($paper['AuthorID'][$idx],2,-3);
 					$author2 = ucwords($author);
 					echo "<a href=\"author.php?author_id=$author_id\">$author2; </a>";
 				}
