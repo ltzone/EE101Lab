@@ -1,6 +1,8 @@
 <!DOCTYPE html> 
 <html>
 <head>
+
+<meta http-equiv="content-type" content="text/html; charset=gbk" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <title>Author Page</title>
@@ -21,8 +23,15 @@
 	</div>
 
 <div class="container">
+
+ 
 	<?php
+
+
+ 
+
 		$author_id = $_GET["author_id"];
+		$author_ex_id = ucwords($author_id);
 		$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 		$result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$author_id'");
 		if ($result) {
@@ -38,11 +47,64 @@
 				$Affi_name = ucwords($affline['AffiliationName']);
 				echo "<p style=\"font-size:15px;\">$Affi_name</p>";}
 			}
-
-
-		$result = mysqli_query($link, "SELECT PaperID from paper_author_affiliation where AuthorID='$author_id'");
+		$page_num=$_GET['page'];
+  if(!$page_num)
+  {
+  	$page_num = 1;
+  }
+echo $page_num;
+  $result = mysqli_query($link, "SELECT count(PaperID) from paper_author_affiliation where AuthorID='$author_id' ");//var_dump($result);
+  $row = $result->fetch_array();
+  $num_results = $row[0];//var_dump($num_results);
+  $page_total=(integer)(($num_results+2)/3);
+  //echo $page_total;
+  echo '<p>共'.$page_total.'页/每页3条   共'.$num_results.'条内容。</p>';
+   if($page_total>$page_num )
+   {
+	  	if($page_num>1)
+	  	{
+		  	echo '<a href="./author.php?page='.($page_num-1).'">上一页</a>';
+		  	echo " "."$page_num".'/'."$page_total"." ";
+		  	echo '<a href="./author.php?page='.($page_num+1).'?author_id=$author_ex_id">下一页</a>';
+		  	if (($num_results-($page_num-1)*3)<3)
+		  	{
+		  		$print_line = $num_results-$page_num*3;
+		  	}
+		  	else 
+		  	{
+		  		$print_line = 3;
+		  	}
+	  	}
+	  	else 
+	  	{
+	  		echo '上一页';
+		  	echo " "."$page_num".'/'."$page_total"." ";
+		  	echo '<a href="./author.php?page='.($page_num+1).'">下一页</a>';
+	  		$print_line = 3;
+	  	}
+   }
+   else
+   {
+   		if($page_total==1)
+  		{
+	  		echo '上一页';
+		  	echo " "."$page_num".'/'."$page_total"." ";
+		  	echo '下一页';
+		    $print_line = $num_results;
+  		}
+  		else
+  		{
+  			echo '<a href="./author.php?page='.($page_num-1).'">上一页</a>';
+	  		echo " "."$page_num".'/'."$page_total"." ";
+	  		echo '下一页';
+	  	  
+	  		$print_line = $num_results-($page_num-1)*3;
+  		}
+   }
+		$result = mysqli_query($link, "SELECT PaperID from paper_author_affiliation where AuthorID='$author_id'limit ".(($page_num-1)*3).",3 ");
 		if ($result) {
 			echo "<table border=\"0\" frame=\"hsides\"><tr><th>Title</th><th>Authors</th><th>Conference</th></tr>";
+
 			while ($row = mysqli_fetch_array($result)) {
 				echo "<tr>";
 				$paper_id = $row['PaperID'];
@@ -86,6 +148,7 @@
 				echo "</tr>";
 			}
 			echo "</table>";
+			
 		}
 
 
