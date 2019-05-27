@@ -22,14 +22,16 @@
 <div class="container">
 	<h1>Search Results</h1>
 	<?php
-		$paper_title = $_GET["paper_title"];
-		if ($paper_title) {
-			$paper_title2 = ucwords($paper_title);
-			echo "Search for Title: ".$paper_title2;
+
+		$keyword = $_GET["keyword"];
+		if ($keyword) {
+			//
+			$keyword2 = ucwords($keyword);
+			echo "Keywords: ".$keyword2;
 			$ch = curl_init();
 			$timeout = 5;
-			$query = urlencode(str_replace(' ', '+', $paper_title));
-			$url = "http://localhost:8983/solr/FINAL/select?q=PaperName%3A".$query."&wt=json";
+			$query = urlencode(str_replace(' ', '+', $keyword));
+			$url = "http://localhost:8983/solr/FINAL/select?q=keyword%3A".$query."&wt=json";
 
 			curl_setopt ($ch, CURLOPT_URL, $url);
 			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -38,97 +40,6 @@
 			curl_close($ch);
 			echo "<table border=\"0\" frame=\"hsides\" ><tr><th>Title</th><th>Authors</th><th>Conference</th></tr>";
 
-
-			foreach ($result['response']['docs'] as $paper) {
-				echo "<tr>";
-				echo "<td>";
-				
-				
-					$paper_id = $paper['PaperID'];
-					$paper2 = ucwords($paper['PaperName']);
-				echo "<a href=\"paper.php?paper_id=$paper_id\">$paper2; </a>";
-				
-				echo "</td>";
-
-				echo "<td>";//多值
-				foreach ($paper['AuthorName'] as $idx => $author) {
-					$author_id = substr($paper['AuthorID'][$idx],2,-3);
-					$author2 = ucwords($author);
-					echo "<a href=\"author.php?author_id=$author_id\">$author2; </a>";
-				}
-				echo "</td>";
-
-
-				echo "<td>";
-				$conference_id = $paper['ConferenceID'];
-				$conference = $paper['ConferenceName'];
-				echo "<a href=\"conference.php?conference_id=$conference_id\">$conference; </a>";
-				echo "</td>";
-				echo "</tr>";
-			}
-			echo "</table><br><br>";
-		}
-		$conference_name = $_GET["conference_name"];
-		if ($conference_name) {
-			echo "Search for ConferenceName: ".$conference_name;
-			$ch = curl_init();
-			$timeout = 5;
-			$query = urlencode(str_replace(' ', '+', $conference_name));
-			$url = "http://localhost:8983/solr/FINAL/select?q=ConferenceName%3A".$query."&wt=json";
-
-			curl_setopt ($ch, CURLOPT_URL, $url);
-			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-			$result = json_decode(curl_exec($ch), true);
-			curl_close($ch);
-			echo "<table border=\"0\" frame=\"hsides\" ><tr><th>Title</th><th>Authors</th><th>Conference</th></tr>";
-
-			foreach ($result['response']['docs'] as $paper) {
-				echo "<tr>";
-				echo "<td>";
-				$paper_id = $paper['PaperID'];
-				$papername2 = ucwords($paper['PaperName']);
-				echo "<a href=\"paper.php?paper_id=$paper_id\">$papername2; </a>";
-				echo "</td>";
-
-		
-				echo "<td>";
-				foreach ($paper['AuthorName'] as $idx => $author) {
-					$author_id = substr($paper['AuthorID'][$idx],2,-3);
-					$author2 = ucwords($author);
-					echo "<a href=\"author.php?author_id=$author_id\">$author2; </a>";
-				}
-				echo "</td>";
-				
-				
-				
-				
-				echo "<td>";
-				$conference_id = $paper['ConferenceID'];
-				$conference = $paper['ConferenceName'];
-				echo "<a href=\"conference.php?conference_id=$conference_id\">$conference; </a>";
-				echo "</td>";
-				echo "</tr>";
-
-			}
-			echo "</table><br><br>";
-		}
-
-
-		$author_name = $_GET["author_name"];
-		if ($author_name) {
-			echo "Search for AuthorName: ".$author_name;
-			$ch = curl_init();
-			$timeout = 5;
-			$query = urlencode(str_replace(' ', '+', $author_name));
-			$url = "http://localhost:8983/solr/FINAL/select?q=AuthorName%3A".$query."&wt=json";
-
-			curl_setopt ($ch, CURLOPT_URL, $url);
-			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-			$result = json_decode(curl_exec($ch), true);
-			curl_close($ch);
-			echo "<table border=\"0\" frame=\"hsides\" ><tr><th>Title</th><th>Authors</th><th>Conference</th></tr>";
 			foreach ($result['response']['docs'] as $paper) {
 				echo "<tr>";
 				echo "<td>";
@@ -153,12 +64,9 @@
 				echo "</tr>";
 			}
 			echo "</table><br><br>";
-		}echo "<pre>";
-		echo var_dump($result);
-		echo "<\pre>";
-		# 请补充针对AuthorName以及ConferenceName的搜索
+		}
+
 	?>
 </div>
 </body>
-
 </html>

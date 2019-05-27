@@ -7,8 +7,6 @@
 
 </head>
 
-
-
 <body>
  	<div class="header">
       <div class="container"> 
@@ -23,7 +21,7 @@
 <div class="container">
 	<?php
 		$conference_id = $_GET["conference_id"];
-		$link = mysqli_connect("localhost:3306", 'root', '770528', 'FINAL');
+		$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 		$result = mysqli_query($link, "SELECT ConferenceName from conferences where ConferenceID='$conference_id'");
 		if ($result) {
 			$conference_name = mysqli_fetch_array($result)['ConferenceName'];
@@ -37,7 +35,6 @@
 			while ($row = mysqli_fetch_array($result)) {
 				echo "<tr>";
 				$paper_id = $row['PaperID'];
-				# 请增加对mysqli_query查询结果是否为空的判断
 				$paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID from papers where PaperID='$paper_id'"));
 				if ($paper_info){
 					$paper_title = $paper_info['Title'];
@@ -64,47 +61,16 @@
 					$conference_name2 = ucwords($conference_name);
 					echo $conference_name2;
 					echo "</td>";
-
-
-
-
 				}
-				# 请增加根据paper id在PaperAuthorAffiliations与Authors两个表中进行联合查询，找到根据AuthorSequenceNumber排序的作者列表，并且显示出来的部分
-
-
-				# 请补充根据$conf_id查询conference name并显示的部分
-
 				echo "</tr>";
 			}
 			echo "</table>";
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		} else {
 			echo "Name not found";
 		}
 
-
-
-
-
-
-
-
 	?>
 </div>
 </body>
-
 </html>

@@ -24,21 +24,9 @@
 	    	<h2>Enter Your Keywords</h2>
 			<form class="form-horizontal" action="search.php">
 			  <div class="form-group">
-			    <label for="paper_title" class="col-sm-2 control-label">Paper Title</label>
+			    <label for="keyword" class="col-sm-2 control-label">Keywords</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" id="paper_title" name="paper_title">
-			    </div>
-			  </div>
-			  <div class="form-group">
-			    <label for="author_name" class="col-sm-2 control-label">Author's Name</label>
-			    <div class="col-sm-10">
-			      <input type="text" class="form-control" id="author_name" name="author_name">
-			    </div>
-			  </div>
-			  <div class="form-group">
-			    <label for="conference_name" class="col-sm-2 control-label">Conference's Name</label>
-			    <div class="col-sm-10">
-			      <input type="text" class="form-control" id="conference_name" name="conference_name">
+			      <input type="text" class="form-control" id="keyword" name="keyword">
 			    </div>
 			  </div>
 			  <div class="form-group">
