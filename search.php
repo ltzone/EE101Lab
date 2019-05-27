@@ -39,14 +39,13 @@
 			$result = json_decode(curl_exec($ch), true);
 			curl_close($ch);
 			echo "<table border=\"0\" frame=\"hsides\" ><tr><th>Title</th><th>Authors</th><th>Conference</th></tr>";
-			//
-
 
 			foreach ($result['response']['docs'] as $paper) {
 				echo "<tr>";
 				echo "<td>";
+				$paper_id = $paper['PaperID'];
 				$papername2 = ucwords($paper['PaperName']);
-				echo $papername2;
+				echo "<a href=\"paper.php?paper_id=$paper_id\">$papername2; </a>";
 				echo "</td>";
 
 				echo "<td>";
@@ -58,8 +57,9 @@
 				echo "</td>";
 
 				echo "<td>";
+				$conference_id =$paper['ConferenceID'];
 				$conference = $paper['ConferenceName'];
-				echo $conference;
+				echo "<a href=\"conference.php?conference_id=$conference_id\">$conference; </a>";
 				echo "</td>";
 				echo "</tr>";
 			}
@@ -69,5 +69,4 @@
 	?>
 </div>
 </body>
-
 </html>
