@@ -1,7 +1,7 @@
 # EE101Lab
 2019 Spring Semester EE101 Final Project Working Space :D
 
-## Notice 0527
+# Notice 0527
 
 index.php中已由方少恒改成整合搜索框的形式，为此需要在solr admin中进行如下配置
 
@@ -29,6 +29,22 @@ source: ConferenceName  destination: keyword
 
 配置完成后需重新跑一遍Solrwrite.py
 
+# WIKI V1.0 0527
+
+已实现功能：
+
+1. Integrated Search Bar by fsh
+2. conference.php/paper.php by yhb (half completed)
+3. Echarts demo by zlt (expecting to be promoted)
+4. Leaf flipping (of SQL results) by dsw (still working)
+
+待修复BUG：
+
+- conference.php/paper.php 中超链接的完善
+- search result 中对无结果的提示
+- paper.php 中reference的显示
+- conference.php 中显示结果太多，需要翻页
+- search (solr) result 的翻页
 
 
 ## Notice 0521
