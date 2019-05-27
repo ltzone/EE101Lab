@@ -45,13 +45,11 @@
 
 
 		$result = mysqli_query($link, "SELECT PaperID from paper_author_affiliation where AuthorID='$author_id'");
-
 		if ($result) {
 			echo "<table border=\"0\" frame=\"hsides\"><tr><th>Title</th><th>Authors</th><th>Conference</th></tr>";
 			while ($row = mysqli_fetch_array($result)) {
 				echo "<tr>";
 				$paper_id = $row['PaperID'];
-				# 请增加对mysqli_query查询结果是否为空的判断
 				$paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID from papers where PaperID='$paper_id'"));
 				if ($paper_info){
 					$paper_title = $paper_info['Title'];
@@ -80,10 +78,6 @@
 					echo "</td>";
 
 				}
-				# 请增加根据paper id在PaperAuthorAffiliations与Authors两个表中进行联合查询，找到根据AuthorSequenceNumber排序的作者列表，并且显示出来的部分
-
-
-				# 请补充根据$conf_id查询conference name并显示的部分
 
 				echo "</tr>";
 			}
@@ -110,20 +104,6 @@
 			echo "<script src=\"js/mycharts.js\"> conference_graph($conference_counts,$conference_names);
 			//</script>";
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		} else {
 			echo "Name not found";
 		}
@@ -131,5 +111,4 @@
 	?>
 </div>
 </body>
-
 </html>
