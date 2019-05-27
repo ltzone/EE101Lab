@@ -50,6 +50,7 @@
 			}
 
 		$page_num=$_GET['page'];
+
   if(!$page_num)
   {
   	$page_num = 1;
@@ -187,9 +188,4 @@
 	?>
 </div>
 </body>
-
-
-
-
-
 </html>
