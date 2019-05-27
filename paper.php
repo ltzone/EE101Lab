@@ -42,7 +42,6 @@
 			$row = mysqli_fetch_array($result);
 				echo "<tr>";
 				$paper_id = $row['PaperID'];
-				# 请增加对mysqli_query查询结果是否为空的判断
 				$paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT ConferenceID , PaperPublishYear from papers where PaperID='$paper_id'"));
 				if ($paper_info){
 				
@@ -56,26 +55,10 @@
 					}
 					echo "</td>";
 					
-					//$paper_title = $paper_info['Title'];
 					$conference_id = $paper_info['ConferenceID'];
-					//$paper_title2 = ucwords($paper_title);
-					//echo "<td>$paper_title2</td>";
 					$year= $paper_info['PaperPublishYear'];
-					
-					//echo "<td>";
-					
-
-
-					
-
-
 
 				}
-				# 请增加根据paper id在PaperAuthorAffiliations与Authors两个表中进行联合查询，找到根据AuthorSequenceNumber排序的作者列表，并且显示出来的部分
-
-
-				# 请补充根据$conf_id查询conference name并显示的部分
-				
 
 				
 
@@ -91,22 +74,11 @@
 					echo "<td>";
 					echo $year;
 					echo "<td>";
-					
-			
-			
-			
-			
-			
+
 			echo "</table>";
 		} else {
 			echo "Paper not found";
 		}
-
-
-
-
-
-
 
 	
 		#reference查找
@@ -119,9 +91,6 @@
 		$result = mysqli_fetch_all(mysqli_query($link, "SELECT Title from papers where PaperID='$reference_id1'"));
 		$reference_name1 = $result[0][0];
 		echo "<pre>"; echo $reference_name1; echo "</pre>";
-
-		
-
 
 	?>
 </div>

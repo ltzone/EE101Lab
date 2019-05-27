@@ -39,7 +39,6 @@
 			$result = json_decode(curl_exec($ch), true);
 			curl_close($ch);
 			echo "<table border=\"0\" frame=\"hsides\" ><tr><th>Title</th><th>Authors</th><th>Conference</th></tr>";
-			//
 
 			foreach ($result['response']['docs'] as $paper) {
 				echo "<tr>";
