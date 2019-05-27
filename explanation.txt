@@ -1,0 +1,15 @@
+在solr原有FINAL中配置:
+1.Add Field:
+name: keyword
+field type: text_en
+stored:Y
+indexed:Y
+multivalued:Y
+required:N
+2.Add Copy Field:(3 times)
+source: PaperName  destination: keyword
+source: AuthorName  destination: keyword
+source: ConferenceName  destination: keyword
+
+配置完成后需重新跑一遍Solrwrite.py
+
