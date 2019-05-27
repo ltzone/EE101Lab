@@ -16,7 +16,8 @@ get_AuthorID = 'SELECT `AuthorID` FROM `paper_author_affiliation` WHERE `PaperID
 get_AuthorName_fromID = 'SELECT `AuthorName` FROM `authors` WHERE `AuthorID` = %s'
 
 
-solr.delete('*:*')
+solr.delete(q='*:*')
+solr.commit()
 f = open('D:/SQLLab/data/papers.txt','r', encoding='UTF-8')
 index = 0
 while True:
