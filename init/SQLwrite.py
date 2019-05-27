@@ -1,5 +1,5 @@
 import pymysql
-
+'''
 conn = pymysql.connect( host='127.0.0.1',
                         port=3306,
                         user='root',
@@ -10,7 +10,7 @@ crusor = conn.cursor()
 
 # create the database
 crusor.execute('create database FINAL character set UTF8mb4 collate utf8mb4_general_ci')
-
+'''
 conn = pymysql.connect( host='127.0.0.1',
                         port=3306,
                         user='root',
@@ -18,7 +18,7 @@ conn = pymysql.connect( host='127.0.0.1',
                         charset='utf8',
                         db = 'FINAL',)
 crusor = conn.cursor()
-
+'''
 #create table papers
 crusor.execute('CREATE TABLE `papers`( \
                `PaperID` VARCHAR(10) NOT NULL,\
@@ -191,9 +191,25 @@ while True:
         conn.commit()
 f.close()
 conn.commit()
+'''
 
+crusor.execute(
+'SELECT ConferenceName, count(*) AS ConferenceName \
+FROM (paper_author_affiliation C INNER JOIN \
+(SELECT A.PaperID, B.ConferenceName FROM papers A INNER JOIN conferences B ON A.ConferenceID = B.ConferenceID) D ON D.PaperID = C.PaperID) \
+WHERE C.`AuthorID` = %s GROUP BY ConferenceName','7E8875DB')
+'''
+crusor.execute(
+'SELECT B.Conference, count(*) AS B.ConferenceName \
+FROM (paper_author_affiliation C INNER JOIN \
+(SELECT * FROM papers A INNER JOIN conferences B ON A.ConferenceID = B.ConferenceID) D ON D.PaperID = C.PaperID) \
+WHERE C.AuthorID = `7E8875DB`'
 
+  )
+'''
 
+result = crusor.fetchall()
+print (result)
 '''
 title_pubyr = 'SELECT `Title`,`PaperPublishYear` FROM `papers` WHERE `PaperID` = %s'
 authorid = 'SELECT `AuthorID` FROM `paper_author_affiliation` WHERE `PaperID` = %s ORDER BY AuthorSequence ASC'
@@ -224,5 +240,3 @@ else:
     print('Citing Numbers:', citn)
 
 '''
-
-

@@ -2,15 +2,15 @@
 <!DOCTYPE html> 
 <html>
 <head>
-
 <meta http-equiv="content-type" content="text/html; charset=gbk" />
+    <meta charset="utf-8">
+    <script src="js/echarts.js"></script>
+    <script src="js/mycharts.js"></script>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <title>Author Page</title>
-
 </head>
-
-
 
 <body>
  	<div class="header">
@@ -118,7 +118,6 @@
 			while ($row = mysqli_fetch_array($result)) {
 				echo "<tr>";
 				$paper_id = $row['PaperID'];
-				# 请增加对mysqli_query查询结果是否为空的判断
 				$paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID from papers where PaperID='$paper_id'"));
 				if ($paper_info){
 					$paper_title = $paper_info['Title'];
@@ -146,44 +145,36 @@
 					echo $conference_name2;
 					echo "</td>";
 
-
-
-
 				}
-				# 请增加根据paper id在PaperAuthorAffiliations与Authors两个表中进行联合查询，找到根据AuthorSequenceNumber排序的作者列表，并且显示出来的部分
-
-
-				# 请补充根据$conf_id查询conference name并显示的部分
 
 				echo "</tr>";
 			}
 			echo "</table>";
-			
+
+			# 有关echarts会议的统计数据
+			$result = mysqli_query($link,"SELECT count(*) AS ConferenceName, ConferenceName FROM (paper_author_affiliation C INNER JOIN (SELECT A.PaperID, B.ConferenceName FROM papers A INNER JOIN conferences B ON A.ConferenceID = B.ConferenceID) D ON D.PaperID = C.PaperID) WHERE C.AuthorID = '$author_id' GROUP BY ConferenceName");
+			$conference_num = mysqli_fetch_all($result);
+
+			# 整理数据
+			$conference_names = array();
+			$conference_counts = array();
+			foreach ($conference_num as $conference_num_line){
+				array_push($conference_counts,intval($conference_num_line[0]));
+				array_push($conference_names,$conference_num_line[1]);
+			}
+			$conference_names = json_encode($conference_names);
+			$conference_counts = json_encode($conference_counts);
+
+			# 创建一个div元素，调用自己写的mycharts中的制图函数
+
+			$author_name3 = json_decode($author_name2);
+			echo "<div id=\"main\" style=\"width:600px; height: 400px;\"></div>";
+			echo "<script src=\"js/mycharts.js\"> conference_graph($conference_counts,$conference_names);
+			//</script>";
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		} else {
 			echo "Name not found";
 		}
-
-
-
-
-
-
-
 
 	?>
 </div>
