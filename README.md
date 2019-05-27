@@ -1,7 +1,37 @@
 # EE101Lab
 2019 Spring Semester EE101 Final Project Working Space :D
 
-## Notice
+## Notice 0527
+
+index.php中已由方少恒改成整合搜索框的形式，为此需要在solr admin中进行如下配置
+
+1.Add Field:
+
+name: keyword
+
+field type: text_en
+
+stored:Y
+
+indexed:Y
+
+multivalued:Y
+
+required:N
+
+2.Add Copy Field:(3 times)
+
+source: PaperName  destination: keyword
+
+source: AuthorName  destination: keyword
+
+source: ConferenceName  destination: keyword
+
+配置完成后需重新跑一遍Solrwrite.py
+
+
+
+## Notice 0521
 请在星期五之前将github相关的配置完成
 
 同时请参考config_guide中的说明在本地创建名称为FINAL的database和solr core，保持我们以后数据和配置的一致
