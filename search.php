@@ -20,12 +20,14 @@
 
 
 <div class="container">
-	<h1>Search Results</h1>
 	<?php
 
 		$keyword = $_GET["keyword"];
 		if ($keyword) {
-			//
+			// searchinfo分区，显示会议具体信息
+			echo "<div class = 'searchinfo'>";
+			echo "<h1>Search Results</h1>";
+			//显示keyword，执行搜索
 			$keyword2 = ucwords($keyword);
 			echo "Keywords: ".$keyword2;
 			$ch = curl_init();
@@ -38,33 +40,47 @@
 			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 			$result = json_decode(curl_exec($ch), true);
 			curl_close($ch);
-			echo "<table border=\"0\" frame=\"hsides\" ><tr><th>Title</th><th>Authors</th><th>Conference</th></tr>";
-
+			echo "</div>";
+			// 显示搜索结果的分区
+			echo "<hr>";
+if ($result['response']['numFound']>0){
+			echo "<div class='paperlis'>";
 			foreach ($result['response']['docs'] as $paper) {
-				echo "<tr>";
-				echo "<td>";
+
 				$paper_id = $paper['PaperID'];
 				$papername2 = ucwords($paper['PaperName']);
-				echo "<a href=\"paper.php?paper_id=$paper_id\">$papername2; </a>";
-				echo "</td>";
+				echo "<a href=\"paper.php?paper_id=$paper_id\"><h3>$papername2</h3></a>";
+				echo "<table>";
+				echo "<tr><td width = '120'><b> Authors: </b></td><td>";
 
-				echo "<td>";
+
 				foreach ($paper['AuthorName'] as $idx => $author) {
 					$author_id = substr($paper['AuthorID'][$idx],2,-3);
 					$author2 = ucwords($author);
-					echo "<a href=\"author.php?author_id=$author_id\">$author2; </a>";
+					echo "<a href=\"author.php?page=1&author_id=$author_id\">$author2</a>";
+					echo "; ";
 				}
-				echo "</td>";
-
-				echo "<td>";
+				echo "</td></tr>";
+				echo "<tr><td><b> Conference: </b></td><td>";
 				$conference_id =$paper['ConferenceID'];
 				$conference = $paper['ConferenceName'];
-				echo "<a href=\"conference.php?conference_id=$conference_id\">$conference; </a>";
-				echo "</td>";
-				echo "</tr>";
+				echo "<a href=\"conference.php?page=1&conference_id=$conference_id\">$conference</a>";
+				echo "; ";
+				echo "</td></tr>";
+				echo "</table>";
+				echo "<hr>";
+
+			// 显示charts的分区
+				echo "<div class='chartlis'>";
+
+
+				echo "</div>";
 			}
-			echo "</table><br><br>";
+			echo "</div>";
 		}
+else {echo "No Search Results!";}
+
+}
 
 	?>
 </div>
