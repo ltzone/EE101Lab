@@ -38,9 +38,9 @@
 			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 			$result = json_decode(curl_exec($ch), true);
 			curl_close($ch);
-
 			// 显示搜索结果的分区
 			echo "<hr>";
+if ($result['response']['numFound']>0){
 			echo "<div class='paperlis'>";
 			foreach ($result['response']['docs'] as $paper) {
 
@@ -62,18 +62,21 @@
 				echo "<br><b> Conference: </b>";
 				$conference_id =$paper['ConferenceID'];
 				$conference = $paper['ConferenceName'];
-				echo "<a href=\"conference.php?conference_id=$conference_id\">$conference</a>";
+				echo "<a href=\"conference.php?page=1&conference_id=$conference_id\">$conference</a>";
 				echo "; ";
 				echo "<hr>";
 
 			// 显示charts的分区
 				echo "<div class='chartlis'>";
 
-				
+
 				echo "</div>";
 			}
 			echo "</div>";
 		}
+else {echo "No Search Results!";}
+
+}
 
 	?>
 </div>
