@@ -170,6 +170,10 @@
 			echo "<div id=\"main\" style=\"width:600px; height: 400px;\"></div>";
 			echo "<script src=\"js/mycharts.js\"> conference_graph($conference_counts,$conference_names);
 			//</script>";
+
+
+			# 有关echarts会议的统计数据
+			// $result = mysqli_query($link,"SELECT count(*) AS Yearcount, PaperPublishYear FROM (paper_author_affiliation C INNER JOIN papers D ON D.PaperID = C.PaperID) WHERE C.AuthorID = '".$' GROUP BY PaperPublishYear order by PaperPublishYear asc;
 		}
 		} else {
 			echo "Name not found";
