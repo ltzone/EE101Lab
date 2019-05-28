@@ -40,11 +40,43 @@ source: ConferenceName  destination: keyword
 
 待修复BUG：
 
-- conference.php/paper.php 中超链接的完善
-- search result 中对无结果的提示
-- paper.php 中reference的显示
-- conference.php 中显示结果太多，需要翻页
-- search (solr) result 的翻页
+- conference.php/paper.php 中超链接的完善 [yhb]
+- search result 中对无结果的提示 [dsw]
+- paper.php 中reference的显示 [yhb]
+- search (solr) result 的翻页 [dsw]
+
+新功能：
+
+- ***优化语句** [fsh]
+
+- css [zlt]
+
+- conference.php
++ 美化（去表格）[zlt]
++ 输入页码翻页 [dsw]
++ 年份图表(year) MYSQL [fsh]
+
+- author.php
++ 美化（去表格）[zlt]
++ **作者关系图**
++ 一般图表(year) MYSQL [fsh]
++ **部分加载**
++ 输入页码翻页 [dsw]
++ ***推荐其他作者的文章**
+
+- index.php
++ 抄模板 [zlt]
++ conference 加到首页上去 [zlt]
+
+- search.php
++ 美化（去表格）[zlt]
++ 输入页码翻页 [dsw]
++ 所有和关键词有关的年份、author、conference echarts(solr related) [fsh]
+
+- paper.php
++ 推荐相关论文,搜共同作者的相关论文(MySQL) [yhb]
+**+ *通过共同引用推荐**
++ 其他信息，如被引用数 [yhb]
 
 
 ## Notice 0521
