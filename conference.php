@@ -21,6 +21,7 @@
 <div class="container">
 	<?php
 		$conference_id = $_GET["conference_id"];
+		$conference_ex_id = ucwords($conference_id);
 		$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 		$result = mysqli_query($link, "SELECT ConferenceName from conferences where ConferenceID='$conference_id'");
 		if ($result) {
@@ -28,8 +29,69 @@
 			$conference_name2 = ucwords($conference_name);
 			echo "<h1 style=\"font-family:Arial Black\"> $conference_name2</h1>";
 			
+$page_num=$_GET['page'];
 
-		$result = mysqli_query($link, "SELECT PaperID from papers where ConferenceID='$conference_id'");
+  if(!$page_num)
+  {
+  	$page_num = 1;
+  }
+
+  $result = mysqli_query($link, "SELECT count(PaperID) from papers where ConferenceID='$conference_id' ");//var_dump($result);
+  $row = $result->fetch_array();
+  $num_results = $row[0];//var_dump($num_results);
+  $page_total=(integer)(($num_results+9)/10);
+  //echo $page_total;
+  echo '<p>共'.$page_total.'页,每页10条   共检索到'.$num_results.'条内容</p>';
+   if($page_total>$page_num )
+   {
+	  	if($page_num>1)
+	  	{
+		  	echo '<a href="./conference.php?page=1&conference_id='.($conference_ex_id).'">首页</a>    ';
+		  	echo '<a href="./conference.php?page='.($page_num-1).'&conference_id='.($conference_ex_id).'">上一页</a>';
+		  	echo " "."$page_num".'/'."$page_total"." ";
+		  	echo '<a href="./conference.php?page='.($page_num+1).'&conference_id='.($conference_ex_id).'">下一页</a>';
+		  	echo '<a href="./conference.php?page='.($page_total).'&conference_id='.($conference_ex_id).'">    尾页</a>';
+		  	/*if (($num_results-($page_num-1)*10)<10)
+		  	{
+		  		$print_line = $num_results-$page_num*10;
+		  	}
+		  	else 
+		  	{
+		  		$print_line = 10;
+		  	}*/
+	  	}
+	  	else 
+	  	{
+	  		echo '<a href="./conference.php?page=1&conference_id='.($conference_ex_id).'">首页</a>    ';
+	  		echo '上一页';
+		  	echo " "."$page_num".'/'."$page_total"." ";
+		  	echo '<a href="./conference.php?page='.($page_num+1).'&conference_id='.($conference_ex_id).'">下一页</a>';
+			echo '<a href="./conference.php?page='.($page_total).'&conference_id='.($conference_ex_id).'">    尾页</a>';
+	  		/*$print_line = 10;*/
+	  	}
+   }
+   else
+   {
+   		if($page_total==1)
+  		{
+	  		echo '<a href="./conference.php?page=1&conference_id='.($conference_ex_id).'">首页</a>    ';
+	  		echo '上一页';
+		  	echo " "."$page_num".'/'."$page_total"." ";
+		  	echo '下一页';
+		  	echo '<a href="./conference.php?page='.($page_total).'&conference_id='.($conference_ex_id).'">   尾页</a>';
+		    /*$print_line = $num_results;*/
+  		}
+  		else
+  		{
+  			echo '<a href="./conference.php?page=1&conference_id='.($conference_ex_id).'">首页</a>     ';
+  			echo '<a href="./conference.php?page='.($page_num-1).'&conference_id='.($conference_ex_id).'">上一页</a>';
+	  		echo " "."$page_num".'/'."$page_total"." ";
+	  		echo '下一页';
+	  	   echo '<a href="./conference.php?page='.($page_total).'&conference_id='.($conference_ex_id).'">    尾页</a>';
+	  		/*$print_line = $num_results-($page_num-1)*3;*/
+  		}
+   }
+		$result = mysqli_query($link, "SELECT PaperID from papers where ConferenceID='$conference_id'limit ".(($page_num-1)*10).",10 ");
 		if ($result) {
 			echo "<table border=\"0\" frame=\"hsides\"><tr><th>Title</th><th>Authors</th><th>Conference</th></tr>";
 			while ($row = mysqli_fetch_array($result)) {
@@ -50,7 +112,7 @@
 						$author_another_id = $author_row['AuthorID'];
 						$author_name2 = ucwords($author_name);
 						$author_another_id2 = ucwords($author_another_id);
-						echo "<a href=\"author.php?author_id=$author_another_id2\">$author_name2; </a>";
+						echo "<a href=\"author.php?page=1&author_id=$author_another_id2\">$author_name2; </a>";
 					}
 					echo "</td>";
 
@@ -73,5 +135,4 @@
 	?>
 </div>
 </body>
-
 </html>
