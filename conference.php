@@ -25,21 +25,18 @@
 		$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 		$result = mysqli_query($link, "SELECT ConferenceName from conferences where ConferenceID='$conference_id'");
 		if ($result) {
+			// conferenceinfo分区，显示会议具体信息
+			echo "<div class = 'conferneceinfo'>";
 			$conference_name = mysqli_fetch_array($result)['ConferenceName'];
 			$conference_name2 = ucwords($conference_name);
-			echo "<h1 style=\"font-family:Arial Black\"> $conference_name2</h1>";
+			echo "<h1> $conference_name2</h1>";
+			echo "</div>";
 			
-$page_num=$_GET['page'];
-
-  if(!$page_num)
-  {
-  	$page_num = 1;
-  }
-
-  $result = mysqli_query($link, "SELECT count(PaperID) from papers where ConferenceID='$conference_id' ");
-  $row = $result->fetch_array();
-  $num_results = $row[0];
-  $page_total=(integer)(($num_results+9)/10);
+		$page_num=$_GET['page'];
+		$result = mysqli_query($link, "SELECT count(PaperID) from papers where ConferenceID='$conference_id' ");
+		$row = $result->fetch_array();
+		$num_results = $row[0];
+		$page_total=(integer)(($num_results+9)/10);
 
 
 		$result = mysqli_query($link, "SELECT PaperID from papers where ConferenceID='$conference_id'limit ".(($page_num-1)*10).",10 ");
