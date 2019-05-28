@@ -1,6 +1,52 @@
 # EE101Lab
 2019 Spring Semester EE101 Final Project Working Space :D
 
+# 第一周分工 截止日期 6.2（星期日）
+
+## 待修复BUG：
+
+- conference.php/paper.php 中超链接的完善 [yhb]
+- search result 中对无结果的提示 [dsw]
+- paper.php 中reference的显示 [yhb]
+- search (solr) result 的翻页 [dsw]
+
+## 新功能：
+
+- **优化语句** [fsh]
+
+- css [zlt]
+
+- conference.php
+	+ 美化（去表格）[zlt]
+	+ 输入页码翻页 [dsw]
+	+ 年份图表(year) MYSQL [fsh]
+
+- author.php
+	+ 美化（去表格）[zlt]
+	+ **作者关系图**
+	+ 一般图表(year) MYSQL [fsh]
+	+ **部分加载**
+	+ 输入页码翻页 [dsw]
+	+ **推荐其他作者的文章**
+
+
+- index.php
+	+ 抄模板 [zlt]
+	+ conference 加到首页上去 [zlt]
+
+- search.php
+	+ 美化（去表格）[zlt]
+	+ 输入页码翻页 [dsw]
+	+ 所有和关键词有关的年份、author、conference echarts(solr related) [fsh]
+
+- paper.php
+	+ 推荐相关论文,搜共同作者的相关论文(MySQL) [yhb]
+	+ **通过共同引用推荐**
+	+ 其他信息，如被引用数 [yhb]
+
+
+----------
+
 # Notice 0527
 
 index.php中已由方少恒改成整合搜索框的形式，为此需要在solr admin中进行如下配置
@@ -37,48 +83,6 @@ source: ConferenceName  destination: keyword
 2. conference.php/paper.php by yhb (half completed)
 3. Echarts demo by zlt (expecting to be promoted)
 4. Leaf flipping (of SQL results) by dsw (still working)
-
-待修复BUG：
-
-- conference.php/paper.php 中超链接的完善 [yhb]
-- search result 中对无结果的提示 [dsw]
-- paper.php 中reference的显示 [yhb]
-- search (solr) result 的翻页 [dsw]
-
-新功能：
-
-- **优化语句** [fsh]
-
-
-- css [zlt]
-
-- conference.php
-+ 美化（去表格）[zlt]
-+ 输入页码翻页 [dsw]
-+ 年份图表(year) MYSQL [fsh]
-
-- author.php
-+ 美化（去表格）[zlt]
-+ **作者关系图**
-+ 一般图表(year) MYSQL [fsh]
-+ **部分加载**
-+ 输入页码翻页 [dsw]
-+ **推荐其他作者的文章**
-
-
-- index.php
-+ 抄模板 [zlt]
-+ conference 加到首页上去 [zlt]
-
-- search.php
-+ 美化（去表格）[zlt]
-+ 输入页码翻页 [dsw]
-+ 所有和关键词有关的年份、author、conference echarts(solr related) [fsh]
-
-- paper.php
-+ 推荐相关论文,搜共同作者的相关论文(MySQL) [yhb]
-**+ *通过共同引用推荐**
-+ 其他信息，如被引用数 [yhb]
 
 
 ## Notice 0521
