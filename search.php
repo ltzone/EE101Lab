@@ -52,7 +52,7 @@
 				foreach ($paper['AuthorName'] as $idx => $author) {
 					$author_id = substr($paper['AuthorID'][$idx],2,-3);
 					$author2 = ucwords($author);
-					echo "<a href=\"author.php?author_id=$author_id\">$author2; </a>";
+					echo "<a href=\"author.php?page=1&author_id=$author_id\">$author2; </a>";
 				}
 				echo "</td>";
 
