@@ -20,11 +20,13 @@
 
 
 <div class="container">
-	<h1>Search Results</h1>
 	<?php
 
 		$keyword = $_GET["keyword"];
 		if ($keyword) {
+			// searchinfo分区，显示会议具体信息
+			echo "<div class = 'searchinfo'>";
+			echo "<h1>Search Results</h1>";
 			//显示keyword，执行搜索
 			$keyword2 = ucwords($keyword);
 			echo "Keywords: ".$keyword2;
@@ -38,6 +40,7 @@
 			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 			$result = json_decode(curl_exec($ch), true);
 			curl_close($ch);
+			echo "</div>";
 			// 显示搜索结果的分区
 			echo "<hr>";
 if ($result['response']['numFound']>0){
