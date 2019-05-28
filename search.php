@@ -25,7 +25,7 @@
 
 		$keyword = $_GET["keyword"];
 		if ($keyword) {
-			//
+			//显示keyword，执行搜索
 			$keyword2 = ucwords($keyword);
 			echo "Keywords: ".$keyword2;
 			$ch = curl_init();
@@ -38,32 +38,41 @@
 			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 			$result = json_decode(curl_exec($ch), true);
 			curl_close($ch);
-			echo "<table border=\"0\" frame=\"hsides\" ><tr><th>Title</th><th>Authors</th><th>Conference</th></tr>";
 
+			// 显示搜索结果的分区
+			echo "<hr>";
+			echo "<div class='paperlis'>";
 			foreach ($result['response']['docs'] as $paper) {
-				echo "<tr>";
-				echo "<td>";
+
 				$paper_id = $paper['PaperID'];
 				$papername2 = ucwords($paper['PaperName']);
-				echo "<a href=\"paper.php?paper_id=$paper_id\">$papername2; </a>";
-				echo "</td>";
+				echo "<a href=\"paper.php?paper_id=$paper_id\"><h3>$papername2</h3></a>";
 
-				echo "<td>";
+				echo "<b> Authors: </b>";
+
+
 				foreach ($paper['AuthorName'] as $idx => $author) {
 					$author_id = substr($paper['AuthorID'][$idx],2,-3);
 					$author2 = ucwords($author);
-					echo "<a href=\"author.php?page=1&author_id=$author_id\">$author2; </a>";
+					echo "<a href=\"author.php?page=1&author_id=$author_id\">$author2</a>";
+					echo "; ";
 				}
-				echo "</td>";
 
-				echo "<td>";
+
+				echo "<br><b> Conference: </b>";
 				$conference_id =$paper['ConferenceID'];
 				$conference = $paper['ConferenceName'];
-				echo "<a href=\"conference.php?conference_id=$conference_id\">$conference; </a>";
-				echo "</td>";
-				echo "</tr>";
+				echo "<a href=\"conference.php?conference_id=$conference_id\">$conference</a>";
+				echo "; ";
+				echo "<hr>";
+
+			// 显示charts的分区
+				echo "<div class='chartlis'>";
+
+				
+				echo "</div>";
 			}
-			echo "</table><br><br>";
+			echo "</div>";
 		}
 
 	?>

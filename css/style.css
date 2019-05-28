@@ -13,6 +13,37 @@ body a{
 	-ms-transition: 0.5s all;
 	-moz-transition: 0.5s all;
 }
+
+.paperlis {
+	width: 70%;
+	float:left;
+}
+
+
+/*作者名称*/
+.authorinfo h1{ 
+	font-family: Arial Black;
+	font-size: 30px;
+}
+
+/*机构*/
+.authorinfo h2{
+	font-family: Arial;
+	font-size:25px;
+	font-style:bold;
+}
+
+
+/*机构名称*/
+.authorinfo p{
+	font-size:20px;
+}
+
+
+
+
+
+
 .header{
 	background:#2F4F4F;
 	padding:1em 0;
@@ -33,4 +64,10 @@ body a{
 }
 .logo h1 a{
 	color:#fff;
+}
+
+
+.chartlis {
+	width: 30%;
+	float:left;
 }
