@@ -19,6 +19,9 @@ body a{
 	float:left;
 }
 
+.paperlis table{
+	border:0;
+}
 
 /*作者名称*/
 .authorinfo h1{ 

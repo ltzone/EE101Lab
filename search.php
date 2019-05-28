@@ -47,8 +47,8 @@ if ($result['response']['numFound']>0){
 				$paper_id = $paper['PaperID'];
 				$papername2 = ucwords($paper['PaperName']);
 				echo "<a href=\"paper.php?paper_id=$paper_id\"><h3>$papername2</h3></a>";
-
-				echo "<b> Authors: </b>";
+				echo "<table>";
+				echo "<tr><td width = '120'><b> Authors: </b></td><td>";
 
 
 				foreach ($paper['AuthorName'] as $idx => $author) {
@@ -57,13 +57,14 @@ if ($result['response']['numFound']>0){
 					echo "<a href=\"author.php?page=1&author_id=$author_id\">$author2</a>";
 					echo "; ";
 				}
-
-
-				echo "<br><b> Conference: </b>";
+				echo "</td></tr>";
+				echo "<tr><td><b> Conference: </b></td><td>";
 				$conference_id =$paper['ConferenceID'];
 				$conference = $paper['ConferenceName'];
 				echo "<a href=\"conference.php?page=1&conference_id=$conference_id\">$conference</a>";
 				echo "; ";
+				echo "</td></tr>";
+				echo "</table>";
 				echo "<hr>";
 
 			// 显示charts的分区

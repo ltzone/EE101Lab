@@ -71,8 +71,8 @@ if ($result) {
 					$conf_id = $paper_info['ConferenceID'];
 					$paper_title2 = ucwords($paper_title);
 					echo "<a href=\"paper.php?paper_id=$paper_id\"><h3>$paper_title2</h3></a>";
-
-					echo "<b> Authors: </b>";
+					echo "<table>";
+					echo "<tr><td width = '120'><b> Authors: </b></td><td>";
 					$author_info = mysqli_query($link, "SELECT A.AuthorID, AuthorName FROM paper_author_affiliation A LEFT JOIN authors B ON A.AuthorID = B.AuthorID WHERE PaperID = '$paper_id' ORDER BY AuthorSequence ASC");
 
 					while ($author_row = mysqli_fetch_array($author_info)){
@@ -83,16 +83,15 @@ if ($result) {
 						echo "<a href=\"author.php?page=1&author_id=$author_another_id2\">$author_name2</a>";
 						echo "; ";
 					}
-					echo "<br>";
-					echo "<b> Conference: </b>";
-
+					echo "</td></tr>";
+					echo "<tr><td><b> Conference: </b></td><td>";
 
 					$conference_row = mysqli_fetch_array(mysqli_query($link, "SELECT ConferenceName from conferences WHERE ConferenceID = '$conf_id'"));
 					$conference_name = $conference_row['ConferenceName'];
 					$conference_name2 = ucwords($conference_name);
 					echo "<a href=\"conference.php?page=1&conference_id=$conf_id\">$conference_name2</a>";
-					echo "<br>";
-
+					echo "</td></tr>";
+					echo "</table>";
 				}
 
 				echo "<hr>";
