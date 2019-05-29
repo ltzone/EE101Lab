@@ -23,7 +23,7 @@
 <div class="container">
 	<?php
 		$paper_id = $_GET["paper_id"];
-		$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
+		$link = mysqli_connect("localhost:3306", 'root', '770528', 'FINAL');
 		
 		$result = mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'");
 		if ($result) {
