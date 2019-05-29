@@ -33,11 +33,15 @@
 			echo "</div>";
 			
 		$page_num=$_GET['page'];
+		if(!$page_num)$page_num=1;
+		if($page_num<0)$page_num=1;
+	  	
 		$result = mysqli_query($link, "SELECT count(PaperID) from papers where ConferenceID='$conference_id' ");
 		$row = $result->fetch_array();
 		$num_results = $row[0];
 		$page_total=(integer)(($num_results+9)/10);
-
+		if($page_num>$page_total)$page_num=$page_total;
+		
 
 		$result = mysqli_query($link, "SELECT PaperID from papers where ConferenceID='$conference_id'limit ".(($page_num-1)*10).",10 ");
 		// 显示搜索结果的分区	
@@ -80,45 +84,46 @@
 			}
 
 			// 翻页模块
-			echo '<p>共'.$page_total.'页,每页10条   共检索到'.$num_results.'条内容</p>';
+			echo '<p>PageCount(10 messages per page):&nbsp;&nbsp;'.$page_total.'    </p>';
+			echo '<p>Total messages:&nbsp;&nbsp;'.$num_results.'</p>';
 			if($page_total>$page_num )
 			{
 			  	if($page_num>1)
 			  	{
-				  	echo '<a href="./conference.php?page=1&conference_id='.($conference_ex_id).'">首页</a>    ';
-				  	echo '<a href="./conference.php?page='.($page_num-1).'&conference_id='.($conference_ex_id).'">上一页</a>';
-				  	echo " "."$page_num".'/'."$page_total"." ";
-				  	echo '<a href="./conference.php?page='.($page_num+1).'&conference_id='.($conference_ex_id).'">下一页</a>';
-				  	echo '<a href="./conference.php?page='.($page_total).'&conference_id='.($conference_ex_id).'">    尾页</a>';
+				  	echo '<a href="./conference.php?page=1&conference_id='.($conference_ex_id).'">first page&nbsp;&nbsp;&nbsp;</a>    ';
+				  	echo '<a href="./conference.php?page='.($page_num-1).'&conference_id='.($conference_ex_id).'"> previous page&nbsp;&nbsp;&nbsp;</a>';
+				  	echo " "."$page_num".'/'."$page_total"."&nbsp;&nbsp;&nbsp; ";
+				  	echo '<a href="./conference.php?page='.($page_num+1).'&conference_id='.($conference_ex_id).'">next page&nbsp;&nbsp;&nbsp;</a>';
+				  	echo '<a href="./conference.php?page='.($page_total).'&conference_id='.($conference_ex_id).'">    last page</a>';
 
 			  	}
 			  	else 
 			  	{
-			  		echo '<a href="./conference.php?page=1&conference_id='.($conference_ex_id).'">首页</a>    ';
-			  		echo '上一页';
-				  	echo " "."$page_num".'/'."$page_total"." ";
-				  	echo '<a href="./conference.php?page='.($page_num+1).'&conference_id='.($conference_ex_id).'">下一页</a>';
-					echo '<a href="./conference.php?page='.($page_total).'&conference_id='.($conference_ex_id).'">    尾页</a>';
+			  		echo 'first page&nbsp;&nbsp;&nbsp;  ';
+			  		echo ' previous page&nbsp;&nbsp;&nbsp;';
+				  	echo " "."$page_num".'/'."$page_total"."&nbsp;&nbsp;&nbsp; ";
+				  	echo '<a href="./conference.php?page='.($page_num+1).'&conference_id='.($conference_ex_id).'">next page&nbsp;&nbsp;&nbsp;</a>';
+					echo '<a href="./conference.php?page='.($page_total).'&conference_id='.($conference_ex_id).'">    last page&nbsp;&nbsp;&nbsp;</a>';
 			  	}
 			}
 			else
 			{
 				if($page_total==1)
 				{
-		  		echo '<a href="./conference.php?page=1&conference_id='.($conference_ex_id).'">首页</a>    ';
-		  		echo '上一页';
-			  	echo " "."$page_num".'/'."$page_total"." ";
-			  	echo '下一页';
-			  	echo '<a href="./conference.php?page='.($page_total).'&conference_id='.($conference_ex_id).'">   尾页</a>';
+		  		echo 'first page&nbsp;&nbsp;&nbsp;    ';
+		  		echo ' previous page&nbsp;&nbsp;&nbsp;';
+			  	echo " "."$page_num".'/'."$page_total"." &nbsp;&nbsp;&nbsp;";
+			  	echo 'next page&nbsp;&nbsp;&nbsp;';
+			  	echo 'last page&nbsp;&nbsp;&nbsp;';
 
 				}
 				else
 				{
-					echo '<a href="./conference.php?page=1&conference_id='.($conference_ex_id).'">首页</a>     ';
-					echo '<a href="./conference.php?page='.($page_num-1).'&conference_id='.($conference_ex_id).'">上一页</a>';
-		  		echo " "."$page_num".'/'."$page_total"." ";
-		  		echo '下一页';
-		  	    echo '<a href="./conference.php?page='.($page_total).'&conference_id='.($conference_ex_id).'">    尾页</a>';
+					echo '<a href="./conference.php?page=1&conference_id='.($conference_ex_id).'">first page&nbsp;&nbsp;&nbsp;</a>     ';
+					echo '<a href="./conference.php?page='.($page_num-1).'&conference_id='.($conference_ex_id).'"> previous page&nbsp;&nbsp;&nbsp;</a>';
+		  		echo " "."$page_num".'/'."$page_total"."&nbsp;&nbsp;&nbsp; ";
+		  		echo 'next page&nbsp;&nbsp;&nbsp;';
+		  	    echo 'last page';
 				}
 			}
 			echo "</div>";
@@ -133,6 +138,20 @@
 		}
 
 	?>
+	<form  action="conference.php">
+			  
+			    
+			    
+			      <input type="integer"  id="page" name="page">
+
+			    <br>
+			  
+			  <input name="conference_id" type="hidden" id="conference_id" value="<?php echo $conference_id;?>" />
+			  
+			      <button type="submit" class="btn btn-default">jump to the page</button>
+	
+
+			</form>
 </div>
 </body>
 </html>
