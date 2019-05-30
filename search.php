@@ -34,7 +34,7 @@
 			$ch = curl_init();
 			$timeout = 5;
 			$query = urlencode(str_replace(' ', '+', $keyword));
-			$url = "http://localhost:8983/solr/FINAL/select?q=keyword%3A".$query."&start=0&rows=10000&wt=json";
+			$url = "http://localhost:8983/solr/FINAL/select?q=keyword%3A".$query."&start=0&rows=100000&wt=json";
 
 			curl_setopt ($ch, CURLOPT_URL, $url);
 			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -131,6 +131,10 @@ if ($result['response']['numFound']>0){
 		  	    echo 'last page';
 				}
 			}
+		   	echo "<form  action=\"search.php\"><div style=\"text-align:left;\">";
+    		echo "<input type=\"integer\"  id=\"page\" name=\"page\">";
+    		echo "<input name='keyword' type='hidden' id='keyword' value=$key>";
+			echo "<button type=\"submit\" class=\"btn btn-default\">jump to the page</button></div></form>";
 			echo "</div>";
 		}
 
@@ -141,19 +145,10 @@ else {echo "No Search Results!";}
 	?>
 	
 </div>
-<form  action="search.php">
-			  
-			    <div style="text-align:center;">
-			    
-			      <input type="integer"  id="page" name="page">
 
-			    <br>
-			  
-			  <input name="keyword" type="hidden" id="keywordd" value="<?php echo $key;?>" />
-			  
-			      <button type="submit" class="btn btn-default">jump to the page</button>
-	</div>
 
-			</form>
+
+
+
 </body>
 </html>

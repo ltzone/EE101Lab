@@ -143,7 +143,13 @@ if ($result) {
 			  	   echo ' last page';
 		  		}
 		   	}
-		   	echo "</div>";	
+
+		   	echo "<form  action=\"author.php\"><div style=\"text-align:center;\">";
+    		echo "<input type=\"integer\"  id=\"page\" name=\"page\">";
+    		echo "<input name='author_id' type='hidden' id='author_id' value=$author_id>";
+			echo "<button type=\"submit\" class=\"btn btn-default\">jump to the page</button></div></form>";
+
+ 		   	echo "</div>";	
 
 
 
@@ -181,20 +187,7 @@ if ($result) {
 
 	?>
 
-<form  action="author.php">
-			  
-			    <div style="text-align:center;">
-			    
-			      <input type="integer"  id="page" name="page">
 
-			    <br>
-			  
-			  <input name="author_id" type="hidden" id="author_id" value="<?php echo $author_id;?>" />
-			  
-			      <button type="submit" class="btn btn-default">jump to the page</button>
-	
-</div>
-			</form>
 </div>
 </body>
 </html>

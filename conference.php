@@ -126,7 +126,15 @@
 		  	    echo 'last page';
 				}
 			}
+		   	echo "<form  action=\"conference.php\"><div style=\"text-align:center;\">";
+    		echo "<input type=\"integer\"  id=\"page\" name=\"page\">";
+    		echo "<input name='conference_id' type='hidden' id='conference_id' value=$conference_id>";
+			echo "<button type=\"submit\" class=\"btn btn-default\">jump to the page</button></div></form>";
+
 			echo "</div>";
+
+
+
 		}
 
 			// 展示echarts的分区
@@ -149,19 +157,6 @@
 
 
 
-<form  action="conference.php">
-			  
-			    <div style="text-align:center;">
-			    
-			      <input type="integer"  id="page" name="page">
 
-			    <br>
-			  
-			  <input name="conference_id" type="hidden" id="conference_id" value="<?php echo $conference_id;?>" />
-			  
-			      <button type="submit" class="btn btn-default">jump to the page</button>
-	</div>
-
-			</form>
 </body>
 </html>
