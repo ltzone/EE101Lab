@@ -183,7 +183,7 @@ if ($result) {
 
 <form  action="author.php">
 			  
-			    
+			    <div style="text-align:center;">
 			    
 			      <input type="integer"  id="page" name="page">
 
@@ -193,7 +193,7 @@ if ($result) {
 			  
 			      <button type="submit" class="btn btn-default">jump to the page</button>
 	
-
+</div>
 			</form>
 </div>
 </body>

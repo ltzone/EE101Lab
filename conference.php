@@ -138,9 +138,20 @@
 		}
 
 	?>
-	<form  action="conference.php">
+	
+</div>
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+
+<body>
+
+
+
+<form  action="conference.php">
 			  
-			    
+			    <div style="text-align:center;">
 			    
 			      <input type="integer"  id="page" name="page">
 
@@ -149,9 +160,8 @@
 			  <input name="conference_id" type="hidden" id="conference_id" value="<?php echo $conference_id;?>" />
 			  
 			      <button type="submit" class="btn btn-default">jump to the page</button>
-	
+	</div>
 
 			</form>
-</div>
 </body>
 </html>
