@@ -23,8 +23,8 @@
 <div class="container">
 	<?php
 		$paper_id = $_GET["paper_id"];
-		$link = mysqli_connect("localhost:3306", 'root', '770528', 'FINAL');
-		
+		$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
+		echo "<div class = 'authorinfo'>";
 		$result = mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'");
 		if ($result) {
 			$paper_name = mysqli_fetch_array($result)['Title'];
@@ -36,15 +36,18 @@
 
 
 		#查找paper对应的Author，conference，year
+
+
+
 		$result = mysqli_query($link, "SELECT PaperID from paper_author_affiliation where PaperID='$paper_id'");
 		if ($result) {
-			echo "<table border=\"0\" frame=\"hsides\"><tr><th>Authors</th><th>Conference</th><th>Year</th></tr>";
 			$row = mysqli_fetch_array($result);
 				echo "<tr>";
 				$paper_id = $row['PaperID'];
 				$paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT ConferenceID , PaperPublishYear from papers where PaperID='$paper_id'"));
 				if ($paper_info){
-				
+					echo "<table>";
+					echo "<tr><td width = '120'><b> Authors: </b></td><td>";
 					$author_info = mysqli_query($link, "SELECT A.AuthorID, AuthorName FROM paper_author_affiliation A LEFT JOIN authors B ON A.AuthorID = B.AuthorID WHERE PaperID = '$paper_id' ORDER BY AuthorSequence ASC");
 						while ($author_row = mysqli_fetch_array($author_info)){
 						$author_name = $author_row['AuthorName'];
@@ -53,7 +56,8 @@
 						$author_another_id2 = ucwords($author_another_id);
 						echo "<a href=\"author.php?author_id=$author_another_id2\">$author_name2; </a>";
 					}
-					echo "</td>";
+					echo "</td></tr>";
+					echo "<tr><td><b> Conference: </b></td><td>";
 					
 					$conference_id = $paper_info['ConferenceID'];
 					$year= $paper_info['PaperPublishYear'];
@@ -61,24 +65,19 @@
 				}
 
 				
-
-				echo "</tr>";
-			
-			echo "<td>";
 					$conference_row = mysqli_fetch_array(mysqli_query($link, "SELECT ConferenceName from conferences WHERE ConferenceID = '$conference_id'"));
 					$conference_name = $conference_row['ConferenceName'];
 					$conference_name2 = ucwords($conference_name);
 					echo "<a href=\"conference.php?conference_id=$conference_id\">$conference_name2; </a>";
 					echo "</td>";
-					
-					echo "<td>";
+					echo "</tr>";
+					echo "<tr><td><b> Year: </b></td><td>";
 					echo $year;
-					echo "<td>";
+					echo "</td></tr>";
 
 			echo "</table>";
-		} else {
-			echo "Paper not found";
-		}
+
+		echo "</div>";
 
 	
 		#reference查找
@@ -89,8 +88,7 @@
 		
 		echo "<h1 style=\"font-family:Arial Black\">被引用</h1>";
 		$result = mysqli_query($link, "SELECT ReferenceID from paper_reference2 where PaperID='$paper_id'");
-		// 显示搜索结果的分区
-		if ($result) {
+		if ($result->num_rows) {
 			echo "<div class='paperlis'>";	
 			while ($row = mysqli_fetch_array($result)) {
 				$paper_id_ref = $row['ReferenceID'];
@@ -123,24 +121,23 @@
 					echo "</table>";
 				}
 				
-				else {
-				echo "Reference not found";//这里为啥不出来……
-		}
+
 
 				echo "<hr>";
 			}
 		}
+		else {
+				echo "Reference not found";
+		}	
 		
 		
 		
 		
-		
-		echo "<h1 style=\"font-family:Arial Black\">引用文章推荐</h1>";
+		echo "<h1 style=\"font-family:Arial Black\">引用文章</h1>";
 				
 
 		$result = mysqli_query($link, "SELECT PaperID from paper_reference2 where ReferenceID='$paper_id'");
-		// 显示搜索结果的分区
-		if ($result) {
+		if ($result->num_rows) {
 			echo "<div class='paperlis'>";	
 			while ($row = mysqli_fetch_array($result)) {
 				$paper_id_ref = $row['PaperID'];
@@ -174,14 +171,15 @@
 				}
 				
 				else {
-				echo "Reference not found";//这里为啥不出来……
+				echo "Reference not found";
 		}
 
 				echo "<hr>";
 			}
 		}
 		
-		
+} else {
+echo "Paper not found";}
 		
 		
 		

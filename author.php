@@ -32,7 +32,7 @@
 
 		$author_id = $_GET["author_id"];
 		$author_ex_id = ucwords($author_id);
-		$link = mysqli_connect("localhost:3306", 'root', '770528', 'FINAL');
+		$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 		$result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$author_id'");
 if ($result) {
 		// authorinfo分区，显示名字和机构
