@@ -146,9 +146,73 @@
 		}
 		
 } else {
-echo "Paper not found";}
-		
-		
+echo "没有引用";}
+
+
+
+
+//通过作者推荐
+
+
+
+
+
+
+
+
+
+
+
+
+//通过相关标题推荐（solr）
+			echo "<h1 style=\"font-family:Arial Black\">相关文章</h1>";
+
+			$paper_id = $_GET["paper_id"];
+			$paper_ti=mysqli_fetch_array(mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'"));
+			$paper_title3=$paper_ti['Title'];
+				$ch = curl_init();
+			$timeout = 5;
+			//echo $paper_title3;
+			$paper_title4=substr($paper_title3,3,-2);
+			$query = urlencode(str_replace(' ', '+', $paper_title4));
+			$url = "http://localhost:8983/solr/FINAL/select?q=$paper_title3%3A".$query."&wt=json";
+
+			curl_setopt ($ch, CURLOPT_URL, $url);
+			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+			$result = json_decode(curl_exec($ch), true);
+			curl_close($ch);
+			echo "</div>";
+		// 显示搜索结果的分区
+			echo "<hr>";
+if ($result['response']['numFound']>0){
+			echo "<div class='paperlis'>";
+			foreach ($result['response']['docs'] as $paper) {//这里最好做一下分页
+
+				$paper_id = $paper['PaperID'];
+				$papername2 = ucwords($paper['PaperName']);
+				echo "<a href=\"paper.php?paper_id=$paper_id\"><h3>$papername2</h3></a>";
+				echo "<table>";
+				echo "<tr><td width = '120'><b> Authors: </b></td><td>";
+
+
+				foreach ($paper['AuthorName'] as $idx => $author) {
+					$author_id = substr($paper['AuthorID'][$idx],2,-3);
+					$author2 = ucwords($author);
+					echo "<a href=\"author.php?page=1&author_id=$author_id\">$author2</a>";
+					echo "; ";
+				}
+				echo "</td></tr>";
+				echo "<tr><td><b> Conference: </b></td><td>";
+				$conference_id =$paper['ConferenceID'];
+				$conference = $paper['ConferenceName'];
+				echo "<a href=\"conference.php?page=1&conference_id=$conference_id\">$conference</a>";
+				echo "; ";
+				echo "</td></tr>";
+				echo "</table>";
+				echo "<hr>";
+			}
+}
 		
 
 	?>
