@@ -23,7 +23,7 @@
 <div class="container">
 	<?php
 		$paper_id = $_GET["paper_id"];
-		$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
+		$link = mysqli_connect("localhost:3306", 'root', '770528', 'FINAL');
 		echo "<div class = 'authorinfo'>";
 		$result = mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'");
 		if ($result) {
@@ -86,45 +86,12 @@
 		#增加查询reference结果为空的条件判断（bug）
 
 		
-		echo "<h1 style=\"font-family:Arial Black\">被引用</h1>";
+		
 		$result = mysqli_query($link, "SELECT ReferenceID from paper_reference2 where PaperID='$paper_id'");
-		if ($result->num_rows) {
+		if ($result->num_rows) {$count = 0;
 			echo "<div class='paperlis'>";	
-			while ($row = mysqli_fetch_array($result)) {
-				$paper_id_ref = $row['ReferenceID'];
-				$paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID from papers where PaperID='$paper_id_ref'"));
-				if ($paper_info){
-					$paper_title = $paper_info['Title'];
-					$conf_id = $paper_info['ConferenceID'];
-					$paper_title2 = ucwords($paper_title);
-					echo "<a href=\"paper.php?paper_id=$paper_id_ref\"><h3>$paper_title2</h3></a>";
-					echo "<table>";
-					echo "<tr><td width = '120'><b> Authors: </b></td><td>";
-					$author_info = mysqli_query($link, "SELECT A.AuthorID, AuthorName FROM paper_author_affiliation A LEFT JOIN authors B ON A.AuthorID = B.AuthorID WHERE PaperID = '$paper_id' ORDER BY AuthorSequence ASC");
-
-					while ($author_row = mysqli_fetch_array($author_info)){
-						$author_name = $author_row['AuthorName'];
-						$author_another_id = $author_row['AuthorID'];
-						$author_name2 = ucwords($author_name);
-						$author_another_id2 = ucwords($author_another_id);
-						echo "<a href=\"author.php?page=1&author_id=$author_another_id2\">$author_name2</a>";
-						echo "; ";
-					}
-					echo "</td></tr>";
-					echo "<tr><td><b> Conference: </b></td><td>";
-
-					$conference_row = mysqli_fetch_array(mysqli_query($link, "SELECT ConferenceName from conferences WHERE ConferenceID = '$conf_id'"));
-					$conference_name = $conference_row['ConferenceName'];
-					$conference_name2 = ucwords($conference_name);
-					echo "<a href=\"conference.php?page=1&conference_id=$conf_id\">$conference_name2</a>";
-					echo "</td></tr>";
-					echo "</table>";
-				}
-				
-
-
-				echo "<hr>";
-			}
+			while ($row = mysqli_fetch_array($result)) {$count ++;
+			}	echo "<h1 style=\"font-family:Arial Black\">被引用数: $count</h1>";echo "<hr>";
 		}
 		else {
 				echo "Reference not found";
