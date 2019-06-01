@@ -175,7 +175,7 @@ echo "没有引用";}
 			//echo $paper_title3;
 			$paper_title4=substr($paper_title3,3,-2);
 			$query = urlencode(str_replace(' ', '+', $paper_title4));
-			$url = "http://localhost:8983/solr/FINAL/select?q=$paper_title3%3A".$query."&wt=json";
+			$url = "http://localhost:8983/solr/FINAL/select?q=PaperName%3A".$query."&wt=json";
 
 			curl_setopt ($ch, CURLOPT_URL, $url);
 			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
