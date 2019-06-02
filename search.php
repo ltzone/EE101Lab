@@ -128,8 +128,6 @@ if ($result['response']['numFound']>0){
 			
 
 				echo "<div class='chartlis'>";
-				echo "<div id=\"year_chart\" style=\"width: 350px;height:250px;\"></div>";
-				echo "<div id=\"conference_chart\" style=\"width: 350px;height:250px;\"></div>";
 				echo "</div>";
 			}echo '<p>PageCount(10 messages per page):&nbsp;&nbsp;'.$page_total.'    </p>';
 			echo '<p>Total messages:&nbsp;&nbsp;'.$num_results.'</p>';
