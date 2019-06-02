@@ -90,11 +90,13 @@
 
 		echo "</div>";
 
+
+
 	
 		#reference查找
 
 		
-		#增加查询reference结果为空的条件判断（bug）
+		#增加查询reference结果为空的条件判断
 
 
 		
@@ -102,6 +104,7 @@
 		$result = mysqli_query($link, "SELECT ReferenceID from paper_reference2 where PaperID='$paper_id'");
 		if ($result->num_rows) {
 			echo "<div class='paperlis'>";	
+
 			echo "<h1 style=\"font-family:Arial Black\">引用文章</h1>";
 			while ($row = mysqli_fetch_array($result)) {
 				$paper_id_ref = $row['ReferenceID'];
@@ -136,6 +139,7 @@
 				echo "<hr>";
 			}
 			echo "</div>";
+
 		}
 		else {
 				echo "Reference not found";
@@ -223,7 +227,6 @@ echo "Paper not found";}
 					echo "<table>";
 					echo "<tr><td width = '120'><b> Authors: </b></td><td>";
 
-
 					foreach ($paper['AuthorName'] as $idx => $author) {
 						$author_id = substr($paper['AuthorID'][$idx],2,-3);
 						$author2 = ucwords($author);
@@ -241,7 +244,21 @@ echo "Paper not found";}
 					echo "<hr>";
 				}
 				echo "</div>";
-}
+			}
+
+
+
+		
+		//通过作者推荐文章
+		//
+		//
+		//
+		echo "<div class='paperlis'>";
+		echo "<h1 style=\"font-family:Arial Black\">相关作者的文章: </h1>";echo "<hr>";
+		
+		
+		$relatepaper= mysqli_fetch_array(mysqli_query($link, "SELECT d.PaperID, Title from (SELECT PaperID From (SELECT AuthorID FROM paper_author_affiliation a where a.PaperID = '7DED5581') b inner join paper_author_affiliation c on b.AuthorID = c.AuthorID group by PaperID) d inner join papers on d.PaperID = papers.PaperID"));
+		echo "</div>;"
 		
 
 	?>
