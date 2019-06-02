@@ -42,63 +42,60 @@
 			$result = json_decode(curl_exec($ch), true);
 			curl_close($ch);
 			echo "</div>";
-			// 显示搜索结果的分区
 			echo "<hr>";
 			$page_num=$_GET['page'];
-		if(!$page_num)$page_num=1;
-		if($page_num<0)$page_num=1;
-		$num_results =$result['response']['numFound'];
-		$page_total=(integer)(($num_results+9)/10);
-		if($page_num>$page_total)$page_num=$page_total;
-
-if ($result['response']['numFound']>0){
-	//echarts 统计数据
-	//chart1: years, count_year
-	//chart2: conferences, count_conference
-	$years_data = array();
-	$conferences_data = array();
-	$all_paper = $result["response"]["docs"];
-	foreach ($all_paper as $paper_data) {
-		if(array_key_exists($paper_data["Year"], $years_data)){
-			$years_data[$paper_data["Year"]]++;
-		}else{
-			$years_data[$paper_data["Year"]]=1;
-		}
-		if(array_key_exists($paper_data["ConferenceName"], $conferences_data)){
-			$conferences_data[$paper_data["ConferenceName"]]++;
-		}else{
-			$conferences_data[$paper_data["ConferenceName"]]=1;
-		}
-	}
-
-	ksort($years_data);
-	$years = array();
-	$count_year = array();
-	foreach ($years_data as $key => $value) {
-		array_push($years,$key);
-		array_push($count_year,$value);
-	}
-
-	ksort($conferences_data);
-	$conferences = array();
-	$count_conference = array();
-	foreach ($conferences_data as $key => $value) {
-		array_push($conferences,$key);
-		array_push($count_conference,$value);
-	}
-	//
-
-
-
-
-	$num_results =$result['response']['numFound'];
-		$page_total=(integer)(($num_results+9)/10);
-		if($page_num>$page_total)$page_num=$page_total;
+			if(!$page_num)$page_num=1;
+			if($page_num<0)$page_num=1;
+			$num_results =$result['response']['numFound'];
+			$page_total=(integer)(($num_results+9)/10);
+			if($page_num>$page_total)$page_num=$page_total;
+			if ($result['response']['numFound']>0){
+			//收集echarts 统计数据
+			//chart1: years, count_year
+			//chart2: conferences, count_conference
+			$years_data = array();
+			$years0 = array();
+			$conferences_data = array();
+			$all_paper = $result["response"]["docs"];
+			foreach ($all_paper as $paper_data) {
+				if(array_key_exists(intval($paper_data["Year"]), $years_data)){
+					$years_data[intval($paper_data["Year"])]++;
+				}else{
+					$years_data[intval($paper_data["Year"])]=1;
+				}
+				if(array_key_exists($paper_data["ConferenceName"], $conferences_data)){
+					$conferences_data[$paper_data["ConferenceName"]]++;
+				}else{
+					$conferences_data[$paper_data["ConferenceName"]]=1;
+				}
+				if(!in_array(intval($paper_data["Year"]), $years0)){
+					$years0[] = intval($paper_data["Year"]);
+				}
+			}
+			for($i=min($years0);$i<=max($years0);$i++){
+				if(!array_key_exists($i, $years_data)){
+					$years_data[$i] = 0;
+				}
+			}
+			ksort($years_data);
+			$years = array();
+			$count_year = array();
+			foreach ($years_data as $key => $value) {
+				array_push($years,intval($key));
+				array_push($count_year,$value);
+			}
+			ksort($conferences_data);
+			$conferences = array();
+			$count_conference = array();
+			foreach ($conferences_data as $key => $value) {
+				array_push($conferences,$key);
+				array_push($count_conference,$value);
+			}
+			// 显示信息的区域
 			echo "<div class='paperlis'>";
-			// 显示charts的分区
-			echo "<div id=\"year_chart\" style=\"width: 350px;height:250px;\"></div>";
-			echo "<div id=\"conference_chart\" style=\"width: 350px;height:250px;\"></div>";
-			//
+			$num_results =$result['response']['numFound'];
+			$page_total=(integer)(($num_results+9)/10);
+			if($page_num>$page_total)$page_num=$page_total;
 			if($page_num==$page_total)$l=$num_results;
 			else $l=($page_num-1)*10+10;
 			for ($i=($page_num-1)*10;$i<$l;$i++) {
@@ -123,13 +120,9 @@ if ($result['response']['numFound']>0){
 				echo "</td></tr>";
 				echo "</table>";
 				echo "<hr>";
-				
-				// 翻页模块
-			
-
-				echo "<div class='chartlis'>";
-				echo "</div>";
-			}echo '<p>PageCount(10 messages per page):&nbsp;&nbsp;'.$page_total.'    </p>';
+			}	
+			// 翻页模块
+			echo '<p>PageCount(10 messages per page):&nbsp;&nbsp;'.$page_total.'    </p>';
 			echo '<p>Total messages:&nbsp;&nbsp;'.$num_results.'</p>';
 			if($page_total>$page_num )
 			{
@@ -174,8 +167,12 @@ if ($result['response']['numFound']>0){
     		echo "<input name='keyword' type='hidden' id='keyword' value=$key>";
 			echo "<button type=\"submit\" class=\"btn btn-default\">jump to the page</button></div></form>";
 			echo "</div>";
+			// 图表显示区
+			echo "<div class='chartlis'>";
+			echo "<div id=\"year_chart\" style=\"width: 350px;height:250px;\"></div>";
+			echo "<div id=\"conference_chart\" style=\"width: 350px;height:250px;\"></div>";
+			echo "</div>";
 		}
-
 else {echo "No Search Results!";}
 }
 	?>
@@ -185,7 +182,6 @@ else {echo "No Search Results!";}
 
 	<script type="text/javascript">
         var myChart = echarts.init(document.getElementById('year_chart'));
-
         var years1 = eval(decodeURIComponent('<?php echo urlencode(json_encode($years));?>'));
         var count_year1 = eval(decodeURIComponent('<?php echo urlencode(json_encode($count_year));?>'));
  
@@ -221,7 +217,6 @@ else {echo "No Search Results!";}
 
     <script type="text/javascript">
         var myChart = echarts.init(document.getElementById('conference_chart'));
-
         var conferences1 = eval(decodeURIComponent('<?php echo urlencode(json_encode($conferences));?>'));
         var count_conference1 = eval(decodeURIComponent('<?php echo urlencode(json_encode($count_conference));?>'));
  
