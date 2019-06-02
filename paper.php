@@ -97,10 +97,11 @@
 		#增加查询reference结果为空的条件判断（bug）
 
 		
-		echo "<h1 style=\"font-family:Arial Black\">引用文章</h1>";
+
 		$result = mysqli_query($link, "SELECT ReferenceID from paper_reference2 where PaperID='$paper_id'");
 		if ($result->num_rows) {
 			echo "<div class='paperlis'>";	
+			echo "<h1 style=\"font-family:Arial Black\">引用文章</h1>";
 			while ($row = mysqli_fetch_array($result)) {
 				$paper_id_ref = $row['ReferenceID'];
 				$paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID from papers where PaperID='$paper_id_ref'"));
@@ -136,6 +137,7 @@
 
 				echo "<hr>";
 			}
+			echo "</div>";
 		}
 		else {
 				echo "Reference not found";
@@ -144,12 +146,13 @@
 		
 		
 		
-		echo "<h1 style=\"font-family:Arial Black\">被引用文章</h1>";
+		
 				
 
 		$result = mysqli_query($link, "SELECT PaperID from paper_reference2 where ReferenceID='$paper_id'");
 		if ($result->num_rows) {
-			echo "<div class='paperlis'>";	
+			echo "<div class='paperlis'>";
+			echo "<h1 style=\"font-family:Arial Black\">被引用文章</h1>";
 			while ($row = mysqli_fetch_array($result)) {
 				$paper_id_ref = $row['PaperID'];
 				$paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID from papers where PaperID='$paper_id_ref'"));
@@ -187,13 +190,14 @@
 
 				echo "<hr>";
 			}
+			echo "</div>";
 		}
 		
 } else {
 echo "Paper not found";}
 		
 		
-		
+	
 
 	?>
 </div>
