@@ -86,93 +86,11 @@
 		echo "<h1 style=\"font-family:Arial Black\">相关作者的文章: </h1>";echo "<hr>";
 		
 		
- 
-//
-//
-//
-		$author_id = $_GET["author_id"];
-		$author_ex_id = ucwords($author_id);
-		
-		$result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$author_id'");
-if ($result) {
-		// authorinfo分区，显示名字和机构
-		echo "<div class = 'authorinfo'>";
-		$author_name = mysqli_fetch_array($result)['AuthorName'];
-		$author_name2 = ucwords($author_name);
-		echo "<h1>$author_name2</h1>";
-		
-		$result = mysqli_query($link, "SELECT Affiliations.AffiliationID, Affiliations.AffiliationName from (select AffiliationID, count(*) as cnt from paper_author_affiliation where AuthorID='$author_id' and AffiliationID is not null group by AffiliationID order by cnt desc) as tmp inner join Affiliations on tmp.AffiliationID = Affiliations.AffiliationID");
-
-		if ($result->num_rows>0){
-		echo "<b>Affiliations: </b>";
-		foreach ($result as $affline){
-			$Affi_name = ucwords($affline['AffiliationName']);
-			echo "$Affi_name;";}
-		}
-		echo "</div>";
-		echo "<hr>";
-
-
-
-	  	$result = mysqli_query($link, "SELECT count(PaperID) from paper_author_affiliation where AuthorID='$author_id' ");
-	  	$row = $result->fetch_array();
-	  	$num_results = $row[0];
-	  	$page_num=$_GET['page'];
-	  	$page_total=(integer)(($num_results+9)/10);
-		$result = mysqli_query($link, "SELECT PaperID from paper_author_affiliation where AuthorID='$author_id'limit ".(($page_num-1)*10).",10 ");
-		// 显示搜索结果的分区
-		if ($result) {
-			echo "<div class='paperlis'>";	
-			while ($row = mysqli_fetch_array($result)) {
-				$paper_id = $row['PaperID'];
-				$paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID from papers where PaperID='$paper_id'"));
-				if ($paper_info){
-					$paper_title = $paper_info['Title'];
-					$conf_id = $paper_info['ConferenceID'];
-					$paper_title2 = ucwords($paper_title);
-					echo "<a href=\"paper.php?paper_id=$paper_id\"><h3>$paper_title2</h3></a>";
-					echo "<table>";
-					echo "<tr><td width = '120'><b> Authors: </b></td><td>";
-					$author_info = mysqli_query($link, "SELECT A.AuthorID, AuthorName FROM paper_author_affiliation A LEFT JOIN authors B ON A.AuthorID = B.AuthorID WHERE PaperID = '$paper_id' ORDER BY AuthorSequence ASC");
-
-					while ($author_row = mysqli_fetch_array($author_info)){
-						$author_name = $author_row['AuthorName'];
-						$author_another_id = $author_row['AuthorID'];
-						$author_name2 = ucwords($author_name);
-						$author_another_id2 = ucwords($author_another_id);
-						echo "<a href=\"author.php?page=1&author_id=$author_another_id2\">$author_name2</a>";
-						echo "; ";
-					}
-					echo "</td></tr>";
-					echo "<tr><td><b> Conference: </b></td><td>";
-
-					$conference_row = mysqli_fetch_array(mysqli_query($link, "SELECT ConferenceName from conferences WHERE ConferenceID = '$conf_id'"));
-					$conference_name = $conference_row['ConferenceName'];
-					$conference_name2 = ucwords($conference_name);
-					echo "<a href=\"conference.php?page=1&conference_id=$conf_id\">$conference_name2</a>";
-					echo "</td></tr>";
-					echo "</table>";
-				}
-
-				echo "<hr>";
-			}
-
-			
-
-
-
-
-		}
-		} else {
-			echo "Name not found";
-		}
-
+		$relatepaper= mysqli_fetch_array(mysqli_query($link, "SELECT d.PaperID, Title from (SELECT PaperID From (SELECT AuthorID FROM paper_author_affiliation a where a.PaperID = '7DED5581') b inner join paper_author_affiliation c on b.AuthorID = c.AuthorID group by PaperID) d inner join papers on d.PaperID = papers.PaperID"));
 		
 		
-		
-		
-		
-		
+		//
+		var_dump($relatepaper);
 
 	
 		#reference查找
@@ -272,7 +190,7 @@ echo "没有引用";}
 			echo "</div>";
 		// 显示搜索结果的分区
 			echo "<hr>";
-if ($result['response']['numFound']>0){
+if ($result['response']['numFound']>0){//有时会有index response not defined   bug
 			echo "<div class='paperlis'>";
 			foreach ($result['response']['docs'] as $paper) {//这里最好做一下分页,一次显示三条
 
