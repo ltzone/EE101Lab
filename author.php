@@ -41,22 +41,37 @@ if ($result) {
 		$author_name2 = ucwords($author_name);
 		echo "<h1>$author_name2</h1>";
 		
-		$result = mysqli_query($link, "SELECT Affiliations.AffiliationID, Affiliations.AffiliationName from (select AffiliationID, count(*) as cnt from paper_author_affiliation where AuthorID='$author_id' and AffiliationID is not null group by AffiliationID order by cnt desc) as tmp inner join Affiliations on tmp.AffiliationID = Affiliations.AffiliationID");
-
-		if ($result->num_rows>0){
-		echo "<b>Affiliations: </b>";
-		foreach ($result as $affline){
-			$Affi_name = ucwords($affline['AffiliationName']);
-			echo "$Affi_name;";}
-		}
-		echo "</div>";
-		echo "<hr>";
-
+		$Affresult = mysqli_query($link, "SELECT Affiliations.AffiliationID, Affiliations.AffiliationName from (select AffiliationID, count(*) as cnt from paper_author_affiliation where AuthorID='$author_id' and AffiliationID is not null group by AffiliationID order by cnt desc) as tmp inner join Affiliations on tmp.AffiliationID = Affiliations.AffiliationID");
 
 
 	  	$result = mysqli_query($link, "SELECT count(PaperID) from paper_author_affiliation where AuthorID='$author_id' ");
 	  	$row = $result->fetch_array();
 	  	$num_results = $row[0];
+
+		echo "<table>";
+		echo "<tr><td width = '120'>Papers:</td><td>";
+		echo ($num_results);
+		echo "</td></tr>";
+
+		if ($Affresult->num_rows!=0){
+			echo "<tr><td>Affiliations: </td><td>";
+			foreach ($Affresult as $affline){
+				$Affi_name = ucwords($affline['AffiliationName']);
+				echo "$Affi_name;";}
+			echo "</td></tr>";
+			}
+
+
+
+
+
+		echo "</table>";
+		echo "</div>";
+		echo "<hr>";
+
+
+
+
 	  	$page_num=$_GET['page'];
 	  	$page_total=(integer)(($num_results+9)/10);
 		$result = mysqli_query($link, "SELECT PaperID from paper_author_affiliation where AuthorID='$author_id'limit ".(($page_num-1)*10).",10 ");
@@ -157,12 +172,22 @@ if ($result) {
 			$conference_names = json_encode($conference_names);
 			$conference_counts = json_encode($conference_counts);
 
+			$conference_pie = array();
+			foreach ($conference_num as $conference_num_line){
+				$conference_elem = array("value"=>intval($conference_num_line[0]),"name"=>$conference_num_line[1]);
+				array_push($conference_pie,$conference_elem);
+			}
+			$conference_pie = json_encode($conference_pie);
+
 			# 创建一个div元素，调用自己写的mycharts中的制图函数
 
-			$author_name3 = json_decode($author_name2);
-			echo "<div id=\"main\" style=\"width:350px;height:250px;\"></div>";
-			echo "<script src=\"js/mycharts.js\"> conference_graph($conference_counts,$conference_names);
-			//</script>";
+
+			echo "<div id=\"bar\" style=\"width:350px;height:250px;\"></div>";	
+			echo "<div id=\"pie\" style=\"width:350px;height:250px;\"></div>";
+
+			//echo "<script src=\"js/conf_pie.js\"></script>";
+			echo "<script src=\"js/mycharts.js\">conference_pie($conference_pie);conference_graph($conference_counts,$conference_names);</script>";
+
 
 
 			# 有关echarts会议的统计数据
