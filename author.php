@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <script src="js/echarts.js"></script>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts-en.common.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <title>Author Page</title>
@@ -143,11 +144,10 @@ if ($result) {
 
 		   	// 展示echarts的分区
 		   	echo "<div class='chartlis'>";
-			# 有关echarts会议的统计数据
+			# 有关echarts会议的统计数据 conference_name, conference_number
 			$result = mysqli_query($link,"SELECT count(*) AS ConferenceName, ConferenceName FROM (paper_author_affiliation C INNER JOIN (SELECT A.PaperID, B.ConferenceName FROM papers A INNER JOIN conferences B ON A.ConferenceID = B.ConferenceID) D ON D.PaperID = C.PaperID) WHERE C.AuthorID = '$author_id' GROUP BY ConferenceName");
 			$conference_num = mysqli_fetch_all($result);
 
-			# 整理数据
 			$conference_names = array();
 			$conference_counts = array();
 			foreach ($conference_num as $conference_num_line){
@@ -157,7 +157,20 @@ if ($result) {
 			$conference_names = json_encode($conference_names);
 			$conference_counts = json_encode($conference_counts);
 
+			// paper_year, paper_number
+			$result = mysqli_query($link,"SELECT count(*) AS count, PaperPublishYear FROM (papers A INNER JOIN (SELECT PaperID, AuthorID FROM paper_author_affiliation WHERE AuthorID = '$author_id') B ON A.PaperID = B.PaperID) GROUP BY PaperPublishYear ORDER BY PaperPublishYear");
+
+			$year_data = mysqli_fetch_all($result);
+			$years=array();
+			$year_number=array();
+			foreach ($year_data as $year_data_line) {
+				array_push($years,$year_data_line[1]);
+				array_push($year_number,$year_data_line[0]);
+			}
+
 			# 创建一个div元素，调用自己写的mycharts中的制图函数
+			//echarts year-paper
+			echo "<div id=\"year_paper\" style=\"width: 600px;height:400px;\"></div>";
 
 			$author_name3 = json_decode($author_name2);
 			echo "<div id=\"main\" style=\"width:350px;height:250px;\"></div>";
@@ -174,6 +187,42 @@ if ($result) {
 		}
 
 	?>
+
+	<!--echarts year-paper图 需要数组years，year_number-->
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('year_paper'));
+
+        var years1 = eval(decodeURIComponent('<?php echo urlencode(json_encode($years));?>'));
+        var number1 = eval(decodeURIComponent('<?php echo urlencode(json_encode($year_number));?>'));
+ 
+		option = {
+		    title: {
+		        text: '作者论文发表数量'
+		    },
+		    tooltip: {
+		        trigger: 'axis'
+		    },
+		    legend: {
+		        data:['number of papers']
+		    },
+		    xAxis: {
+		        type: 'category',
+		        data: years1
+		    },
+		    yAxis: {
+		        type: 'value'
+		    },
+		    series: [
+		    {
+	            name:'papers',
+		        type: 'line',
+		        data: number1
+		    },
+		    ]
+		};
+		
+        myChart.setOption(option);
+    </script>
 </div>
 </body>
 </html>
