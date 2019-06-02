@@ -75,6 +75,17 @@
 					echo $year;
 					echo "</td></tr>";
 
+					echo "<tr><td><b> Cited: </b></td><td>";
+					$cited_count = mysqli_fetch_array(mysqli_query($link,"SELECT count(*) FROM paper_reference2 WHERE ReferenceID = '$paper_id';"));
+					echo ($cited_count[0]);
+					echo "</td></tr>";
+
+
+					echo "<tr><td><b> Reference: </b></td><td>";
+					$refer_count = mysqli_fetch_array(mysqli_query($link,"SELECT count(*) FROM paper_reference2 WHERE PaperID = '$paper_id';"));
+					echo ($refer_count[0]);
+					echo "</td></tr>";
+
 			echo "</table>";
 
 		echo "</div>";
@@ -86,7 +97,7 @@
 		#增加查询reference结果为空的条件判断（bug）
 
 		
-		echo "<h1 style=\"font-family:Arial Black\">被引用</h1>";
+		echo "<h1 style=\"font-family:Arial Black\">引用文章</h1>";
 		$result = mysqli_query($link, "SELECT ReferenceID from paper_reference2 where PaperID='$paper_id'");
 		if ($result->num_rows) {
 			echo "<div class='paperlis'>";	
@@ -133,7 +144,7 @@
 		
 		
 		
-		echo "<h1 style=\"font-family:Arial Black\">引用文章</h1>";
+		echo "<h1 style=\"font-family:Arial Black\">被引用文章</h1>";
 				
 
 		$result = mysqli_query($link, "SELECT PaperID from paper_reference2 where ReferenceID='$paper_id'");

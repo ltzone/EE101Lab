@@ -30,12 +30,22 @@
 			$conference_name = mysqli_fetch_array($result)['ConferenceName'];
 			$conference_name2 = ucwords($conference_name);
 			echo "<h1> $conference_name2</h1>";
-			echo "</div>";
-			
-		$page_num=$_GET['page'];
+
 		$result = mysqli_query($link, "SELECT count(PaperID) from papers where ConferenceID='$conference_id' ");
 		$row = $result->fetch_array();
 		$num_results = $row[0];
+
+			echo "<table>";
+			echo "<tr><td width = '120'><b> Papers: </b></td><td>";
+			echo ($num_results);
+			echo "</td></tr>";
+			echo "</table>";
+
+
+
+			echo "</div>";
+			
+		$page_num=$_GET['page'];
 		$page_total=(integer)(($num_results+9)/10);
 
 
@@ -74,6 +84,10 @@
 					$conference_name2 = ucwords($conference_name);
 					echo "<a href=\"conference.php?page=1&conference_id=$conf_id\">$conference_name2</a>";
 					echo "</td></tr>";
+
+
+
+
 					echo "</table>";
 				}
 				echo "<hr>";
