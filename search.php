@@ -43,7 +43,6 @@
 			curl_close($ch);
 			echo "</div>";
 
-
 			echo "<hr>";
 			$page_num=$_GET['page'];
 			if(!$page_num)$page_num=1;
@@ -54,25 +53,34 @@
 			if ($result['response']['numFound']>0){
 
 
-
-
-
 			//收集echarts 统计数据
 			//chart1: years, count_year
 			//chart2: conferences, count_conference
 			$years_data = array();
+
+			$years0 = array();
 			$conferences_data = array();
 			$all_paper = $result["response"]["docs"];
 			foreach ($all_paper as $paper_data) {
-				if(array_key_exists($paper_data["Year"], $years_data)){
-					$years_data[$paper_data["Year"]]++;
+				if(array_key_exists(intval($paper_data["Year"]), $years_data)){
+					$years_data[intval($paper_data["Year"])]++;
 				}else{
-					$years_data[$paper_data["Year"]]=1;
+					$years_data[intval($paper_data["Year"])]=1;
+
 				}
 				if(array_key_exists($paper_data["ConferenceName"], $conferences_data)){
 					$conferences_data[$paper_data["ConferenceName"]]++;
 				}else{
 					$conferences_data[$paper_data["ConferenceName"]]=1;
+				}
+
+				if(!in_array(intval($paper_data["Year"]), $years0)){
+					$years0[] = intval($paper_data["Year"]);
+				}
+			}
+			for($i=min($years0);$i<=max($years0);$i++){
+				if(!array_key_exists($i, $years_data)){
+					$years_data[$i] = 0;
 				}
 			}
 
@@ -80,7 +88,8 @@
 			$years = array();
 			$count_year = array();
 			foreach ($years_data as $key => $value) {
-				array_push($years,$key);
+
+				array_push($years,intval($key));
 				array_push($count_year,$value);
 			}
 
@@ -91,9 +100,6 @@
 				array_push($conferences,$key);
 				array_push($count_conference,$value);
 			}
-
-
-
 
 			// 显示信息的区域
 			echo "<div class='paperlis'>";
@@ -129,9 +135,6 @@
 				echo "</table>";
 				echo "<hr>";
 			}	
-
-
-
 
 			// 翻页模块
 			echo '<p>PageCount(10 messages per page):&nbsp;&nbsp;'.$page_total.'    </p>';
@@ -180,18 +183,13 @@
 			echo "<button type=\"submit\" class=\"btn btn-default\">jump to the page</button></div></form>";
 			echo "</div>";
 
-
-
 			// 图表显示区
 			echo "<div class='chartlis'>";
 			echo "<div id=\"year_chart\" style=\"width: 350px;height:250px;\"></div>";
 			echo "<div id=\"conference_chart\" style=\"width: 350px;height:250px;\"></div>";
 			echo "</div>";
 
-
-
 		}
-
 else {echo "No Search Results!";}
 }
 	?>
@@ -201,7 +199,6 @@ else {echo "No Search Results!";}
 
 	<script type="text/javascript">
         var myChart = echarts.init(document.getElementById('year_chart'));
-
         var years1 = eval(decodeURIComponent('<?php echo urlencode(json_encode($years));?>'));
         var count_year1 = eval(decodeURIComponent('<?php echo urlencode(json_encode($count_year));?>'));
  
@@ -237,7 +234,6 @@ else {echo "No Search Results!";}
 
     <script type="text/javascript">
         var myChart = echarts.init(document.getElementById('conference_chart'));
-
         var conferences1 = eval(decodeURIComponent('<?php echo urlencode(json_encode($conferences));?>'));
         var count_conference1 = eval(decodeURIComponent('<?php echo urlencode(json_encode($count_conference));?>'));
  
