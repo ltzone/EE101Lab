@@ -27,6 +27,7 @@
 			    <label for="keyword" class="col-sm-2 control-label">Keywords</label>
 			    <div class="col-sm-10">
 			      <input type="text" class="form-control" id="keyword" name="keyword">
+			      <input name="page" type="hidden" id="page" value=1 />
 			    </div>
 			  </div>
 			  <div class="form-group">

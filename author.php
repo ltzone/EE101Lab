@@ -73,7 +73,11 @@ if ($result) {
 
 
 	  	$page_num=$_GET['page'];
+	  	if(!$page_num)$page_num=1;
+	  	if($page_num<0)$page_num=1;
 	  	$page_total=(integer)(($num_results+9)/10);
+	  	
+	  	if($page_num>$page_total)$page_num=$page_total;
 		$result = mysqli_query($link, "SELECT PaperID from paper_author_affiliation where AuthorID='$author_id'limit ".(($page_num-1)*10).",10 ");
 		// 显示搜索结果的分区
 		if ($result) {
@@ -113,46 +117,54 @@ if ($result) {
 			}
 
 			// 翻页模块
-		   	echo '<p>共'.$page_total.'页,每页10条   共检索到'.$num_results.'条内容</p>';
+		   	echo '<p>PageCount(10 messages per page):&nbsp;&nbsp;'.$page_total.'    </p>';
+			echo '<p>Total messages:&nbsp;&nbsp;'.$num_results.'</p>';
 		   	if($page_total>$page_num )
 		   	{
 			  	if($page_num>1)
 			  	{
-				  	echo '<p href="./author.php?page=1&author_id='.($author_ex_id).'">首页</p>    ';
-				  	echo '<a href="./author.php?page='.($page_num-1).'&author_id='.($author_ex_id).'">上一页</a>';
-				  	echo " "."$page_num".'/'."$page_total"." ";
-				  	echo '<a href="./author.php?page='.($page_num+1).'&author_id='.($author_ex_id).'">下一页</a>';
-				  	echo '<a href="./author.php?page='.($page_total).'&author_id='.($author_ex_id).'">    尾页</a>';
+				  	
+				  	echo '<a href="./author.php?page=1&author_id='.($author_ex_id).'">first page&nbsp;&nbsp;&nbsp;</a>    ';
+				  	echo '<a href="./author.php?page='.($page_num-1).'&author_id='.($author_ex_id).'"> previous page&nbsp;&nbsp;&nbsp;</a>';
+				  	echo " "."$page_num".'/'."$page_total"."&nbsp;&nbsp;&nbsp; ";
+				  	echo '<a href="./author.php?page='.($page_num+1).'&author_id='.($author_ex_id).'">next page&nbsp;&nbsp;&nbsp;</a>';
+				  	echo '<a href="./author.php?page='.($page_total).'&author_id='.($author_ex_id).'">    last page&nbsp;&nbsp;&nbsp;</a>';
 			  	}
 			  	else 
 			  	{
-			  		echo '<a href="./author.php?page=1&author_id='.($author_ex_id).'">首页</a>    ';
-			  		echo '上一页';
-				  	echo " "."$page_num".'/'."$page_total"." ";
-				  	echo '<a href="./author.php?page='.($page_num+1).'&author_id='.($author_ex_id).'">下一页</a>';
-					echo '<a href="./author.php?page='.($page_total).'&author_id='.($author_ex_id).'">    尾页</a>';
+			  		echo 'first page&nbsp;&nbsp;&nbsp;    ';
+			  		echo ' previous page&nbsp;&nbsp;&nbsp;';
+				  	echo " "."$page_num".'/'."$page_total"." &nbsp;&nbsp;&nbsp;";
+				  	echo '<a href="./author.php?page='.($page_num+1).'&author_id='.($author_ex_id).'">next page&nbsp;&nbsp;&nbsp;</a>';
+					echo '<a href="./author.php?page='.($page_total).'&author_id='.($author_ex_id).'">    last page</a>';
 			  	}
 		   	}
 		   	else
 		   	{
 		   		if($page_total==1)
 		  		{
-			  		echo '<a href="./author.php?page=1&author_id='.($author_ex_id).'">首页</a>    ';
-			  		echo '上一页';
-				  	echo " "."$page_num".'/'."$page_total"." ";
-				  	echo '下一页';
-				  	echo '<a href="./author.php?page='.($page_total).'&author_id='.($author_ex_id).'">   尾页</a>';
+			  		echo 'first page&nbsp;&nbsp;&nbsp; ';
+			  		echo ' previous page&nbsp;&nbsp;&nbsp;';
+				  	echo " "."$page_num".'/'."$page_total"." &nbsp;&nbsp;&nbsp;";
+				  	echo 'next page&nbsp;&nbsp;&nbsp;';
+				  	echo ' last page';
 		  		}
 		  		else
 		  		{
-		  			echo '<a href="./author.php?page=1&author_id='.($author_ex_id).'">首页</a>     ';
-		  			echo '<a href="./author.php?page='.($page_num-1).'&author_id='.($author_ex_id).'">上一页</a>';
-			  		echo " "."$page_num".'/'."$page_total"." ";
-			  		echo '下一页';
-			  	   echo '<a href="./author.php?page='.($page_total).'&author_id='.($author_ex_id).'">    尾页</a>';
+		  			echo '<a href="./author.php?page=1&author_id='.($author_ex_id).'">first page&nbsp;&nbsp;&nbsp;</a>     ';
+		  			echo '<a href="./author.php?page='.($page_num-1).'&author_id='.($author_ex_id).'"> previous page&nbsp;&nbsp;&nbsp;</a>';
+			  		echo " "."$page_num".'/'."$page_total"."&nbsp;&nbsp;&nbsp; ";
+			  		echo 'next page&nbsp;&nbsp;&nbsp;';
+			  	   echo ' last page';
 		  		}
 		   	}
-		   	echo "</div>";	
+
+		   	echo "<form  action=\"author.php\"><div style=\"text-align:center;\">";
+    		echo "<input type=\"integer\"  id=\"page\" name=\"page\">";
+    		echo "<input name='author_id' type='hidden' id='author_id' value=$author_id>";
+			echo "<button type=\"submit\" class=\"btn btn-default\">jump to the page</button></div></form>";
+
+ 		   	echo "</div>";	
 
 
 
@@ -199,6 +211,8 @@ if ($result) {
 		}
 
 	?>
+
+
 </div>
 </body>
 </html>
