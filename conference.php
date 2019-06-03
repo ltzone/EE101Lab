@@ -157,9 +157,10 @@
 
 		
 		// 展示echarts的分区
-		echo "<div id=\"main\" style=\"width: 600px;height:400px;\"></div>";
+
 
 		echo "<div class='chartlis'>";
+		echo "<div id=\"main\" style=\"width: 350px;height:250px;\"></div>";
 		echo "</div>";
 
 		} else {

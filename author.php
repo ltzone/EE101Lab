@@ -170,7 +170,7 @@ if ($result) {
 
 			# 创建一个div元素，调用自己写的mycharts中的制图函数
 			//echarts year-paper
-			echo "<div id=\"year_paper\" style=\"width: 600px;height:400px;\"></div>";
+			echo "<div id=\"year_paper\" style=\"width: 350px;height:250px;\"></div>";
 
 			$author_name3 = json_decode($author_name2);
 			echo "<div id=\"main\" style=\"width:350px;height:250px;\"></div>";
@@ -215,7 +215,7 @@ if ($result) {
 		    series: [
 		    {
 	            name:'papers',
-		        type: 'line',
+		        type: 'bar',
 		        data: number1
 		    },
 		    ]
