@@ -22,7 +22,7 @@
 	<?php
 		$conference_id = $_GET["conference_id"];
 		$conference_ex_id = ucwords($conference_id);
-		$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
+		$link = mysqli_connect("localhost:3306", 'root', '770528', 'FINAL');
 		$result = mysqli_query($link, "SELECT ConferenceName from conferences where ConferenceID='$conference_id'");
 		if ($result) {
 			// conferenceinfo分区，显示会议具体信息

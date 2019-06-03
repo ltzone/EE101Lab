@@ -23,7 +23,7 @@
 <div class="container">
 	<?php
 		$paper_id = $_GET["paper_id"];
-		$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
+		$link = mysqli_connect("localhost:3306", 'root', '770528', 'FINAL');
 		echo "<div class = 'authorinfo'>";
 		$result = mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'");
 		if ($result) {
@@ -218,7 +218,7 @@ echo "Paper not found";}
 		// 显示搜索结果的分区
 			if ($result['response']['numFound']>0){
 				echo "<div class='paperlis'>";
-				echo "<h1 style=\"font-family:Arial Black\">相关文章</h1>";
+				echo "<h1 style=\"font-family:Arial Black\">相关文章内容</h1>";
 				foreach ($result['response']['docs'] as $paper) {
 
 					$paper_id = $paper['PaperID'];
@@ -259,6 +259,13 @@ echo "Paper not found";}
 		
 		$relatepaper= mysqli_fetch_array(mysqli_query($link, "SELECT d.PaperID, Title from (SELECT PaperID From (SELECT AuthorID FROM paper_author_affiliation a where a.PaperID = '7DED5581') b inner join paper_author_affiliation c on b.AuthorID = c.AuthorID group by PaperID) d inner join papers on d.PaperID = papers.PaperID"));
 		echo "</div>;"
+		$paper_num=3;
+		while($paper_num>0){
+			
+			
+			
+			$paper_num--;
+		}
 		
 
 	?>
