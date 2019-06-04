@@ -1,6 +1,10 @@
 <!DOCTYPE html> 
 <html>
 <head>
+<meta http-equiv="content-type" content="text/html; charset=gbk" />
+    <meta charset="utf-8">
+    <script src="js/echarts.js"></script>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <title>Paper Page</title>
@@ -96,11 +100,13 @@
 		
 		#增加查询reference结果为空的条件判断（bug）
 
+
 		
-		echo "<h1 style=\"font-family:Arial Black\">引用文章</h1>";
+
 		$result = mysqli_query($link, "SELECT ReferenceID from paper_reference2 where PaperID='$paper_id'");
 		if ($result->num_rows) {
 			echo "<div class='paperlis'>";	
+			echo "<h1 style=\"font-family:Arial Black\">引用文章</h1>";
 			while ($row = mysqli_fetch_array($result)) {
 				$paper_id_ref = $row['ReferenceID'];
 				$paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID from papers where PaperID='$paper_id_ref'"));
@@ -131,25 +137,22 @@
 					echo "</td></tr>";
 					echo "</table>";
 				}
-				
-
-
 				echo "<hr>";
 			}
+			echo "</div>";
 		}
 		else {
 				echo "Reference not found";
 		}	
 		
+
 		
-		
-		
-		echo "<h1 style=\"font-family:Arial Black\">被引用文章</h1>";
 				
 
 		$result = mysqli_query($link, "SELECT PaperID from paper_reference2 where ReferenceID='$paper_id'");
 		if ($result->num_rows) {
-			echo "<div class='paperlis'>";	
+			echo "<div class='paperlis'>";
+			echo "<h1 style=\"font-family:Arial Black\">被引用文章</h1>";
 			while ($row = mysqli_fetch_array($result)) {
 				$paper_id_ref = $row['PaperID'];
 				$paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID from papers where PaperID='$paper_id_ref'"));
@@ -187,15 +190,126 @@
 
 				echo "<hr>";
 			}
+			echo "</div>";
 		}
 		
 } else {
 echo "Paper not found";}
 		
-		
+
+
+
+
+			$paper_id = $_GET["paper_id"];
+			$paper_ti=mysqli_fetch_array(mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'"));
+			$paper_title3=$paper_ti['Title'];
+				$ch = curl_init();
+			$timeout = 5;
+			//echo $paper_title3;
+			$paper_title4=substr($paper_title3,3,-2);
+			$query = urlencode(str_replace(' ', '+', $paper_title4));
+			$url = "http://localhost:8983/solr/FINAL/select?q=PaperName%3A".$query."&wt=json";
+
+			curl_setopt ($ch, CURLOPT_URL, $url);
+			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+			$result = json_decode(curl_exec($ch), true);
+			curl_close($ch);
+		// 显示搜索结果的分区
+			if ($result['response']['numFound']>0){
+				echo "<div class='paperlis'>";
+				echo "<h1 style=\"font-family:Arial Black\">相关文章</h1>";
+				foreach ($result['response']['docs'] as $paper) {
+
+					$paper_id = $paper['PaperID'];
+					$papername2 = ucwords($paper['PaperName']);
+					echo "<a href=\"paper.php?paper_id=$paper_id\"><h3>$papername2</h3></a>";
+					echo "<table>";
+					echo "<tr><td width = '120'><b> Authors: </b></td><td>";
+
+
+					foreach ($paper['AuthorName'] as $idx => $author) {
+						$author_id = substr($paper['AuthorID'][$idx],2,-3);
+						$author2 = ucwords($author);
+						echo "<a href=\"author.php?page=1&author_id=$author_id\">$author2</a>";
+						echo "; ";
+					}
+					echo "</td></tr>";
+					echo "<tr><td><b> Conference: </b></td><td>";
+					$conference_id =$paper['ConferenceID'];
+					$conference = $paper['ConferenceName'];
+					echo "<a href=\"conference.php?page=1&conference_id=$conference_id\">$conference</a>";
+					echo "; ";
+					echo "</td></tr>";
+					echo "</table>";
+					echo "<hr>";
+				}
+				echo "</div>";
+}
 		
 
 	?>
+
+
+
+<?php
+
+	function get_paper_name($link,$paper_id){
+		$res = mysqli_query($link,"SELECT Title from papers where PaperID='$paper_id'");
+		if ($res) {
+				return ucwords(mysqli_fetch_array($res)['Title']);
+			}
+		else return NULL;
+	}
+	$paper_id = $_GET["paper_id"];
+	$result = mysqli_query($link, "SELECT paperID,referenceID FROM paper_reference2 WHERE paperID = '$paper_id'");
+
+	$links = [];
+	$nodes = [array('category'=>0,'name'=> $paper_id,'value'=>20, 'label'=> get_paper_name($link,$paper_id))];
+	$node_records = array($paper_id);
+
+
+	$connect = mysqli_fetch_all($result);
+	foreach ($connect as $connect_elem){
+		$link_item = array('source'=>$connect_elem[1],  'target'=> $connect_elem[0] ,'name'=>'reference');
+		if (!(in_array($connect_elem[1],$node_records))){
+			$node_item = array('category'=>1, 'name'=> $connect_elem[1], 'value'=>16, 'label'=> get_paper_name($link,$connect_elem[1]));
+			array_push($node_records,$connect_elem[1]);
+			array_push($nodes,$node_item);
+		}
+		array_push($links,$link_item);
+	}
+
+	$newconnect =array();
+	for ($depth=2;$depth<4;$depth+=1){
+		foreach ($connect as $connect_elem){
+			$result = mysqli_query($link, "SELECT paperID,referenceID FROM paper_reference2 WHERE paperID = '$connect_elem[1]'");
+			$connection = mysqli_fetch_all($result);
+			$newconnect = array_merge($newconnect,$connection);
+			foreach ($connection as $connection_elem){
+				$link_item = array('source'=>$connection_elem[1],  'target'=> $connection_elem[0],'name'=>'reference');
+				if (!(in_array($connection_elem[1],$node_records))){
+					$node_item = array('category'=>$depth, 'name'=> $connection_elem[1], 'value'=>(20-4*$depth), 'label'=> get_paper_name($link,$connection_elem[1]));
+					array_push($node_records,$connection_elem[1]);
+					array_push($nodes,$node_item);
+				}
+				array_push($links,$link_item);
+			}
+		}
+		$connect = $newconnect;
+		$newconnect = array();
+	}
+
+	echo "<div style='padding:20px;width:100%;height:100%;'> 
+		  <div id='main' style='width: 1104px;height:464px;'></div></div>";
+
+    $nodes = json_encode($nodes);
+    $links = json_encode($links);
+
+	echo "<script src=\"js/mycharts.js\"> relation_chart($nodes,$links);";
+	echo "</script>";
+	?>
+
 </div>
 </body>
 
