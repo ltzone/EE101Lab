@@ -257,20 +257,32 @@ echo "Paper not found";}
 		//
 		//
 		//
+		
+		
+		$result = mysqli_query($link, "SELECT d.PaperID, Title from (SELECT PaperID From (SELECT AuthorID FROM paper_author_affiliation a where a.PaperID = $paper_id) b inner join paper_author_affiliation c on b.AuthorID = c.AuthorID group by PaperID) d inner join papers on d.PaperID = papers.PaperID");
+		if ($result) {
+			
 		echo "<div class='paperlis'>";
 		echo "<h1 style=\"font-family:Arial Black\">相关作者的文章: </h1>";echo "<hr>";
 		
-		
-		$relatepaper= mysqli_fetch_array(mysqli_query($link, "SELECT d.PaperID, Title from (SELECT PaperID From (SELECT AuthorID FROM paper_author_affiliation a where a.PaperID = '7DED5581') b inner join paper_author_affiliation c on b.AuthorID = c.AuthorID group by PaperID) d inner join papers on d.PaperID = papers.PaperID"));
-		echo "</div>;"
-		$paper_num=3;
-		while($paper_num>0){
-			
-			
-			
-			$paper_num--;
+			echo "<div class='paperlis'>";
+			while ($row = mysqli_fetch_array($result)){
+				$paperkkk=$relatepaper['PaperID'];
+				$flag=($paperkkk!=$paper_id);
+				if ($flag){
+					echo "<table>";	
+					$papernamekkkrow=mysqli_fetch_array(mysqli_query($link, "SELECT Title From papers where PaperID='$paperkkk'"));
+					$papernamekkk=$papernamekkkrow['Title'];
+					echo "<a href=\"paper.php?paper_id=$paperkkk\">$papernamekkk; </a>";
+
+				
+					
+
+			echo "</table>";
+				}
+			}
 		}
-		
+		echo "</div>";
 
 	?>
 
