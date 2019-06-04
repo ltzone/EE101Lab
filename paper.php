@@ -1,6 +1,10 @@
 <!DOCTYPE html> 
 <html>
 <head>
+<meta http-equiv="content-type" content="text/html; charset=gbk" />
+    <meta charset="utf-8">
+    <script src="js/echarts.js"></script>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <title>Paper Page</title>
@@ -269,6 +273,67 @@ echo "Paper not found";}
 		
 
 	?>
+
+
+
+<?php
+
+	function get_paper_name($link,$paper_id){
+		$res = mysqli_query($link,"SELECT Title from papers where PaperID='$paper_id'");
+		if ($res) {
+				return ucwords(mysqli_fetch_array($res)['Title']);
+			}
+		else return NULL;
+	}
+	$paper_id = $_GET["paper_id"];
+	$result = mysqli_query($link, "SELECT paperID,referenceID FROM paper_reference2 WHERE paperID = '$paper_id'");
+
+	$links = [];
+	$nodes = [array('category'=>0,'name'=> $paper_id,'value'=>20, 'label'=> get_paper_name($link,$paper_id))];
+	$node_records = array($paper_id);
+
+
+	$connect = mysqli_fetch_all($result);
+	foreach ($connect as $connect_elem){
+		$link_item = array('source'=>$connect_elem[1],  'target'=> $connect_elem[0] ,'name'=>'reference');
+		if (!(in_array($connect_elem[1],$node_records))){
+			$node_item = array('category'=>1, 'name'=> $connect_elem[1], 'value'=>16, 'label'=> get_paper_name($link,$connect_elem[1]));
+			array_push($node_records,$connect_elem[1]);
+			array_push($nodes,$node_item);
+		}
+		array_push($links,$link_item);
+	}
+
+	$newconnect =array();
+	for ($depth=2;$depth<4;$depth+=1){
+		foreach ($connect as $connect_elem){
+			$result = mysqli_query($link, "SELECT paperID,referenceID FROM paper_reference2 WHERE paperID = '$connect_elem[1]'");
+			$connection = mysqli_fetch_all($result);
+			$newconnect = array_merge($newconnect,$connection);
+			foreach ($connection as $connection_elem){
+				$link_item = array('source'=>$connection_elem[1],  'target'=> $connection_elem[0],'name'=>'reference');
+				if (!(in_array($connection_elem[1],$node_records))){
+					$node_item = array('category'=>$depth, 'name'=> $connection_elem[1], 'value'=>(20-4*$depth), 'label'=> get_paper_name($link,$connection_elem[1]));
+					array_push($node_records,$connection_elem[1]);
+					array_push($nodes,$node_item);
+				}
+				array_push($links,$link_item);
+			}
+		}
+		$connect = $newconnect;
+		$newconnect = array();
+	}
+
+	echo "<div style='padding:20px;width:100%;height:100%;'> 
+		  <div id='main' style='width: 1104px;height:464px;'></div></div>";
+
+    $nodes = json_encode($nodes);
+    $links = json_encode($links);
+
+	echo "<script src=\"js/mycharts.js\"> relation_chart($nodes,$links);";
+	echo "</script>";
+	?>
+
 </div>
 </body>
 
