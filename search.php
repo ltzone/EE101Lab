@@ -36,14 +36,15 @@
 			$timeout = 5;
 			$query = urlencode(str_replace(' ', '+', $keyword));
 			$url = "http://localhost:8983/solr/FINAL/select?q=keyword%3A".$query."&start=0&rows=100000&wt=json";
+
 			curl_setopt ($ch, CURLOPT_URL, $url);
 			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 			$result = json_decode(curl_exec($ch), true);
 			curl_close($ch);
 			echo "</div>";
-
 			echo "<hr>";
+
 			$page_num=$_GET['page'];
 			if(!$page_num)$page_num=1;
 			if($page_num<0)$page_num=1;
@@ -134,6 +135,7 @@
 				echo "</td></tr>";
 				echo "</table>";
 				echo "<hr>";
+
 			}	
 
 			// 翻页模块
@@ -143,19 +145,19 @@
 			{
 			  	if($page_num>1)
 			  	{
-				  	echo '<a href="./search.php?page=1&keyword='.($key).'">first page&nbsp;&nbsp;&nbsp;</a>    ';
-				  	echo '<a href="./search.php?page='.($page_num-1).'&keyword='.($key).'"> previous page&nbsp;&nbsp;&nbsp;</a>';
+				  	echo '<a href="./search.php?page=1&keyword='.($keyword).'">first page&nbsp;&nbsp;&nbsp;</a>    ';
+				  	echo '<a href="./search.php?page='.($page_num-1).'&keyword='.($keyword).'"> previous page&nbsp;&nbsp;&nbsp;</a>';
 				  	echo " "."$page_num".'/'."$page_total"."&nbsp;&nbsp;&nbsp; ";
-				  	echo '<a href="./search.php?page='.($page_num+1).'&keyword='.($key).'">next page&nbsp;&nbsp;&nbsp;</a>';
-				  	echo '<a href="./search.php?page='.($page_total).'&keyword='.($key).'">    last page</a>';
+				  	echo '<a href="./search.php?page='.($page_num+1).'&keyword='.($keyword).'">next page&nbsp;&nbsp;&nbsp;</a>';
+				  	echo '<a href="./search.php?page='.($page_total).'&keyword='.($keyword).'">    last page</a>';
 			  	}
 			  	else 
 			  	{
 			  		echo 'first page&nbsp;&nbsp;&nbsp;  ';
 			  		echo ' previous page&nbsp;&nbsp;&nbsp;';
 				  	echo " "."$page_num".'/'."$page_total"."&nbsp;&nbsp;&nbsp; ";
-				  	echo '<a href="./search.php?page='.($page_num+1).'&keyword='.($key).'">next page&nbsp;&nbsp;&nbsp;</a>';
-					echo '<a href="./search.php?page='.($page_total).'&keyword='.($key).'">    last page&nbsp;&nbsp;&nbsp;</a>';
+				  	echo '<a href="./search.php?page='.($page_num+1).'&keyword='.($keyword).'">next page&nbsp;&nbsp;&nbsp;</a>';
+					echo '<a href="./search.php?page='.($page_total).'&keyword='.($keyword).'">    last page&nbsp;&nbsp;&nbsp;</a>';
 			  	}
 			}
 			else
@@ -170,8 +172,8 @@
 				}
 				else
 				{
-					echo '<a href="./search.php?page=1&keyword='.($key).'">first page&nbsp;&nbsp;&nbsp;</a>     ';
-					echo '<a href="./search.php?page='.($page_num-1).'&keyword='.($key).'"> previous page&nbsp;&nbsp;&nbsp;</a>';
+					echo '<a href="./search.php?page=1&keyword='.($keyword).'">first page&nbsp;&nbsp;&nbsp;</a>     ';
+					echo '<a href="./search.php?page='.($page_num-1).'&keyword='.($keyword).'"> previous page&nbsp;&nbsp;&nbsp;</a>';
 		  		echo " "."$page_num".'/'."$page_total"."&nbsp;&nbsp;&nbsp; ";
 		  		echo 'next page&nbsp;&nbsp;&nbsp;';
 		  	    echo 'last page';
@@ -179,7 +181,7 @@
 			}
 		   	echo "<form  action=\"search.php\"><div style=\"text-align:left;\">";
     		echo "<input type=\"integer\"  id=\"page\" name=\"page\">";
-    		echo "<input name='keyword' type='hidden' id='keyword' value=$key>";
+    		echo "<input name='keyword' type='hidden' id='keyword' value=$keyword>";
 			echo "<button type=\"submit\" class=\"btn btn-default\">jump to the page</button></div></form>";
 			echo "</div>";
 
@@ -190,11 +192,10 @@
 			echo "</div>";
 
 		}
+
 else {echo "No Search Results!";}
 }
 	?>
-
-
 
 
 	<script type="text/javascript">
@@ -265,6 +266,7 @@ else {echo "No Search Results!";}
 		
         myChart.setOption(option);
     </script>
+
 	
 </div>
 
