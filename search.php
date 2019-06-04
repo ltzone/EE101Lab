@@ -145,19 +145,19 @@
 			{
 			  	if($page_num>1)
 			  	{
-				  	echo '<a href="./search.php?page=1&keyword='.($key).'">first page&nbsp;&nbsp;&nbsp;</a>    ';
-				  	echo '<a href="./search.php?page='.($page_num-1).'&keyword='.($key).'"> previous page&nbsp;&nbsp;&nbsp;</a>';
+				  	echo '<a href="./search.php?page=1&keyword='.($keyword).'">first page&nbsp;&nbsp;&nbsp;</a>    ';
+				  	echo '<a href="./search.php?page='.($page_num-1).'&keyword='.($keyword).'"> previous page&nbsp;&nbsp;&nbsp;</a>';
 				  	echo " "."$page_num".'/'."$page_total"."&nbsp;&nbsp;&nbsp; ";
-				  	echo '<a href="./search.php?page='.($page_num+1).'&keyword='.($key).'">next page&nbsp;&nbsp;&nbsp;</a>';
-				  	echo '<a href="./search.php?page='.($page_total).'&keyword='.($key).'">    last page</a>';
+				  	echo '<a href="./search.php?page='.($page_num+1).'&keyword='.($keyword).'">next page&nbsp;&nbsp;&nbsp;</a>';
+				  	echo '<a href="./search.php?page='.($page_total).'&keyword='.($keyword).'">    last page</a>';
 			  	}
 			  	else 
 			  	{
 			  		echo 'first page&nbsp;&nbsp;&nbsp;  ';
 			  		echo ' previous page&nbsp;&nbsp;&nbsp;';
 				  	echo " "."$page_num".'/'."$page_total"."&nbsp;&nbsp;&nbsp; ";
-				  	echo '<a href="./search.php?page='.($page_num+1).'&keyword='.($key).'">next page&nbsp;&nbsp;&nbsp;</a>';
-					echo '<a href="./search.php?page='.($page_total).'&keyword='.($key).'">    last page&nbsp;&nbsp;&nbsp;</a>';
+				  	echo '<a href="./search.php?page='.($page_num+1).'&keyword='.($keyword).'">next page&nbsp;&nbsp;&nbsp;</a>';
+					echo '<a href="./search.php?page='.($page_total).'&keyword='.($keyword).'">    last page&nbsp;&nbsp;&nbsp;</a>';
 			  	}
 			}
 			else
@@ -172,8 +172,8 @@
 				}
 				else
 				{
-					echo '<a href="./search.php?page=1&keyword='.($key).'">first page&nbsp;&nbsp;&nbsp;</a>     ';
-					echo '<a href="./search.php?page='.($page_num-1).'&keyword='.($key).'"> previous page&nbsp;&nbsp;&nbsp;</a>';
+					echo '<a href="./search.php?page=1&keyword='.($keyword).'">first page&nbsp;&nbsp;&nbsp;</a>     ';
+					echo '<a href="./search.php?page='.($page_num-1).'&keyword='.($keyword).'"> previous page&nbsp;&nbsp;&nbsp;</a>';
 		  		echo " "."$page_num".'/'."$page_total"."&nbsp;&nbsp;&nbsp; ";
 		  		echo 'next page&nbsp;&nbsp;&nbsp;';
 		  	    echo 'last page';
@@ -181,7 +181,7 @@
 			}
 		   	echo "<form  action=\"search.php\"><div style=\"text-align:left;\">";
     		echo "<input type=\"integer\"  id=\"page\" name=\"page\">";
-    		echo "<input name='keyword' type='hidden' id='keyword' value=$key>";
+    		echo "<input name='keyword' type='hidden' id='keyword' value=$keyword>";
 			echo "<button type=\"submit\" class=\"btn btn-default\">jump to the page</button></div></form>";
 			echo "</div>";
 

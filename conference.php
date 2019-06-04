@@ -49,6 +49,28 @@ $num_results = $row[0];
 	  	
 
 
+		//创建$years,$number
+		$years=array();
+		$data=array();
+		$number1=array();
+		$result = mysqli_query($link, "SELECT PaperID from papers where ConferenceID='$conference_id' ");
+		if($result) {
+			while($row = mysqli_fetch_array($result)){
+				$paper_id = $row['PaperID'];
+				$paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT PaperPublishYear from papers where PaperID='$paper_id'"));
+				if(array_key_exists($paper_info['PaperPublishYear'], $data)){
+					$data[$paper_info['PaperPublishYear']]++;
+				}else{
+					$data[$paper_info['PaperPublishYear']]=1;
+				}
+			}
+		}
+		//创建years,number1
+		ksort($data);
+		foreach ($data as $key => $value) {
+			$years[]=$key;
+			$number[]=$value;
+		}
 
 
 			
