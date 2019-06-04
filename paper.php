@@ -58,7 +58,7 @@
 						$author_another_id = $author_row['AuthorID'];
 						$author_name2 = ucwords($author_name);
 						$author_another_id2 = ucwords($author_another_id);
-						echo "<a href=\"author.php?author_id=$author_another_id2\">$author_name2; </a>";
+						echo "<a href=\"author.php?page=1&author_id=$author_another_id2\">$author_name2; </a>";
 					}
 					echo "</td></tr>";
 					echo "<tr><td><b> Conference: </b></td><td>";
@@ -72,7 +72,7 @@
 					$conference_row = mysqli_fetch_array(mysqli_query($link, "SELECT ConferenceName from conferences WHERE ConferenceID = '$conference_id'"));
 					$conference_name = $conference_row['ConferenceName'];
 					$conference_name2 = ucwords($conference_name);
-					echo "<a href=\"conference.php?conference_id=$conference_id\">$conference_name2; </a>";
+					echo "<a href=\"conference.php?page=1&conference_id=$conference_id\">$conference_name2; </a>";
 					echo "</td>";
 					echo "</tr>";
 					echo "<tr><td><b> Year: </b></td><td>";
@@ -258,8 +258,9 @@ echo "Paper not found";}
 		//
 		//
 		
-		
+		$paper_id=$_GET["paper_id"];
 		$result = mysqli_query($link, "SELECT d.PaperID, Title from (SELECT PaperID From (SELECT AuthorID FROM paper_author_affiliation a where a.PaperID = $paper_id) b inner join paper_author_affiliation c on b.AuthorID = c.AuthorID group by PaperID) d inner join papers on d.PaperID = papers.PaperID");
+		var_dump($result);
 		if ($result) {
 			
 		echo "<div class='paperlis'>";
