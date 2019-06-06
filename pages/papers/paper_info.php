@@ -259,8 +259,9 @@ if ($result) {
                         echo "<td>";
                         if ($Affresult->num_rows!=0){
                             foreach ($Affresult as $affline){
+                                $Affi_id = $affline['AffiliationID'];
                                 $Affi_name = ucwords($affline['AffiliationName']);
-                                echo "$Affi_name;\n";}
+                                echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=$Affi_id\">$Affi_name</a>;\n";}
                             echo "</td>";
                             }
                         echo "<td></td>";

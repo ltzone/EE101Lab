@@ -38,7 +38,9 @@
 			</form>
 	</div>
 
-
+<object type="image/svg+xml" data="./test1.svg" style="display:block;width:1000px;height:800px" >
+    <param name="src" value="./test.svg" >
+</object>
 
 </body>
 
