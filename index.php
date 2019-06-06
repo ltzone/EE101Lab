@@ -22,7 +22,7 @@
 	<div class="container">
 		<br>
 	    	<h2>Enter Your Keywords</h2>
-			<form class="form-horizontal" action="search.php">
+			<form class="form-horizontal" action="/pages/search/search_info.php">
 			  <div class="form-group">
 			    <label for="keyword" class="col-sm-2 control-label">Keywords</label>
 			    <div class="col-sm-10">
