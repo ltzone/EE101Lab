@@ -172,7 +172,7 @@ if ($result) {
                                                         
                     <div class="widget-content">
                         
-                        <div id="main" class="chart-holder"></div> <!-- /area-chart -->
+                        <div id="main" class="chart-holder" width=1104px height=1200px></div> <!-- /area-chart -->
 
 <?php
 
@@ -221,9 +221,6 @@ if ($result) {
         $connect = $newconnect;
         $newconnect = array();
     }
-
-    echo "<div style='padding:20px;width:100%;height:100%;'> 
-          <div id='main' style='width: 1104px;height:464px;'></div></div>";
 
     $nodes = json_encode($nodes);
     $links = json_encode($links);
@@ -307,7 +304,7 @@ if ($result) {
         },
         tooltip : {
             trigger: 'item',
-            formatter: '{a} : {b}'
+            formatter: ['{label}','{c} : {d} : {e} ','{a} : {b}','sdasda'].join('\n'),
             //formatter: function(params){//触发之后返回的参数，这个函数是关键
             //if (params.data.category !=undefined) //如果触发节点
             //   window.open("http://www.baidu.com")
@@ -335,10 +332,13 @@ if ($result) {
                 name : title,
                 ribbonType: false,
                 categories : categories,
+
+                roam:true,
+                focusNodeAdjacency:true,
                 itemStyle: {
                     normal: {
                         label: {
-                            show: true,
+                            show: false,
                             textStyle: {
                                 color: '#333'
                             }
@@ -363,6 +363,7 @@ if ($result) {
                         linkStyle : {}
                     }
                 },
+                force: {repulsion:80},
                 useWorker: false,
                 minRadius : 15,
                 maxRadius : 25,
