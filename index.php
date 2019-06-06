@@ -22,7 +22,7 @@
 	<div class="container">
 		<br>
 	    	<h2>Enter Your Keywords</h2>
-			<form class="form-horizontal" action="search.php">
+			<form class="form-horizontal" action="/pages/search/search_info.php">
 			  <div class="form-group">
 			    <label for="keyword" class="col-sm-2 control-label">Keywords</label>
 			    <div class="col-sm-10">
@@ -38,7 +38,9 @@
 			</form>
 	</div>
 
-
+<object type="image/svg+xml" data="./test1.svg" style="display:block;width:1000px;height:800px" >
+    <param name="src" value="./test.svg" >
+</object>
 
 </body>
 
