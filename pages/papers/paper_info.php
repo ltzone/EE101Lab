@@ -21,6 +21,15 @@
 <body>
 
 
+<?php
+$paper_id = $_GET["paper_id"];
+$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
+$result = mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'");
+if ($result) {
+    $paper_name = mysqli_fetch_array($result)['Title'];
+    $paper_name2 = ucwords($paper_name);
+}
+?>
 
 
 
@@ -36,7 +45,8 @@
                 <span class="icon-bar"></span>              
             </a>
             
-            <a class="brand" href="./paper_info.php">Papers</a>
+            <?php echo "<a class=\"brand\" href=\"./paper_info.php?paper_id=$paper_id\">";
+             ?>Papers</a>
             
             <div class="nav-collapse">
             
@@ -77,15 +87,6 @@
 </div> <!-- /navbar -->
 
 
-<?php
-$paper_id = $_GET["paper_id"];
-$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
-$result = mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'");
-if ($result) {
-    $paper_name = mysqli_fetch_array($result)['Title'];
-    $paper_name2 = ucwords($paper_name);
-}
-?>
 
 
 
@@ -197,7 +198,7 @@ if ($result) {
                     $conference_row = mysqli_fetch_array(mysqli_query($link, "SELECT ConferenceName from conferences WHERE ConferenceID = '$conference_id'"));
                     $conference_name = $conference_row['ConferenceName'];
                     $conference_name2 = ucwords($conference_name);
-                    echo "<a href=\"conference.php?page=1&conference_id=$conference_id\">$conference_name2; </a>";
+                    echo "<a href=\"..\conference\conference_info.php?page=1&conference_id=$conference_id\">$conference_name2; </a>";
                     echo "</td>";
                     echo "</tr>";
                     echo "<tr><td><b> Year: </b></td><td>";
@@ -258,8 +259,9 @@ if ($result) {
                         echo "<td>";
                         if ($Affresult->num_rows!=0){
                             foreach ($Affresult as $affline){
+                                $Affi_id = $affline['AffiliationID'];
                                 $Affi_name = ucwords($affline['AffiliationName']);
-                                echo "$Affi_name;\n";}
+                                echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=$Affi_id\">$Affi_name</a>;\n";}
                             echo "</td>";
                             }
                         echo "<td></td>";

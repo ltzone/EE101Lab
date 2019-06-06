@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Dashboard - Bootstrap Admin</title>
+    <title>Papers - Paper Information</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />    
@@ -21,15 +21,20 @@
 <body>
 
 
-
 <?php
-$paper_id = $_GET["paper_id"];
+$affiliation_id = $_GET["affiliation_id"];
 $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
-$result = mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'");
-if ($result) {
-    $paper_name = mysqli_fetch_array($result)['Title'];
-    $paper_name2 = ucwords($paper_name);
-}
+$result = mysqli_query($link, "SELECT AffiliationName from affiliations where AffiliationID='$affiliation_id'");
+        $affiliation_name = mysqli_fetch_array($result)['AffiliationName'];
+        $affiliation_name2 = ucwords($affiliation_name);
+
+# 查询本机构所有作者（不重复）
+$result = mysqli_query($link, "SELECT AuthorID, count(distinct AuthorID) from paper_author_affiliation where AffiliationID='$affiliation_id' group by AuthorID");
+$author_list = mysqli_fetch_all($result);
+$author_count= count($author_list );
+
+# 查询本机构所有文章 （不重复）
+# SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID='01109E6D' group by PaperID
 ?>
 
 
@@ -44,8 +49,9 @@ if ($result) {
                 <span class="icon-bar"></span> 
                 <span class="icon-bar"></span>              
             </a>
-            
-            <?php echo "<a class=\"brand\" href=\"./paper_info.php?paper_id=$paper_id\">"; ?>Papers</a>
+
+
+            <?php echo "<a class=\"brand\" href=\"./affiliation_info.php?affiliation_id=$affiliation_id\">Affiliations</a>";?>
             
             <div class="nav-collapse">
             
@@ -92,54 +98,38 @@ if ($result) {
     <div class="container">
         
         <div class="row">
+            <!-- 左栏标签 -->    
             <div class="span3">
                 
                 
                 <ul id="main-nav" class="nav nav-tabs nav-stacked">
                     
                     <li>
-                        <?php echo "<a href=\"./paper_info.php?paper_id=$paper_id\">" ?>
+                        <?php echo "<a href=\"./affiliation_info.php?affiliation_id=$affiliation_id\">" ?>
                             <i class="icon-user"></i>
-                            Paper Information      
+                            Affiliation Information      
                         </a>
                     </li>
-                    
-                    <li>
-                        <?php echo "<a href=\"./paper_charts.php?paper_id=$paper_id\">" ?>
-                            <i class="icon-signal"></i>
-                            Paper Charts
-                        </a>
-                    </li>
-                    
-                    <li class="active">
-                        <?php echo "<a href=\"./paper_reference.php?paper_id=$paper_id\">" ?>
+
+                    <li  class="active">
+                        <?php echo "<a href=\"./affiliation_paper.php?affiliation_id=$affiliation_id\">" ?>
                             <i class="icon-th-list"></i>
-                            References    
+                            Affiliation Papers   
                         </a>
                     </li>
                     
                     <li>
-                        <?php echo "<a href=\"./paper_citation.php?paper_id=$paper_id\">" ?>
-                            <i class="icon-th-large"></i>
-                            Citations
-                            <span class="label label-warning pull-right">5</span>
+                        <?php echo "<a href=\"./affiliation_charts.php?affiliation_id=$affiliation_id\">" ?>
+                            <i class="icon-signal"></i>
+                            Affiliation Charts
                         </a>
                     </li>
-                    
-                    <li>
-                        <?php echo "<a href=\"./paper_recommendation.php?paper_id=$paper_id\">" ?>
-                            <i class="icon-pushpin"></i>
-                            Recommendations
-                        </a>
-                    </li>
-                    
                     <li>
                         <a href="../../index.php">
                             <i class="icon-home"></i>
                             Back to Home                     
                         </a>
-                    </li>
-                    
+                    </li>                
                 </ul>   
                 
                 <hr />
@@ -158,7 +148,7 @@ if ($result) {
                 
                 <h1 class="page-title">
                     <i class="icon-user"></i>
-                    References                   
+                    Affiliation Papers of <?php echo $affiliation_name2; ?>              
                 </h1>
                 
                 <div class="stat-container">
@@ -187,14 +177,14 @@ if ($result) {
                     
                 </div> <!-- /stat-container -->
 <?php
-                $result = mysqli_query($link, "SELECT ReferenceID from paper_reference2 where PaperID='$paper_id'");
+                $result = mysqli_query($link, "SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID='$affiliation_id' group by PaperID");
                 if ($result->num_rows) {              
                 echo "
                 <div class=\"widget widget-table\">
                                         
                     <div class=\"widget-header\">
                         <i class=\"icon-th-list\"></i>
-                        <h3>Reference Table</h3>
+                        <h3>Paper Table</h3>
                     </div> <!-- /widget-header -->
                     
                     <div class=\"widget-content\">
@@ -215,7 +205,7 @@ if ($result) {
 
             $idx = 1;
             while ($row = mysqli_fetch_array($result)) {
-                $paper_id_ref = $row['ReferenceID'];
+                $paper_id_ref = $row['PaperID'];
                 $paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID, PaperPublishYear from papers where PaperID='$paper_id_ref'"));
                 if ($paper_info){
                     $paper_title = $paper_info['Title'];
@@ -226,7 +216,7 @@ if ($result) {
                     echo "<a href=\"paper_info.php?paper_id=$paper_id_ref\"><h3>$paper_title2</h3></a>";
                     echo "</td>";
                     echo "<td>";
-                    $author_info = mysqli_query($link, "SELECT A.AuthorID, AuthorName FROM paper_author_affiliation A LEFT JOIN authors B ON A.AuthorID = B.AuthorID WHERE PaperID = '$paper_id' ORDER BY AuthorSequence ASC");
+                    $author_info = mysqli_query($link, "SELECT A.AuthorID, AuthorName FROM paper_author_affiliation A LEFT JOIN authors B ON A.AuthorID = B.AuthorID WHERE PaperID = '$paper_id_ref' ORDER BY AuthorSequence ASC");
 
                     while ($author_row = mysqli_fetch_array($author_info)){
                         $author_name = $author_row['AuthorName'];
@@ -260,7 +250,7 @@ if ($result) {
             echo "  </div> <!-- /widget-content -->";
         }
         else {
-                echo "<div class='widget-content'><h4>Citations not found</h4></div>";
+                echo "<div class='widget-content'><h4>Papers not found</h4></div>";
         }   ?>
 
                     

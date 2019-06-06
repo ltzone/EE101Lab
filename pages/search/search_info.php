@@ -173,20 +173,20 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
                 $paper=$result['response']['docs'][$i] ;
                 $paper_id = $paper['PaperID'];
                 $papername2 = ucwords($paper['PaperName']);
-                echo "<a href=\"paper.php?paper_id=$paper_id\"><h3>$papername2</h3></a>";
+                echo "<a href=\"../papers/paper_info.php?paper_id=$paper_id\"><h3>$papername2</h3></a>";
                 echo "<table>";
                 echo "<tr><td width = '120'><b> Authors: </b></td><td>";
                 foreach ($paper['AuthorName'] as $idx => $author) {
                     $author_id = substr($paper['AuthorID'][$idx],2,-3);
                     $author2 = ucwords($author);
-                    echo "<a href=\"author.php?page=1&author_id=$author_id\">$author2</a>";
+                    echo "<a href=\".\..\authors\author_info.php?page=1&author_id=$author_id\">$author2</a>";
                     echo "; ";
                 }
                 echo "</td></tr>";
                 echo "<tr><td><b> Conference: </b></td><td>";
                 $conference_id =$paper['ConferenceID'];
                 $conference = $paper['ConferenceName'];
-                echo "<a href=\"conference.php?page=1&conference_id=$conference_id\">$conference</a>";
+                echo "<a href=\".\..\conference\conference_info.php?page=1&conference_id=$conference_id\">$conference</a>";
                 echo "; ";
                 echo "</td></tr>";
                 echo "</table>";

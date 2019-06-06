@@ -211,7 +211,7 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                     $yr = $paper_info['PaperPublishYear'];
                     $paper_title2 = ucwords($paper_title);
                     echo "<tr><td>$idx</td><td>";
-                    echo "<a href=\"paper.php?paper_id=$paper_id_ref\"><h3>$paper_title2</h3></a>";
+                    echo "<a href=\"../papers/paper_info.php?paper_id=$paper_id_ref\"><h3>$paper_title2</h3></a>";
                     echo "</td>";
                     echo "<td>";
                     $author_info = mysqli_query($link, "SELECT A.AuthorID, AuthorName FROM paper_author_affiliation A LEFT JOIN authors B ON A.AuthorID = B.AuthorID WHERE PaperID = '$paper_id_ref' ORDER BY AuthorSequence ASC");
@@ -221,7 +221,7 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                         $author_another_id = $author_row['AuthorID'];
                         $author_name2 = ucwords($author_name);
                         $author_another_id2 = ucwords($author_another_id);
-                        echo "<a href=\"author.php?page=1&author_id=$author_another_id2\">$author_name2</a>";
+                        echo "<a href=\"../authors/author_info.php?page=1&author_id=$author_another_id2\">$author_name2</a>";
                         echo "; ";
                     }
                     echo "</td><td>";
@@ -229,7 +229,7 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                     $conference_row = mysqli_fetch_array(mysqli_query($link, "SELECT ConferenceName from conferences WHERE ConferenceID = '$conf_id'"));
                     $conference_name = $conference_row['ConferenceName'];
                     $conference_name2 = ucwords($conference_name);
-                    echo "<a href=\"conference.php?page=1&conference_id=$conf_id\">$conference_name2</a>";
+                    echo "<a href=\"conference_info.php?page=1&conference_id=$conf_id\">$conference_name2</a>";
                     echo "</td><td>";
                     echo $yr; echo "</td>";
 

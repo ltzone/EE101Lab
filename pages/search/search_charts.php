@@ -16,6 +16,7 @@
     <link href="../../css/adminia.css" rel="stylesheet" /> 
     <link href="../../css/adminia-responsive.css" rel="stylesheet" /> 
     <link href="../../css/pages/dashboard.css" rel="stylesheet" /> 
+    <script src="../../js/echarts.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 
 <body>
@@ -81,6 +82,95 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 </div> <!-- /navbar -->
 
 <div id="content">
+
+    <?php 
+        $keyword = $_GET["keyword"];
+        if ($keyword) {
+            $ch = curl_init();
+            $timeout = 5;
+            $query = urlencode(str_replace(' ', '+', $keyword));
+            $url = "http://localhost:8983/solr/FINAL/select?q=keyword%3A".$query."&start=0&rows=100000&wt=json";
+
+            curl_setopt ($ch, CURLOPT_URL, $url);
+            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+            $result = json_decode(curl_exec($ch), true);
+            curl_close($ch);
+        }
+        //收集echarts 统计数据
+        //chart1: years, count_year
+        //chart2: conferences, count_conference
+        $years_data = array();
+
+        $years0 = array();
+        $conferences_data = array();
+        $all_paper = $result["response"]["docs"];
+        //var_dump($all_paper);
+        $authors_data = array();
+        foreach ($all_paper as $paper_data) {
+            if(array_key_exists(intval($paper_data["Year"]), $years_data)){
+                $years_data[intval($paper_data["Year"])]++;
+            }else{
+                $years_data[intval($paper_data["Year"])]=1;
+
+            }
+            if(array_key_exists($paper_data["ConferenceName"], $conferences_data)){
+                $conferences_data[$paper_data["ConferenceName"]]++;
+            }else{
+                $conferences_data[$paper_data["ConferenceName"]]=1;
+            }
+
+            if(!in_array(intval($paper_data["Year"]), $years0)){
+                $years0[] = intval($paper_data["Year"]);
+            }
+            foreach ($paper_data["AuthorName"] as $authorName) {
+                if(array_key_exists($authorName, $authors_data)){
+                    $authors_data[$authorName]++;
+                }else{
+                    $authors_data[$authorName] = 1;
+                }
+            }
+        }
+        for($i=min($years0);$i<=max($years0);$i++){
+            if(!array_key_exists($i, $years_data)){
+                $years_data[$i] = 0;
+            }
+        }
+
+        ksort($years_data);
+        $years = array();
+        $count_year = array();
+        foreach ($years_data as $key => $value) {
+
+            array_push($years,intval($key));
+            array_push($count_year,$value);
+        }
+
+        ksort($conferences_data);
+        $conferences = array();
+        $count_conference = array();
+        foreach ($conferences_data as $key => $value) {
+            array_push($conferences,$key);
+            array_push($count_conference,$value);
+        }
+
+        arsort($authors_data);
+        $all_authors = array_keys($authors_data);
+        $authors = array();
+        $author_num = array();
+        for ($i=0; $i < min(10,sizeof($all_authors)); $i++) { 
+            array_push($authors,$all_authors[$i]);
+            array_push($author_num,$authors_data[$all_authors[$i]]);
+        }
+
+        $years = json_encode($years);
+        $count_year = json_encode($count_year);
+        $conferences = json_encode($conferences);
+        $count_conference = json_encode($count_conference);
+        $authors = json_encode($authors);
+        $author_num = json_encode($author_num);
+
+    ?>
     
     <div class="container">
         
@@ -131,14 +221,12 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 
                 <div class="widget">
                     
-                    <div class="widget-header">
-                        <h3>Area Chart</h3>
-                    </div> <!-- /widget-header -->
                                                         
                     <div class="widget-content">
                         
-                        <div id="area-chart" class="chart-holder"></div> <!-- /area-chart -->
-                        
+                        <div id="year_chart" style="float: left;width: 400px;height:325px;"></div>
+                        <div id="conference_chart" style="float: left;width: 400px;height:325px;"></div>
+                        <div id="author_chart" style="float: left;width: 400px;height:325px;"></div>
                         
                                         
                     </div> <!-- /widget-content -->
@@ -148,58 +236,9 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
                 
                 
                 
-                <div class="widget">
-                    
-                    <div class="widget-header">
-                        <h3>Line Chart</h3>
-                    </div> <!-- /widget-header -->
-                                                        
-                    <div class="widget-content">
-                        
-                        <div id="line-chart" class="chart-holder"></div> <!-- /donut-chart -->
-                        
-                        
-                                        
-                    </div> <!-- /widget-content -->
-                    
-                </div> <!-- /widget -->
                 
                 
                 
-                <div class="widget">
-                    
-                    <div class="widget-header">
-                        <h3>Bar Chart</h3>
-                    </div> <!-- /widget-header -->
-                                                        
-                    <div class="widget-content">
-                        
-                        <div id="bar-chart" class="chart-holder"></div> <!-- /donut-chart -->
-                        
-                        
-                                        
-                    </div> <!-- /widget-content -->
-                    
-                </div> <!-- /widget -->
-                
-                
-                
-                
-                <div class="widget">
-                    
-                    <div class="widget-header">
-                        <h3>Pie Chart</h3>
-                    </div> <!-- /widget-header -->
-                                                        
-                    <div class="widget-content">
-                        
-                        <div id="pie-chart" class="chart-holder"></div> <!-- /donut-chart -->
-                        
-                        
-                                        
-                    </div> <!-- /widget-content -->
-                    
-                </div> <!-- /widget -->
  
                 
           
@@ -211,6 +250,130 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
             
             
         </div> <!-- /row -->
+
+        <!-- echarts Publish Year -->
+        <script type="text/javascript">
+            var myChart = echarts.init(document.getElementById('year_chart'));
+            var years1 = eval(decodeURIComponent('<?php echo urlencode($years);?>'));
+            var count_year1 = eval(decodeURIComponent('<?php echo urlencode($count_year);?>'));
+     
+            option = {
+                title: {
+                    text: 'Publish Year'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['number of papers']
+                },
+                xAxis: {
+                    type: 'category',
+                    data: years1
+                },
+                yAxis: {
+                    type: 'value',
+                    minInterval: 1
+                },
+                series: [
+                {
+                    name:'papers',
+                    type: 'line',
+                    data: count_year1
+                },
+                ]
+            };
+            
+            myChart.setOption(option);
+        </script>
+
+        <!--echarts Conference Source -->
+        <script type="text/javascript">
+            var myChart = echarts.init(document.getElementById('conference_chart'));
+            var conferences1 = eval(decodeURIComponent('<?php echo urlencode($conferences);?>'));
+            var count_conference1 = eval(decodeURIComponent('<?php echo urlencode($count_conference);?>'));
+     
+            option = {
+                title: {
+                    text: 'Conference'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['number of papers']
+                },
+                xAxis: {
+                    type: 'category',
+                    data: conferences1,
+                    axisLabel: {
+                        interval:0,
+                        rotate: 40
+                    }
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                {
+                    name:'papers',
+                    type: 'bar',
+                    data: count_conference1
+                },
+                ]
+            };
+            
+            myChart.setOption(option);
+        </script>
+
+
+        <!-- author charts authors author_num-->
+        <script type="text/javascript">
+            var myChart = echarts.init(document.getElementById('author_chart'));
+            var authors1 = eval(decodeURIComponent('<?php echo urlencode($authors);?>'));
+            var author_num1 = eval(decodeURIComponent('<?php echo urlencode($author_num);?>'));
+
+            for(i=0;i<authors1.length;i++){
+                authors1[i] = authors1[i].replace(/[+]/g," ");
+            }
+     
+            option = {
+                title: {
+                    text: 'Top Authors'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['number of papers']
+                },
+                xAxis: {
+                    type: 'category',
+                    data: authors1,
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 40,
+                        textStyle: {
+                            fontSize: 9
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    minInterval: 1
+                },
+                series: [
+                {
+                    name:'papers',
+                    type: 'bar',
+                    data: author_num1
+                },
+                ]
+            };
+            
+            myChart.setOption(option);
+        </script>
+
         
     </div> <!-- /container -->
     

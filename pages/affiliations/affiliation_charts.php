@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Conferences</title>
+    <title>Papers - Paper Information</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />    
@@ -16,42 +16,25 @@
     <link href="../../css/adminia.css" rel="stylesheet" /> 
     <link href="../../css/adminia-responsive.css" rel="stylesheet" /> 
     <link href="../../css/pages/dashboard.css" rel="stylesheet" /> 
-    <script src="../../js/echarts.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 
 <body>
 
 
 <?php
-$conference_id = $_GET["conference_id"];
+$affiliation_id = $_GET["affiliation_id"];
 $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
+$result = mysqli_query($link, "SELECT AffiliationName from affiliations where AffiliationID='$affiliation_id'");
+        $affiliation_name = mysqli_fetch_array($result)['AffiliationName'];
+        $affiliation_name2 = ucwords($affiliation_name);
 
-//创建$years,$number
-$years=array();
-$data=array();
-$number1=array();
-$result = mysqli_query($link, "SELECT PaperID,PaperPublishYear from papers where ConferenceID='$conference_id' ");
-if($result) {
-    while($row = mysqli_fetch_array($result)){
-        $paper_id = $row['PaperID'];
-        $paper_year = $row['PaperPublishYear'];
-        //
-        if(array_key_exists($paper_year, $data)){
-            $data[$paper_year]++;
-        }else{
-            $data[$paper_year]=1;
-        }
-    }
-}
-//创建years,number1
-ksort($data);
-foreach ($data as $key => $value) {
-    $years[]=$key;
-    $number[]=$value;
-}
+# 查询本机构所有作者（不重复）
+$result = mysqli_query($link, "SELECT AuthorID, count(distinct AuthorID) from paper_author_affiliation where AffiliationID='$affiliation_id' group by AuthorID");
+$author_list = mysqli_fetch_all($result);
+$author_count= count($author_list );
 
-$years = json_encode($years);
-$number = json_encode($number);
+# 查询本机构所有文章 （不重复）
+# SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID='01109E6D' group by PaperID
 ?>
 
 
@@ -68,7 +51,7 @@ $number = json_encode($number);
             </a>
 
 
-            <?php echo "<a class=\"brand\" href=\"./conference_info.php?conference_id=$conference_id\">Conferences</a>";?>
+            <?php echo "<a class=\"brand\" href=\"./affiliation_info.php?affiliation_id=$affiliation_id\">Affiliations</a>";?>
             
             <div class="nav-collapse">
             
@@ -122,16 +105,23 @@ $number = json_encode($number);
                 <ul id="main-nav" class="nav nav-tabs nav-stacked">
                     
                     <li>
-                        <?php echo "<a href=\"./conference_info.php?conference_id=$conference_id\">" ?>
+                        <?php echo "<a href=\"./affiliation_info.php?affiliation_id=$affiliation_id\">" ?>
                             <i class="icon-user"></i>
-                            Conference Information      
+                            Affiliation Information      
+                        </a>
+                    </li>
+
+                    <li >
+                        <?php echo "<a href=\"./affiliation_paper.php?affiliation_id=$affiliation_id\">" ?>
+                            <i class="icon-th-list"></i>
+                            Affiliation Papers   
                         </a>
                     </li>
                     
-                    <li  class="active">
-                        <?php echo "<a href=\"./conference_charts.php?conference_id=$conference_id\">" ?>
+                    <li class="active">
+                        <?php echo "<a href=\"./affiliation_charts.php?affiliation_id=$affiliation_id\">" ?>
                             <i class="icon-signal"></i>
-                            Conference Charts
+                            Affiliation Charts
                         </a>
                     </li>
                     <li>
@@ -139,8 +129,7 @@ $number = json_encode($number);
                             <i class="icon-home"></i>
                             Back to Home                     
                         </a>
-                    </li>
-                                        
+                    </li>                
                 </ul>   
                 
                 <hr />
@@ -151,24 +140,27 @@ $number = json_encode($number);
                 
                 <br />
             </div> <!-- /span3 -->
-            
+
+
 
             <!-- 右栏内容 -->
             <div class="span9">
                 
                 <h1 class="page-title">
                     <i class="icon-user"></i>
-                    Conference Charts              
+                    Affiliation Charts              
                 </h1>
 
                 <div class="widget">
                     
                     <div class="widget-header">
-                        <h3>Year</h3>
+                        <h3>Area Chart</h3>
                     </div> <!-- /widget-header -->
                                                         
                     <div class="widget-content">
-                        <div id="main" style="width: 600px;height:400px;"></div>
+                        
+                        <div id="area-chart" class="chart-holder"></div> <!-- /area-chart -->
+                        
                         
                                         
                     </div> <!-- /widget-content -->
@@ -178,10 +170,58 @@ $number = json_encode($number);
                 
                 
                 
+                <div class="widget">
+                    
+                    <div class="widget-header">
+                        <h3>Line Chart</h3>
+                    </div> <!-- /widget-header -->
+                                                        
+                    <div class="widget-content">
+                        
+                        <div id="line-chart" class="chart-holder"></div> <!-- /donut-chart -->
+                        
+                        
+                                        
+                    </div> <!-- /widget-content -->
+                    
+                </div> <!-- /widget -->
+                
+                
+                
+                <div class="widget">
+                    
+                    <div class="widget-header">
+                        <h3>Bar Chart</h3>
+                    </div> <!-- /widget-header -->
+                                                        
+                    <div class="widget-content">
+                        
+                        <div id="bar-chart" class="chart-holder"></div> <!-- /donut-chart -->
+                        
+                        
+                                        
+                    </div> <!-- /widget-content -->
+                    
+                </div> <!-- /widget -->
                 
                 
                 
                 
+                <div class="widget">
+                    
+                    <div class="widget-header">
+                        <h3>Pie Chart</h3>
+                    </div> <!-- /widget-header -->
+                                                        
+                    <div class="widget-content">
+                        
+                        <div id="pie-chart" class="chart-holder"></div> <!-- /donut-chart -->
+                        
+                        
+                                        
+                    </div> <!-- /widget-content -->
+                    
+                </div> <!-- /widget -->
  
                 
           
@@ -193,44 +233,6 @@ $number = json_encode($number);
             
             
         </div> <!-- /row -->
-
-        <!-- echarts画图，需要数组 years1,number1 -->
-        <!--div id="main" style="width: 600px;height:400px;"></div-->
-        <script type="text/javascript">
-            // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('main'));
-
-            var years1 = eval(decodeURIComponent('<?php echo urlencode($years);?>'));
-            var number1 = eval(decodeURIComponent('<?php echo urlencode($number);?>'));
-
-            // 指定图表的配置项和数据
-            option = {
-                tooltip: {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data:['number of papers']
-                },
-                xAxis: {
-                    type: 'category',
-                    data: years1
-                },
-                yAxis: {
-                    type: 'value',
-                    minInterval: 1
-                },
-                series: [
-                {
-                    name:'papers',
-                    type: 'line',
-                    data: number1
-                },
-                ]
-            };
-            
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
-        </script>
         
     </div> <!-- /container -->
     

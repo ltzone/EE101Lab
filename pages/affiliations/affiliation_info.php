@@ -22,11 +22,19 @@
 
 
 <?php
-$author_id = $_GET["author_id"];
+$affiliation_id = $_GET["affiliation_id"];
 $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
-$result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$author_id'");
-        $author_name = mysqli_fetch_array($result)['AuthorName'];
-        $author_name2 = ucwords($author_name);
+$result = mysqli_query($link, "SELECT AffiliationName from affiliations where AffiliationID='$affiliation_id'");
+        $affiliation_name = mysqli_fetch_array($result)['AffiliationName'];
+        $affiliation_name2 = ucwords($affiliation_name);
+
+# 查询本机构所有作者（不重复）
+$result = mysqli_query($link, "SELECT AuthorID, count(distinct AuthorID) from paper_author_affiliation where AffiliationID='$affiliation_id' group by AuthorID");
+$author_list = mysqli_fetch_all($result);
+$author_count= count($author_list );
+
+# 查询本机构所有文章 （不重复）
+# SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID='01109E6D' group by PaperID
 ?>
 
 
@@ -43,7 +51,7 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
             </a>
 
 
-            <?php echo "<a class=\"brand\" href=\"./author_info.php?author_id=$author_id\">Authors</a>";?>
+            <?php echo "<a class=\"brand\" href=\"./affiliation_info.php?affiliation_id=$affiliation_id\">Affiliations</a>";?>
             
             <div class="nav-collapse">
             
@@ -97,16 +105,23 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                 <ul id="main-nav" class="nav nav-tabs nav-stacked">
                     
                     <li class="active">
-                        <?php echo "<a href=\"./author_info.php?author_id=$author_id\">" ?>
+                        <?php echo "<a href=\"./affiliation_info.php?affiliation_id=$affiliation_id\">" ?>
                             <i class="icon-user"></i>
-                            Author Information      
+                            Affiliation Information      
+                        </a>
+                    </li>
+
+                    <li >
+                        <?php echo "<a href=\"./affiliation_paper.php?affiliation_id=$affiliation_id\">" ?>
+                            <i class="icon-th-list"></i>
+                            Affiliation Papers   
                         </a>
                     </li>
                     
                     <li>
-                        <?php echo "<a href=\"./author_charts.php?author_id=$author_id\">" ?>
+                        <?php echo "<a href=\"./affiliation_charts.php?affiliation_id=$affiliation_id\">" ?>
                             <i class="icon-signal"></i>
-                            Author Charts
+                            Affiliation Charts
                         </a>
                     </li>
                     <li>
@@ -132,10 +147,10 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                 
                 <h1 class="page-title">
                     <i class="icon-user"></i>
-                   Author Information               
+                   Affiliation Information               
                 </h1>
 
-                <!-- 放置paper相关信息 -->
+                <!-- 放置affiliation相关信息 -->
                 <div class="row">
                     
                     <div class="span9">
@@ -143,29 +158,16 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                         <div class="widget">
                             
                             <div class="widget-header">
-                                <h3><?php echo $author_name2;?></h3>
+                                <h3><?php echo $affiliation_name2;?></h3>
                             </div> <!-- /widget-header -->
                                                                 
                             <div class="widget-content">
-<?php       $Affresult = mysqli_query($link, "SELECT Affiliations.AffiliationID, Affiliations.AffiliationName from (select AffiliationID, count(*) as cnt from paper_author_affiliation where AuthorID='$author_id' and AffiliationID is not null group by AffiliationID order by cnt desc) as tmp inner join Affiliations on tmp.AffiliationID = Affiliations.AffiliationID");
-
-
-        $result = mysqli_query($link, "SELECT count(PaperID) from paper_author_affiliation where AuthorID='$author_id' ");
-        $row = $result->fetch_array();
-        $num_results = $row[0];
+<?php   
 
         echo "<table>";
-        echo "<tr><td width = '120'>Papers:</td><td>";
-        echo ($num_results);
+        echo "<tr><td width = '120'>Authors:</td><td>";
+        echo ($author_count);
         echo "</td></tr>";
-
-        if ($Affresult->num_rows!=0){
-            echo "<tr><td>Affiliations: </td><td>";
-            foreach ($Affresult as $affline){
-                $Affi_name = ucwords($affline['AffiliationName']);
-                echo "$Affi_name;";}
-            echo "</td></tr>";
-            }
         echo "</table>";?>
                             </div> <!-- /widget-content -->
                             
@@ -180,8 +182,8 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                         <div class="widget">
 
 <?php
-                    $result = mysqli_query($link, "SELECT PaperID from paper_author_affiliation where AuthorID='$author_id'");
-                if ($result->num_rows) {              
+
+                if ($author_count>0) {              
                 echo "
                 <div class=\"widget widget-table\">
                                         
@@ -196,64 +198,49 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Paper Name</th>
-                                    <th>Authors</th>
-                                    <th>Conference</th>
-                                    <th>Year</th>
-                                    <th>&nbsp;</th>
+                                    <th>Author Name</th>
+                                    <th>Affiliations</th>
+                                    <th>Publications</th>
+                                    <th>Citations</th>
                                 </tr>
                             </thead>  <tbody>";
 
 
 
-            $idx = 1;
-            while ($row = mysqli_fetch_array($result)) {
-                $paper_id_ref = $row['PaperID'];
-                $paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID, PaperPublishYear from papers where PaperID='$paper_id_ref'"));
-                if ($paper_info){
-                    $paper_title = $paper_info['Title'];
-                    $conf_id = $paper_info['ConferenceID'];
-                    $yr = $paper_info['PaperPublishYear'];
-                    $paper_title2 = ucwords($paper_title);
-                    echo "<tr><td>$idx</td><td>";
-                    echo "<a href=\"../papers/paper_info.php?paper_id=$paper_id_ref\"><h3>$paper_title2</h3></a>";
+
+            for ($i=0;$i<$author_count;$i+=1){
+                $author_id = $author_list[$i][0];
+                $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$author_id'");
+                $author_name = mysqli_fetch_array($result)['AuthorName'];
+                echo "<tr>";
+                echo "<td>";
+                echo $i+1;
+                echo "</td>";
+                echo "<td>".ucwords($author_name)."</td>";
+                $Affresult = mysqli_query($link, "SELECT Affiliations.AffiliationID, Affiliations.AffiliationName from (select AffiliationID, count(*) as cnt from paper_author_affiliation where AuthorID='$author_id' and AffiliationID is not null group by AffiliationID order by cnt desc) as tmp inner join Affiliations on tmp.AffiliationID = Affiliations.AffiliationID");
+                echo "<td>";
+                if ($Affresult->num_rows!=0){
+                    foreach ($Affresult as $affline){
+                        $Affi_name = ucwords($affline['AffiliationName']);
+                        echo "$Affi_name;\n";}
                     echo "</td>";
-                    echo "<td>";
-                    $author_info = mysqli_query($link, "SELECT A.AuthorID, AuthorName FROM paper_author_affiliation A LEFT JOIN authors B ON A.AuthorID = B.AuthorID WHERE PaperID = '$paper_id_ref' ORDER BY AuthorSequence ASC");
-
-                    while ($author_row = mysqli_fetch_array($author_info)){
-                        $author_name = $author_row['AuthorName'];
-                        $author_another_id = $author_row['AuthorID'];
-                        $author_name2 = ucwords($author_name);
-                        $author_another_id2 = ucwords($author_another_id);
-                        echo "<a href=\"../authors/author_info.php?page=1&author_id=$author_another_id2\">$author_name2</a>";
-                        echo "; ";
                     }
-                    echo "</td><td>";
-
-                    $conference_row = mysqli_fetch_array(mysqli_query($link, "SELECT ConferenceName from conferences WHERE ConferenceID = '$conf_id'"));
-                    $conference_name = $conference_row['ConferenceName'];
-                    $conference_name2 = ucwords($conference_name);
-                    echo "<a href=\"../conference/conference_info.php?page=1&conference_id=$conf_id\">$conference_name2</a>";
-                    echo "</td><td>";
-                    echo $yr; echo "</td>";
-
-                    echo "              <td class=\"action-td\">
-                                        <a href=\"javascript:;\" class=\"btn btn-small btn-warning\">
-                                            <i class=\"icon-ok\"></i>                             
-                                        </a>                    
-                                        <a href=\"javascript:;\" class=\"btn btn-small\">
-                                            <i class=\"icon-remove\"></i>                     
-                                        </a>
-                                    </td></tr>";
-                    $idx +=1;
+                echo "<td>";
+                $result = mysqli_query($link, "SELECT count(PaperID) from paper_author_affiliation where AuthorID='$author_id'");
+                $pub_count =  mysqli_fetch_array($result)[0];
+                echo $pub_count;echo "</td>";
+                echo "<td>";
+                $result = mysqli_query($link, "SELECT count(*) from paper_reference2 A INNER JOIN (SELECT PaperID from paper_author_affiliation where AuthorID='$author_id') B on A.PaperID = B.PaperID");
+                $ref_count =  mysqli_fetch_array($result)[0];
+                echo $ref_count;
+                echo "</td>";
+                echo "</tr>";
                 }
-            }
             echo "</tbody></table>";
             echo "  </div> <!-- /widget-content -->";
         }
         else {
-                echo "<div class='widget-content'><h4>Papers not found</h4></div>";
+                echo "<div class='widget-content'><h4>Authors not found</h4></div>";
         }   ?>
                         </div>
 
