@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -22,6 +23,15 @@
 
 
 
+<?php
+$paper_id = $_GET["paper_id"];
+$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
+$result = mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'");
+if ($result) {
+    $paper_name = mysqli_fetch_array($result)['Title'];
+    $paper_name2 = ucwords($paper_name);
+}
+?>
 
 
 <!-- 头部页面 -->   
@@ -36,7 +46,7 @@
                 <span class="icon-bar"></span>              
             </a>
             
-            <a class="brand" href="./paper_info.php">Papers</a>
+            <?php echo "<a class=\"brand\" href=\"./paper_info.php?paper_id=$paper_id\">"; ?>Papers</a>
             
             <div class="nav-collapse">
             
@@ -76,16 +86,6 @@
     </div> <!-- /navbar-inner -->    
 </div> <!-- /navbar -->
 
-
-<?php
-$paper_id = $_GET["paper_id"];
-$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
-$result = mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'");
-if ($result) {
-    $paper_name = mysqli_fetch_array($result)['Title'];
-    $paper_name2 = ucwords($paper_name);
-}
-?>
 
 
 
@@ -226,7 +226,7 @@ if ($result) {
                     $yr = $paper_info['PaperPublishYear'];
                     $paper_title2 = ucwords($paper_title);
                     echo "<tr><td>$idx</td><td>";
-                    echo "<a href=\"paper.php?paper_id=$paper_id_ref\"><h3>$paper_title2</h3></a>";
+                    echo "<a href=\"paper_info.php?paper_id=$paper_id_ref\"><h3>$paper_title2</h3></a>";
                     echo "</td>";
                     echo "<td>";
                     $author_info = mysqli_query($link, "SELECT A.AuthorID, AuthorName FROM paper_author_affiliation A LEFT JOIN authors B ON A.AuthorID = B.AuthorID WHERE PaperID = '$paper_id' ORDER BY AuthorSequence ASC");
@@ -236,7 +236,7 @@ if ($result) {
                         $author_another_id = $author_row['AuthorID'];
                         $author_name2 = ucwords($author_name);
                         $author_another_id2 = ucwords($author_another_id);
-                        echo "<a href=\"author.php?page=1&author_id=$author_another_id2\">$author_name2</a>";
+                        echo "<a href=\"../authors/author_info.php?page=1&author_id=$author_another_id2\">$author_name2</a>";
                         echo "; ";
                     }
                     echo "</td><td>";
@@ -244,7 +244,7 @@ if ($result) {
                     $conference_row = mysqli_fetch_array(mysqli_query($link, "SELECT ConferenceName from conferences WHERE ConferenceID = '$conf_id'"));
                     $conference_name = $conference_row['ConferenceName'];
                     $conference_name2 = ucwords($conference_name);
-                    echo "<a href=\"conference.php?page=1&conference_id=$conf_id\">$conference_name2</a>";
+                    echo "<a href=\"../conference/conference_info.php?page=1&conference_id=$conf_id\">$conference_name2</a>";
                     echo "</td><td>";
                     echo $yr; echo "</td>";
 

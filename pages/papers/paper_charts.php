@@ -23,6 +23,17 @@
 
 
 
+<?php
+$paper_id = $_GET["paper_id"];
+$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
+$result = mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'");
+if ($result) {
+    $paper_name = mysqli_fetch_array($result)['Title'];
+    $paper_name2 = ucwords($paper_name);
+}
+?>
+
+
 
 <!-- 头部页面 -->   
 <div class="navbar navbar-fixed-top">
@@ -35,8 +46,8 @@
                 <span class="icon-bar"></span> 
                 <span class="icon-bar"></span>              
             </a>
-            
-            <a class="brand" href="./paper_info.php">Papers</a>
+            <?php echo "<a class=\"brand\" href=\"./paper_info.php?paper_id=$paper_id\">"; ?>
+            Papers</a>
             
             <div class="nav-collapse">
             
@@ -75,17 +86,6 @@
         </div> <!-- /container -->
     </div> <!-- /navbar-inner -->    
 </div> <!-- /navbar -->
-
-
-<?php
-$paper_id = $_GET["paper_id"];
-$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
-$result = mysqli_query($link, "SELECT Title from papers where PaperID='$paper_id'");
-if ($result) {
-    $paper_name = mysqli_fetch_array($result)['Title'];
-    $paper_name2 = ucwords($paper_name);
-}
-?>
 
 
 
@@ -172,7 +172,7 @@ if ($result) {
                                                         
                     <div class="widget-content">
                         
-                        <div id="main" class="chart-holder" width=1104px height=1200px></div> <!-- /area-chart -->
+                        <div id="main" class="chart-holder" style="height:600px"></div> <!-- /area-chart -->
 
 <?php
 
@@ -181,7 +181,7 @@ if ($result) {
         if ($res) {
                 return ucwords(mysqli_fetch_array($res)['Title']);
             }
-        else return NULL;
+        else return ('Paper Not Found');
     }
     $paper_id = $_GET["paper_id"];
     $result = mysqli_query($link, "SELECT paperID,referenceID FROM paper_reference2 WHERE paperID = '$paper_id'");
@@ -193,7 +193,8 @@ if ($result) {
 
     $connect = mysqli_fetch_all($result);
     foreach ($connect as $connect_elem){
-        $link_item = array('source'=>$connect_elem[1],  'target'=> $connect_elem[0] ,'name'=>'reference');
+        $link_item = array('source'=>$connect_elem[1],  'target'=> $connect_elem[0] ,'name'=>'reference',
+                        'label'=>get_paper_name($link,$connect_elem[1])."<br>is referenced by <br>".get_paper_name($link,$connect_elem[0]));
         if (!(in_array($connect_elem[1],$node_records))){
             $node_item = array('category'=>1, 'name'=> $connect_elem[1], 'value'=>16, 'label'=> get_paper_name($link,$connect_elem[1]));
             array_push($node_records,$connect_elem[1]);
@@ -209,7 +210,8 @@ if ($result) {
             $connection = mysqli_fetch_all($result);
             $newconnect = array_merge($newconnect,$connection);
             foreach ($connection as $connection_elem){
-                $link_item = array('source'=>$connection_elem[1],  'target'=> $connection_elem[0],'name'=>'reference');
+                $link_item = array('source'=>$connection_elem[1],  'target'=> $connection_elem[0],'name'=>'reference',
+                                    'label'=>get_paper_name($link,$connect_elem[1])."<br>is referenced by <br>".get_paper_name($link,$connect_elem[0]));
                 if (!(in_array($connection_elem[1],$node_records))){
                     $node_item = array('category'=>$depth, 'name'=> $connection_elem[1], 'value'=>(20-4*$depth), 'label'=> get_paper_name($link,$connection_elem[1]));
                     array_push($node_records,$connection_elem[1]);
@@ -247,31 +249,22 @@ if ($result) {
 </div> <!-- /content -->
                     
     
-<div id="footer">
-    
-    <div class="container">             
-        <hr />
-        <p>&copy; 2012 Go Ideate.More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>
-    </div> <!-- /container -->
-    
-</div> <!-- /footer -->
-
 
     
 
 <!-- Le javascript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="./js/jquery-1.7.2.min.js"></script>
-<script src="./js/excanvas.min.js"></script>
-<script src="./js/jquery.flot.js"></script>
-<script src="./js/jquery.flot.pie.js"></script>
-<script src="./js/jquery.flot.orderBars.js"></script>
-<script src="./js/jquery.flot.resize.js"></script>
+<script src="../../js/jquery-1.7.2.min.js"></script>
+<script src="../../js/excanvas.min.js"></script>
+<script src="../../js/jquery.flot.js"></script>
+<script src="../../js/jquery.flot.pie.js"></script>
+<script src="../../js/jquery.flot.orderBars.js"></script>
+<script src="../../js/jquery.flot.resize.js"></script>
 
     <script src="../../js/echarts.js"></script>
 
-<script src="./js/bootstrap.js"></script>
+<script src="../../js/bootstrap.js"></script>
 
 <!-- 图表生成js
 ==================================================== -->
@@ -304,7 +297,12 @@ if ($result) {
         },
         tooltip : {
             trigger: 'item',
-            formatter: ['{label}','{c} : {d} : {e} ','{a} : {b}','sdasda'].join('\n'),
+            formatter:
+                function (a){
+                    return a["data"]['label'].split('+').join(' ')
+                }
+
+            // ['{label}','{c} : {d} : {e} ','{a} : {b.label}','sdasda'].join('\n'),
             //formatter: function(params){//触发之后返回的参数，这个函数是关键
             //if (params.data.category !=undefined) //如果触发节点
             //   window.open("http://www.baidu.com")
@@ -369,7 +367,6 @@ if ($result) {
                 maxRadius : 25,
                 gravity: 1.1,
                 scaling: 1.1,
-                roam: 'move',
                 nodes:nodes,
                 links:links
             }
