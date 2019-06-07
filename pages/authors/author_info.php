@@ -163,7 +163,9 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
             echo "<tr><td>Affiliations: </td><td>";
             foreach ($Affresult as $affline){
                 $Affi_name = ucwords($affline['AffiliationName']);
-                echo "$Affi_name;";}
+                $Affi_id = $affline['AffiliationID'];
+                echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=$Affi_id\">";
+                echo "$Affi_name;</a>";}
             echo "</td></tr>";
             }
         echo "</table>";?>
@@ -187,7 +189,7 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                                         
                     <div class=\"widget-header\">
                         <i class=\"icon-th-list\"></i>
-                        <h3>Reference Table</h3>
+                        <h3>Publications</h3>
                     </div> <!-- /widget-header -->
                     
                     <div class=\"widget-content\">
@@ -200,7 +202,6 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                                     <th>Authors</th>
                                     <th>Conference</th>
                                     <th>Year</th>
-                                    <th>&nbsp;</th>
                                 </tr>
                             </thead>  <tbody>";
 
@@ -238,14 +239,6 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                     echo "</td><td>";
                     echo $yr; echo "</td>";
 
-                    echo "              <td class=\"action-td\">
-                                        <a href=\"javascript:;\" class=\"btn btn-small btn-warning\">
-                                            <i class=\"icon-ok\"></i>                             
-                                        </a>                    
-                                        <a href=\"javascript:;\" class=\"btn btn-small\">
-                                            <i class=\"icon-remove\"></i>                     
-                                        </a>
-                                    </td></tr>";
                     $idx +=1;
                 }
             }

@@ -165,22 +165,20 @@ if ($result) {
                                         
                     <div class="stat-holder">                       
                         <div class="stat">                          
-                            <span>564</span>                            
-                            Completed Sales                         
+                            <span><?php
+                    $refer_count = mysqli_fetch_array(mysqli_query($link,"SELECT count(*) FROM paper_reference2 WHERE PaperID = '$paper_id';"));
+                    echo ($refer_count[0]);
+                            ?></span>                            
+                            Total References                      
                         </div> <!-- /stat -->                       
                     </div> <!-- /stat-holder -->
                     
                     <div class="stat-holder">                       
                         <div class="stat">                          
-                            <span>423</span>                            
-                            Pending Sales                           
-                        </div> <!-- /stat -->                       
-                    </div> <!-- /stat-holder -->
-                    
-                    <div class="stat-holder">                       
-                        <div class="stat">                          
-                            <span>96</span>                         
-                            Returned Sales                          
+                            <span><?php
+                    $cited_count = mysqli_fetch_array(mysqli_query($link,"SELECT count(*) FROM paper_reference2 WHERE ReferenceID = '$paper_id';"));
+                    echo ($cited_count[0]);?></span>                            
+                            Total Citations                        
                         </div> <!-- /stat -->                       
                     </div> <!-- /stat-holder -->
 
@@ -207,7 +205,6 @@ if ($result) {
                                     <th>Authors</th>
                                     <th>Conference</th>
                                     <th>Year</th>
-                                    <th>&nbsp;</th>
                                 </tr>
                             </thead>  <tbody>";
 
@@ -243,16 +240,9 @@ if ($result) {
                     $conference_name2 = ucwords($conference_name);
                     echo "<a href=\"../conference/conference_info.php?page=1&conference_id=$conf_id\">$conference_name2</a>";
                     echo "</td><td>";
-                    echo $yr; echo "</td>";
+                    echo $yr; echo "</td></tr>";
 
-                    echo "              <td class=\"action-td\">
-                                        <a href=\"javascript:;\" class=\"btn btn-small btn-warning\">
-                                            <i class=\"icon-ok\"></i>                             
-                                        </a>                    
-                                        <a href=\"javascript:;\" class=\"btn btn-small\">
-                                            <i class=\"icon-remove\"></i>                     
-                                        </a>
-                                    </td></tr>";
+
                     $idx +=1;
                 }
             }
@@ -260,7 +250,7 @@ if ($result) {
             echo "  </div> <!-- /widget-content -->";
         }
         else {
-                echo "<div class='widget-content'><h4>Citations not found</h4></div>";
+                echo "<div class='widget-content'><h4>References not found</h4></div>";
         }   ?>
 
                     
@@ -268,54 +258,7 @@ if ($result) {
                     
                 </div> <!-- /widget -->
                 
-                
-                <div class="widget">
-                                        
-                    <div class="widget-header">
-                        <i class="icon-signal"></i>
-                        <h3>Area Chart</h3>
-                    </div> <!-- /widget-header -->
-                                                        
-                    <div class="widget-content">                    
-                        <div id="bar-chart" class="chart-holder"></div> <!-- /bar-chart -->             
-                    </div> <!-- /widget-content -->
-                    
-                </div> <!-- /widget -->
-                
-                <div class="row">
-                    
-                    <div class="span5">
-                                    
-                        <div class="widget">
-                            
-                            <div class="widget-header">
-                                <h3>5 Column</h3>
-                            </div> <!-- /widget-header -->
-                                                                
-                            <div class="widget-content">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                            </div> <!-- /widget-content -->
-                            
-                        </div> <!-- /widget -->
-                        
-                    </div> <!-- /span5 -->
-        
-                    <div class="span4">
-                        
-                        <div class="widget">
-                            
-                            <div class="widget-header">
-                                <h3>4 Column</h3>
-                            </div> <!-- /widget-header -->
-                                                                
-                            <div class="widget-content">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                            </div> <!-- /widget-content -->
-                            
-                        </div> <!-- /widget -->
-                    </div> <!-- /span4 -->
-                    
-                </div> <!-- /row -->
+
                 
             </div> <!-- /span9 -->
             
