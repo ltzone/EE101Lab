@@ -141,31 +141,51 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                     
                     <div class="span9">
                                     
-                        <div class="widget">
-                            
-                            <div class="widget-header">
-                                <h3><?php echo $conference_name;?></h3>
-                            </div> <!-- /widget-header -->
-                                                                
-                            <div class="widget-content">
-<?php   
 
 
-        $result = mysqli_query($link, "SELECT count(PaperID) from papers where ConferenceID='$conference_id' ");
-        $row = $result->fetch_array();
-        $num_results = $row[0];
+                <div class="stat-container">
+                                        
+                    <div class="stat-holder">                       
+                        <div class="stat">                          
+                            <span><?php 
 
-        echo "<table>";
-        echo "<tr><td width = '120'>Papers:</td><td>";
-        echo ($num_results);
-        echo "</td></tr>";
+                $result =mysqli_query($link,"SELECT AuthorID, count(distinct AuthorID) from (SELECT PaperID from papers where ConferenceID='$conference_id') A INNER JOIN paper_author_affiliation B on A.PaperID = B.PaperID GROUP BY AuthorID");
+                $result = mysqli_fetch_all($result);
+                echo count($result);
 
+                            ?></span>                            
+                            Total of Authors                       
+                        </div> <!-- /stat -->                       
+                    </div> <!-- /stat-holder -->
+                    
+                    <div class="stat-holder">                       
+                        <div class="stat">                          
+                            <span><?php
+                $pubresult = mysqli_query($link, "SELECT count(*) from papers where ConferenceID='$conference_id'");
+                $pubresult = mysqli_fetch_all($pubresult)[0][0];
+                echo $pubresult; ?>
+                            </span>                            
+                            Total of Papers                        
+                        </div> <!-- /stat -->                       
+                    </div> <!-- /stat-holder -->
+                    
+                    <div class="stat-holder">                       
+                        <div class="stat">                          
+                            <span><?php
 
-        echo "</table>";?>
-                            </div> <!-- /widget-content -->
-                            
-                        </div> <!-- /widget -->
-                        
+                $result =mysqli_query($link,"SELECT count(*) from (SELECT PaperID, count(distinct PaperID) from papers where ConferenceID='$conference_id' group by PaperID) A INNER JOIN paper_reference2 B on A.PaperID = B.PaperID");
+                $result = mysqli_fetch_all($result)[0][0];
+                echo $result;
+                ?>
+
+                            </span>                         
+                            Total of References                          
+                        </div> <!-- /stat -->                       
+                    </div> <!-- /stat-holder -->
+
+                    
+                </div> <!-- /stat-container -->
+
                     </div> <!-- /span5 -->
                     
                 </div> <!-- /row -->        
@@ -195,8 +215,7 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                                     <th>Authors</th>
                                     <th>Conference</th>
                                     <th>Year</th>
-                                    <th>&nbsp;</th>
-                                </tr>
+                                 </tr>
                             </thead>  <tbody>";
 
 
@@ -233,15 +252,9 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                     echo "</td><td>";
                     echo $yr; echo "</td>";
 
-                    echo "              <td class=\"action-td\">
-                                        <a href=\"javascript:;\" class=\"btn btn-small btn-warning\">
-                                            <i class=\"icon-ok\"></i>                             
-                                        </a>                    
-                                        <a href=\"javascript:;\" class=\"btn btn-small\">
-                                            <i class=\"icon-remove\"></i>                     
-                                        </a>
-                                    </td></tr>";
+
                     $idx +=1;
+
                 }
             }
             echo "</tbody></table>";

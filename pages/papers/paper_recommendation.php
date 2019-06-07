@@ -166,26 +166,24 @@ if ($result) {
                                         
                     <div class="stat-holder">                       
                         <div class="stat">                          
-                            <span>564</span>                            
-                            Completed Sales                         
+                            <span><?php
+                    $refer_count = mysqli_fetch_array(mysqli_query($link,"SELECT count(*) FROM paper_reference2 WHERE PaperID = '$paper_id';"));
+                    echo ($refer_count[0]);
+                            ?></span>                            
+                            Total References                      
                         </div> <!-- /stat -->                       
                     </div> <!-- /stat-holder -->
                     
                     <div class="stat-holder">                       
                         <div class="stat">                          
-                            <span>423</span>                            
-                            Pending Sales                           
+                            <span><?php
+                    $cited_count = mysqli_fetch_array(mysqli_query($link,"SELECT count(*) FROM paper_reference2 WHERE ReferenceID = '$paper_id';"));
+                    echo ($cited_count[0]);?></span>                            
+                            Total Citations                        
                         </div> <!-- /stat -->                       
                     </div> <!-- /stat-holder -->
                     
-                    <div class="stat-holder">                       
-                        <div class="stat">                          
-                            <span>96</span>                         
-                            Returned Sales                          
-                        </div> <!-- /stat -->                       
-                    </div> <!-- /stat-holder -->
-
-                    
+                   
                 </div> <!-- /stat-container -->
                 
 <?php
@@ -194,16 +192,13 @@ if ($result) {
                 $paper_title3=$paper_ti['Title'];
                 $ch = curl_init();
                 $timeout = 5;
-                $paper_title4=substr($paper_title3,3,-2);
-                $query = urlencode(str_replace(' ', '+', $paper_title4));
+                $query = urlencode(str_replace(' ', '+', $paper_title3));
                 $url = "http://localhost:8983/solr/FINAL/select?q=PaperName%3A".$query."&wt=json";
                 curl_setopt ($ch, CURLOPT_URL, $url);
                 curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
                 $result = json_decode(curl_exec($ch), true);
                 curl_close($ch);
-
-
                 if ($result['response']['numFound']>0){             
                 echo "
                 <div class=\"widget widget-table\">
@@ -283,55 +278,7 @@ if ($result) {
 
                 </div> <!-- /widget -->
                 
-                
-                <div class="widget">
-                                        
-                    <div class="widget-header">
-                        <i class="icon-signal"></i>
-                        <h3>Area Chart</h3>
-                    </div> <!-- /widget-header -->
-                                                        
-                    <div class="widget-content">                    
-                        <div id="bar-chart" class="chart-holder"></div> <!-- /bar-chart -->             
-                    </div> <!-- /widget-content -->
-                    
-                </div> <!-- /widget -->
-                
-                <div class="row">
-                    
-                    <div class="span5">
-                                    
-                        <div class="widget">
-                            
-                            <div class="widget-header">
-                                <h3>5 Column</h3>
-                            </div> <!-- /widget-header -->
-                                                                
-                            <div class="widget-content">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                            </div> <!-- /widget-content -->
-                            
-                        </div> <!-- /widget -->
-                        
-                    </div> <!-- /span5 -->
-        
-                    <div class="span4">
-                        
-                        <div class="widget">
-                            
-                            <div class="widget-header">
-                                <h3>4 Column</h3>
-                            </div> <!-- /widget-header -->
-                                                                
-                            <div class="widget-content">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                            </div> <!-- /widget-content -->
-                            
-                        </div> <!-- /widget -->
-                    </div> <!-- /span4 -->
-                    
-                </div> <!-- /row -->
-                
+
             </div> <!-- /span9 -->
             
             

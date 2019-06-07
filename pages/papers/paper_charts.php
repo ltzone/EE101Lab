@@ -381,11 +381,11 @@ if ($result) {
     myChart.setOption(option);
     //点可以跳转页面
     myChart.on('click', function (params) {
-                var data=params.value
+                var data=params.name.slice(0,8)
                 //点没有source属性
                 if(data.source==undefined){
                     nodeName=params.name
-                    window.open("http://www.baidu.com")
+                    window.open("./paper_info.php?paper_id="+data)
                 }
      
     });

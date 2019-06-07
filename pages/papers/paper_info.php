@@ -162,18 +162,19 @@ if ($result) {
                 
                 <h1 class="page-title">
                     <i class="icon-user"></i>
-                    Paper Information                   
+                             <?php echo $paper_name2;?>         
                 </h1>
 
                 <!-- 放置paper相关信息 -->
                 <div class="row">
                     
-                    <div class="span5">
+                    <div class="span4">
                                     
                         <div class="widget">
                             
                             <div class="widget-header">
-                                <h3><?php echo $paper_name2;?></h3>
+                                
+                                <h3>Paper Information </h3>
                             </div> <!-- /widget-header -->
                                                                 
                             <div class="widget-content">
@@ -224,7 +225,7 @@ if ($result) {
                         
                     </div> <!-- /span5 -->
         
-                    <div class="span4">
+                    <div class="span5">
                         
                         <div class="widget">
                <div class="widget widget-table">
@@ -242,7 +243,6 @@ if ($result) {
                                     <th>#</th>
                                     <th>Author Name</th>
                                     <th>Affiliation</th>
-                                    <th>&nbsp;</th>
                                 </tr>
                             </thead>
                             
@@ -252,9 +252,10 @@ if ($result) {
                     while ($author_row = mysqli_fetch_array($author_info)){
                         echo "<tr>"; echo "<td>$idx</td>";
                         $author_name = $author_row['AuthorName'];
-                        echo "<td>".ucwords($author_name)."</td>";
-                        $author_aff = $author_row['AffiliationID'];
                         $author_another_id = $author_row['AuthorID'];
+                        echo "<td>"."<a href=\"../authors/author_info.php?author_id=$author_another_id\">".ucwords($author_name)."</a></td>";
+                        $author_aff = $author_row['AffiliationID'];
+                        
                         $Affresult = mysqli_query($link, "SELECT Affiliations.AffiliationID, Affiliations.AffiliationName from (select AffiliationID, count(*) as cnt from paper_author_affiliation where AuthorID='$author_another_id' and AffiliationID is not null group by AffiliationID order by cnt desc) as tmp inner join Affiliations on tmp.AffiliationID = Affiliations.AffiliationID");
                         echo "<td>";
                         if ($Affresult->num_rows!=0){
@@ -264,7 +265,6 @@ if ($result) {
                                 echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=$Affi_id\">$Affi_name</a>;\n";}
                             echo "</td>";
                             }
-                        echo "<td></td>";
                         echo "</tr>";
                         $idx += 1;
                     }
