@@ -16,7 +16,10 @@
     <link href="../../css/adminia.css" rel="stylesheet" /> 
     <link href="../../css/adminia-responsive.css" rel="stylesheet" /> 
     <link href="../../css/pages/dashboard.css" rel="stylesheet" /> 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+</head>
 
 <body>
 
@@ -196,8 +199,19 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
 
 <?php
                     $result = mysqli_query($link, "SELECT PaperID  from papers where ConferenceID='$conference_id'");
+                    $num_results = $result->num_rows;
                 if ($result->num_rows) {              
-                echo "
+                
+
+echo"<script type=\"text/javascript\">
+  window.onload=function(){
+    document.getElementByID(\"show\").onclick=function(){
+        document.getElementByID(\"1\").style.display=\"\";
+    }}
+
+</script>
+<input type=\"button\"id=\"show\"value=\"showdiv\"/>";
+echo "
                 <div class=\"widget widget-table\">
                                         
                     <div class=\"widget-header\">
@@ -205,9 +219,15 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                         <h3>Reference Table</h3>
                     </div> <!-- /widget-header -->
                     
-                    <div class=\"widget-content\">
+                    <div class=\"widget-content\">";
+            $idx = 1;
+            $page=1;
+
+            while ($row = mysqli_fetch_array($result)) {
+                if($idx%10==1){echo"<div id=\"$page\"style=\"display: \"\">";
+                
                     
-                        <table class=\"table table-striped table-bordered\">
+                       echo" <table class=\"table table-striped table-bordered\">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -215,13 +235,9 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                                     <th>Authors</th>
                                     <th>Conference</th>
                                     <th>Year</th>
-                                 </tr>
-                            </thead>  <tbody>";
+                                </tr>
+                            </thead>  <tbody>";}
 
-
-
-            $idx = 1;
-            while ($row = mysqli_fetch_array($result)) {
                 $paper_id_ref = $row['PaperID'];
                 $paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID, PaperPublishYear from papers where PaperID='$paper_id_ref'"));
                 if ($paper_info){
@@ -255,10 +271,10 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
 
                     $idx +=1;
 
-                }
+                }if($idx%10==1&&$idx>1){echo "</tbody></table>";echo"当前第";echo$page;echo"页，共";echo(int)(($num_results-1)/10+1);echo"页";$page+=1;echo"</div>";}
             }
-            echo "</tbody></table>";
-            echo "  </div> <!-- /widget-content -->";
+           
+            echo "  </div> <!-- /widget-content -->";echo $page;
         }
         else {
                 echo "<div class='widget-content'><h4>Papers not found</h4></div>";
