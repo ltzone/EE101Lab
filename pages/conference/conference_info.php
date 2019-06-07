@@ -190,13 +190,7 @@ echo"<script type=\"text/javascript\">
 
 </script>
 <input type=\"button\"id=\"show\"value=\"showdiv\"/>";
-
-            $idx = 1;
-            $page=1;
-
-            while ($row = mysqli_fetch_array($result)) {
-                if($idx%10==1){echo"<div id=\"$page\"style=\"display: \"\">";
-                echo "
+echo "
                 <div class=\"widget widget-table\">
                                         
                     <div class=\"widget-header\">
@@ -204,9 +198,15 @@ echo"<script type=\"text/javascript\">
                         <h3>Reference Table</h3>
                     </div> <!-- /widget-header -->
                     
-                    <div class=\"widget-content\">
+                    <div class=\"widget-content\">";
+            $idx = 1;
+            $page=1;
+
+            while ($row = mysqli_fetch_array($result)) {
+                if($idx%10==1){echo"<div id=\"$page\"style=\"display: \"\">";
+                
                     
-                        <table class=\"table table-striped table-bordered\">
+                       echo" <table class=\"table table-striped table-bordered\">
                             <thead>
                                 <tr>
                                     <th>#</th>
