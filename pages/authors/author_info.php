@@ -52,7 +52,7 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                     <li class="dropdown">
                         
                     <div class="input-group">
-                     <form action="search_info.php" style="margin:0px">
+                     <form action="../search/search_info.php" style="margin:0px">
                       <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
                       <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
                      </form>
