@@ -222,16 +222,21 @@ $("#but2").click(function(){
     document.getElementById(now.toString()).style.display="none";
     document.getElementById((now+1).toString()).style.display="";
     now+=1;
-       }else document.getElementById((totalpage).toString()).style.display=""; });});
+       }
+    else document.getElementById((totalpage).toString()).style.display="";
        for (var it=1;it<=totalpage;++it){
         var itit="b"+it.toString();
-        if(it<(now-2)||it>(now+2))document.getElementById(itit).style.display="none";
-        else document.getElementById(itit).style.display="";
+        if (document.getElementById(itit)){
+        if(it<(now-2)||it>(now+2)) { document.getElementById(itit).style.display="none"; }
+        else { document.getElementById(itit).style.display=""; }}
         
-    }if(now>=1&&now<=2){document.getElementById("b4").style.display="";
-     document.getElementById("b5").style.display="";}
+    }
+    var t;
+     if(now>=1&&now<=2){if(t= document.getElementById("b4")) t.style.display="";
+     if (t=document.getElementById("b5")) t.style.display="";}
      if(now>totalpage-2)document.getElementById("b"+(totalpage-4).toString()).style.display="";   
-     if(now>totalpage-1)document.getElementById("b"+(totalpage-3).toString()).style.display="";  
+     if(now>totalpage-1)document.getElementById("b"+(totalpage-3).toString()).style.display="";
+      });});  
 </script>';
 
  echo'
