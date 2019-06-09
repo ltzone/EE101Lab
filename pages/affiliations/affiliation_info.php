@@ -262,7 +262,12 @@ echo"                                </tr>
 
 
 
-                                }                               
+                                }
+
+
+
+
+                                                               
                                 }
                             echo "<td>$pub_count</td></tr>";
 
