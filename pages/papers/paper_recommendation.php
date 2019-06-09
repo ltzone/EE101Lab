@@ -200,7 +200,6 @@ if ($result) {
                                     <th>Authors</th>
                                     <th>Conference</th>
                                     <th>Year</th>
-                                    <th>&nbsp;</th>
                                 </tr>
                             </thead>  <tbody>";
 
@@ -240,14 +239,7 @@ if ($result) {
                     echo "</td><td>";
                     echo $yr; echo "</td>";
 
-                    echo "              <td class=\"action-td\">
-                                        <a href=\"javascript:;\" class=\"btn btn-small btn-warning\">
-                                            <i class=\"icon-ok\"></i>                             
-                                        </a>                    
-                                        <a href=\"javascript:;\" class=\"btn btn-small\">
-                                            <i class=\"icon-remove\"></i>                     
-                                        </a>
-                                    </td></tr>";
+                    echo "       </tr>";
                     $idx +=1;
                 }
             }
