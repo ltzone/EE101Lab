@@ -44,37 +44,20 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
 
 
             <?php echo "<a class=\"brand\" href=\"./author_info.php?author_id=$author_id\">Authors</a>";?>
-            
-            <div class="nav-collapse">
+                        <div class="nav-collapse">
             
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="#"><span class="badge badge-warning">7</span></a>
-                    </li>
                     
-                    <li class="divider-vertical"></li>
                     
                     <li class="dropdown">
                         
-                        <a data-toggle="dropdown" class="dropdown-toggle " href="#">
-                            Rod Howard <b class="caret"></b>                            
-                        </a>
-                        
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="./account.html"><i class="icon-user"></i> Account Setting  </a>
-                            </li>
-                            
-                            <li>
-                                <a href="./change_password.html"><i class="icon-lock"></i> Change Password</a>
-                            </li>
-                            
-                            <li class="divider"></li>
-                            
-                            <li>
-                                <a href="./"><i class="icon-off"></i> Logout</a>
-                            </li>
-                        </ul>
+                    <div class="input-group">
+                     <form action="search_info.php" style="margin:0px">
+                      <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
+                      <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
+                     </form>
+                    </div><!-- /input-group -->
+
                     </li>
                 </ul>
                 
@@ -242,17 +225,21 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                     echo $yr; echo "</td>";
 
                     $idx +=1;
+
                 }if($idx%10==1&&$idx>1){echo "</tbody></table>";echo"Page: ";echo$page;echo"         Total of Pages: ";echo(int)(($num_results-1)/10+1);$page+=1;echo"</div>";}
                 else if ($idx==$num_results+1){echo "</tbody></table>";echo"Page: ";echo$page;echo"        Total of Pages: ";echo(int)(($num_results-1)/10+1);echo"</div>";}
+
             }
             
             echo "  </div> <!-- /widget-content -->";
         $totalpage=(int)(($num_results-1)/10+1);
+
  //分页 
             echo'
 <script type="text/javascript">
 var now=1;
 var totalpage =' .$totalpage.';
+
  document.getElementById("1").style.display="";
 </script>';
            echo'
@@ -261,6 +248,7 @@ var totalpage =' .$totalpage.';
 $("#but1").click(function(){
     document.getElementById(now.toString()).style.display="none";
     document.getElementById("1").style.display="";
+
     now=1;for (var it=1;it<=totalpage;++it){
         var itit="b"+it.toString();
         if(it>5)document.getElementById(itit).style.display="none";
@@ -280,6 +268,7 @@ $("#but2").click(function(){
     document.getElementById((now+1).toString()).style.display="";
     now+=1;
        }else document.getElementById((totalpage).toString()).style.display=""; });});
+
        for (var it=1;it<=totalpage;++it){
         var itit="b"+it.toString();
         if(it<(now-2)||it>(now+2))document.getElementById(itit).style.display="none";
@@ -289,6 +278,7 @@ $("#but2").click(function(){
      document.getElementById("b5").style.display="";}
      if(now>totalpage-2)document.getElementById("b"+(totalpage-4).toString()).style.display="";   
      if(now>totalpage-1)document.getElementById("b"+(totalpage-3).toString()).style.display="";  
+
 </script>';
 
  echo'
@@ -299,6 +289,7 @@ $("#but3").click(function(){
     document.getElementById(now.toString()).style.display="none";
     document.getElementById((now-1).toString()).style.display="";
     now-=1;}else  document.getElementById("1").style.display=""; 
+
     for (var it=1;it<=totalpage;++it){
         var itit="b"+it.toString();
         if(it<(now-2)||it>(now+2))document.getElementById(itit).style.display="none";
@@ -308,6 +299,7 @@ $("#but3").click(function(){
      document.getElementById("b5").style.display="";}
      if(now>totalpage-2)document.getElementById("b"+(totalpage-4).toString()).style.display="";   
      if(now>totalpage-1)document.getElementById("b"+(totalpage-3).toString()).style.display="";  
+
         });});
 </script>';
 
@@ -318,6 +310,7 @@ $("#but4").click(function(){
     document.getElementById(now.toString()).style.display="none";
     document.getElementById(totalpage.toString()).style.display="";
     now=totalpage;
+
     for (var it=1;it<=totalpage;++it){
         var itit=\'b\'+it.toString();
         if(it<totalpage-4)document.getElementById(itit).style.display="none";
@@ -336,11 +329,13 @@ echo"<style type=\"text/css\">
 echo "<div class=\"button\"><button id=\"but1\">First</button></div>";
 
 echo "<div class=\"button\"><button id=\"but3\">Previous</button></div>";
+
 echo"     ";
 for($j=1;$j<=$totalpage;++$j){
     $jj=(string)$j;
     echo "<div class =\"button\"><button id=\"b$jj\">$jj</button></div>";}
     echo"     ";
+
 echo "<div class=\"button\"><button id=\"but2\">Next</button></div>";
 echo "<div class=\"button\"><button id=\"but4\">Last</button></div>";echo"</div>";}
         else {

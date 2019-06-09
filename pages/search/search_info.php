@@ -43,33 +43,17 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
             <div class="nav-collapse">
             
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="#"><span class="badge badge-warning">7</span></a>
-                    </li>
                     
-                    <li class="divider-vertical"></li>
                     
                     <li class="dropdown">
                         
-                        <a data-toggle="dropdown" class="dropdown-toggle " href="#">
-                            Rod Howard <b class="caret"></b>                            
-                        </a>
-                        
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="./account.html"><i class="icon-user"></i> Account Setting  </a>
-                            </li>
-                            
-                            <li>
-                                <a href="./change_password.html"><i class="icon-lock"></i> Change Password</a>
-                            </li>
-                            
-                            <li class="divider"></li>
-                            
-                            <li>
-                                <a href="./"><i class="icon-off"></i> Logout</a>
-                            </li>
-                        </ul>
+                    <div class="input-group">
+                     <form action="search_info.php" style="margin:0px">
+                      <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
+                      <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
+                     </form>
+                    </div><!-- /input-group -->
+
                     </li>
                 </ul>
                 
@@ -164,6 +148,7 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
             $page=1;
 
             //分割div
+
             for ($i=1;$i<=$num_results;$i++) {
                 if($i%10==1){echo"<div id=\"$page\"style=\"display:none\">";}
                 $paper=$result['response']['docs'][$i-1] ;
@@ -187,8 +172,10 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
                 echo "</td></tr>";
                 echo "</table>";
                 echo "<hr>";
+
                 if($i%10==0&&$i>1){echo"Page: ";echo$page;echo"<br>";echo"  Total of Pages: ";echo$totalpage;echo"<br>";echo"Total of Papers: ";echo$num_results;$page+=1;echo"</div>";}
                 else if ($i==$num_results){echo"Page: ";echo$page;echo"<br>";echo"  Total of Pages: ";echo$totalpage;echo"<br>";echo"Total of Papers: ";echo$num_results;echo"</div>";}
+
             }   
 //翻页
            echo'
@@ -212,7 +199,6 @@ $("#but1").click(function(){
     } 
       });});
 </script>';
-
             
             echo'
 <script type="text/javascript">
@@ -247,6 +233,7 @@ $("#but3").click(function(){
     document.getElementById(now.toString()).style.display="none";
     document.getElementById((now-1).toString()).style.display="";
     now-=1;}else  document.getElementById("1").style.display=""; 
+
     for (var it=1;it<=totalpage;++it){
         var itit="b"+it.toString();
         if(it<(now-2)||it>(now+2))document.getElementById(itit).style.display="none";
@@ -266,6 +253,7 @@ $("#but4").click(function(){
     document.getElementById(now.toString()).style.display="none";
     document.getElementById(totalpage.toString()).style.display="";
     now=totalpage;
+
     for (var it=1;it<=totalpage;++it){
         var itit=\'b\'+it.toString();
         if(it<totalpage-4)document.getElementById(itit).style.display="none";

@@ -45,37 +45,20 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
 
 
             <?php echo "<a class=\"brand\" href=\"./conference_info.php?conference_id=$conference_id\">Conferences</a>";?>
-            
-            <div class="nav-collapse">
+                        <div class="nav-collapse">
             
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="#"><span class="badge badge-warning">7</span></a>
-                    </li>
                     
-                    <li class="divider-vertical"></li>
                     
                     <li class="dropdown">
                         
-                        <a data-toggle="dropdown" class="dropdown-toggle " href="#">
-                            Rod Howard <b class="caret"></b>                            
-                        </a>
-                        
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="./account.html"><i class="icon-user"></i> Account Setting  </a>
-                            </li>
-                            
-                            <li>
-                                <a href="./change_password.html"><i class="icon-lock"></i> Change Password</a>
-                            </li>
-                            
-                            <li class="divider"></li>
-                            
-                            <li>
-                                <a href="./"><i class="icon-off"></i> Logout</a>
-                            </li>
-                        </ul>
+                    <div class="input-group">
+                     <form action="search_info.php" style="margin:0px">
+                      <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
+                      <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
+                     </form>
+                    </div><!-- /input-group -->
+
                     </li>
                 </ul>
                 
@@ -108,6 +91,12 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                         <?php echo "<a href=\"./conference_charts.php?conference_id=$conference_id\">" ?>
                             <i class="icon-signal"></i>
                             Conference Charts
+                        </a>
+                    </li>
+                    <li>
+                        <?php echo "<a href=\"./conference_big.php?conference_id=$conference_id\">" ?>
+                            <i class="icon-signal"></i>
+                            Big Graph
                         </a>
                     </li>
                     <li>
@@ -208,7 +197,7 @@ echo "
                                         
                     <div class=\"widget-header\">
                         <i class=\"icon-th-list\"></i>
-                        <h3>Reference Table</h3>
+                        <h3>Paper Table</h3>
                     </div> <!-- /widget-header -->
                     
                     <div class=\"widget-content\">";
@@ -218,8 +207,7 @@ echo "
             while ($row = mysqli_fetch_array($result)) {
                 
                 if($idx%10==1){echo"<div id=\"$page\"style=\"display:none\">";
-                
-                    
+                  
                        echo" <table class=\"table table-striped table-bordered\">
                             <thead>
                                 <tr>
@@ -274,6 +262,7 @@ echo "
 var now=1; 
 var totalpage =' .$totalpage.';
 
+
  document.getElementById("1").style.display="";
 </script>';
            echo'
@@ -283,6 +272,7 @@ $("#but1").click(function(){
     document.getElementById(now.toString()).style.display="none";
     document.getElementById("1").style.display="";
     now=1;
+
     for (var it=1;it<=totalpage;++it){
         var itit="b"+it.toString();
         if(it>5)document.getElementById(itit).style.display="none";
@@ -312,6 +302,7 @@ for (var it=1;it<=totalpage;++it){
      if(now>totalpage-2)document.getElementById("b"+(totalpage-4).toString()).style.display="";   
      if(now>totalpage-1)document.getElementById("b"+(totalpage-3).toString()).style.display="";  
         });});
+
 </script>';
 
  echo'
@@ -331,6 +322,7 @@ $("#but3").click(function(){
      document.getElementById(\'b5\').style.display="";}
      if(now>totalpage-2)document.getElementById(\'b\'+(totalpage-4).toString()).style.display="";   
      if(now>totalpage-1)document.getElementById(\'b\'+(totalpage-3).toString()).style.display="";  
+
         });});
 </script>';
 
@@ -358,6 +350,7 @@ echo"<style type=\"text/css\">
 echo "<div class=\"button\"><button id=\"but1\">First</button></div>";
 
 echo "<div class=\"button\"><button id=\"but3\">Previous</button></div>";
+
 echo"     ";
 for($j=1;$j<=$totalpage;++$j){
     $jj=(string)$j;
@@ -404,10 +397,10 @@ $(ppp).click(function(){
     document.getElementById(now.toString()).style.display=\"none\";
     document.getElementById(pppp).style.display=\"\";
 
+
     now=(parseInt((this.id))/10000);
         });});pp+=1;*/
 </script>";
-
 
 
             echo "  </div> <!-- /widget-content -->";
