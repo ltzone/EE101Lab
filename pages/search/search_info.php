@@ -163,7 +163,7 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
             $totalpage=(integer)(($num_results+9)/10);
             $page=1;
 
-
+            //分割div
             for ($i=1;$i<=$num_results;$i++) {
                 if($i%10==1){echo"<div id=\"$page\"style=\"display:none\">";}
                 $paper=$result['response']['docs'][$i-1] ;
@@ -187,25 +187,14 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
                 echo "</td></tr>";
                 echo "</table>";
                 echo "<hr>";
-                if($i%10==0&&$i>1){echo"当前第";echo$page;echo"页，共";echo$totalpage;echo"页,共检索到";echo$num_results;echo"条信息";$page+=1;echo"</div>";}
-                if ($i==$num_results){echo"当前第";echo$page;echo"页，共";echo$totalpage;echo"页,共检索到";echo$num_results;echo"条信息";echo"</div>";}
+                if($i%10==0&&$i>1){echo"Page: ";echo$page;echo"<br>";echo"  Total of Pages: ";echo$totalpage;echo"<br>";echo"Total of Papers: ";echo$num_results;$page+=1;echo"</div>";}
+                else if ($i==$num_results){echo"Page: ";echo$page;echo"<br>";echo"  Total of Pages: ";echo$totalpage;echo"<br>";echo"Total of Papers: ";echo$num_results;echo"</div>";}
             }   
-
+//翻页
            echo'
 <script type="text/javascript">
-var now=1; var pp =1;
-var totalpage =' .$totalpage.';
-
-
-var pa=new Array();
-if(totalpage==1)pa[0]=1;
-else if (totalpage==2){pa[0]=1;pa[1]=2;}
-else if (totalpage==3){pa[0]=1;pa[1]=2;pa[2]=3;}
-else if (totalpage==4){pa[0]=1;pa[1]=2;pa[2]=3;pa[3]=4;}
-else if (totalpage==5||now==1||now==2){pa[0]=1;pa[1]=2;pa[2]=3;pa[3]=4;pa[4]=5;}
-else if(now==(totalpage-1)){pa[0]=totalpage-4;pa[1]=totalpage-3;pa[2]=totalpage-2;pa[3]=totalpage-1;pa[4]=totalpage;}
-else if(now==totalpage){pa[0]=totalpage-4;pa[1]=totalpage-3;pa[2]=totalpage-2;pa[3]=totalpage-1;pa[4]=totalpage;}
-else {pa[0]=now-2;pa[1]=now-1;pa[2]=now;pa[3]=now+1;pa[4]=now+2;}
+var now=1; 
+var totalpage ='; echo $totalpage ;echo';
  document.getElementById("1").style.display="";
 </script>';
            echo'
@@ -215,6 +204,12 @@ $("#but1").click(function(){
     document.getElementById(now.toString()).style.display="none";
     document.getElementById("1").style.display="";
     now=1;
+    for (var it=1;it<=totalpage;++it){
+        var itit="b"+it.toString();
+        if(it>5)document.getElementById(itit).style.display="none";
+        else document.getElementById(itit).style.display="";
+        
+    } 
       });});
 </script>';
 
@@ -228,6 +223,15 @@ $("#but2").click(function(){
     document.getElementById((now+1).toString()).style.display="";
     now+=1;
        }else document.getElementById((totalpage).toString()).style.display=""; });});
+       for (var it=1;it<=totalpage;++it){
+        var itit="b"+it.toString();
+        if(it<(now-2)||it>(now+2))document.getElementById(itit).style.display="none";
+        else document.getElementById(itit).style.display="";
+        
+    }if(now>=1&&now<=2){document.getElementById("b4").style.display="";
+     document.getElementById("b5").style.display="";}
+     if(now>totalpage-2)document.getElementById("b"+(totalpage-4).toString()).style.display="";   
+     if(now>totalpage-1)document.getElementById("b"+(totalpage-3).toString()).style.display="";  
 </script>';
 
  echo'
@@ -238,6 +242,15 @@ $("#but3").click(function(){
     document.getElementById(now.toString()).style.display="none";
     document.getElementById((now-1).toString()).style.display="";
     now-=1;}else  document.getElementById("1").style.display=""; 
+    for (var it=1;it<=totalpage;++it){
+        var itit="b"+it.toString();
+        if(it<(now-2)||it>(now+2))document.getElementById(itit).style.display="none";
+        else document.getElementById(itit).style.display="";
+        
+    }if(now>=1&&now<=2){document.getElementById("b4").style.display="";
+     document.getElementById("b5").style.display="";}
+     if(now>totalpage-2)document.getElementById("b"+(totalpage-4).toString()).style.display="";   
+     if(now>totalpage-1)document.getElementById("b"+(totalpage-3).toString()).style.display="";  
         });});
 </script>';
 
@@ -248,6 +261,10 @@ $("#but4").click(function(){
     document.getElementById(now.toString()).style.display="none";
     document.getElementById(totalpage.toString()).style.display="";
     now=totalpage;
+    for (var it=1;it<=totalpage;++it){
+        var itit=\'b\'+it.toString();
+        if(it<totalpage-4)document.getElementById(itit).style.display="none";
+        else document.getElementById(itit).style.display="";}
         });});
 </script>';
 echo"<div>";
@@ -260,8 +277,54 @@ echo"<style type=\"text/css\">
 echo "<div class=\"button\"><button id=\"but1\">First</button></div>";
 
 echo "<div class=\"button\"><button id=\"but3\">Previous</button></div>";
+echo"     ";
+for($j=1;$j<=$totalpage;++$j){
+    $jj=(string)$j;
+    echo "<div class =\"button\"><button id=\"b$jj\">$jj</button></div>";}
+    echo"     ";
 echo "<div class=\"button\"><button id=\"but2\">Next</button></div>";
-echo "<div class=\"button\"><button id=\"but4\">Last</button></div>";echo"</div>"; // 翻页模块
+echo "<div class=\"button\"><button id=\"but4\">Last</button></div>";echo"</div>";
+echo"
+<script  type=\"text/javascript\">
+ var oBtn=document.getElementsByClassName(\"button\");
+ for (var it=6;it<=totalpage;++it){
+        var itit='b'+it.toString();
+        document.getElementById(itit).style.display=\"none\";
+        
+        
+    }
+
+for(var t=1;t<=totalpage;++t){
+    oBtn[t+1].index=t;
+    oBtn[t+1].onclick=function(){
+       var pppp=(this.index).toString();
+       document.getElementById(now.toString()).style.display=\"none\";
+       document.getElementById(pppp).style.display=\"\"; 
+       now=this.index;
+       for (var it=1;it<=totalpage;++it){
+        var itit='b'+it.toString();
+        if(it<(now-2)||it>(now+2))document.getElementById(itit).style.display=\"none\";
+        else document.getElementById(itit).style.display=\"\";
+        
+    }if(now>=1&&now<=2){document.getElementById('b4').style.display=\"\";
+     document.getElementById('b5').style.display=\"\";}
+     if(now>totalpage-2)document.getElementById('b'+(totalpage-4).toString()).style.display=\"\";   
+     if(now>totalpage-1)document.getElementById('b'+(totalpage-3).toString()).style.display=\"\";  
+    }}
+ /*$(document).ready(function(){
+
+document.write(c);
+var ppp=\"#b\"+(parseInt((this.id))/10000).toString();
+ var pppp=(parseInt((this.id))/10000).toString();
+
+$(ppp).click(function(){
+    
+    document.getElementById(now.toString()).style.display=\"none\";
+    document.getElementById(pppp).style.display=\"\";
+
+    now=(parseInt((this.id))/10000);
+        });});pp+=1;*/
+</script>";
             
         }
 
