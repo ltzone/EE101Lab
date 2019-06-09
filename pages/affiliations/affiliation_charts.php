@@ -152,37 +152,20 @@ $author_num2 = json_encode($author_num2);
 
 
             <?php echo "<a class=\"brand\" href=\"./affiliation_info.php?affiliation_id=$affiliation_id\">Affiliations</a>";?>
-            
-            <div class="nav-collapse">
+                        <div class="nav-collapse">
             
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="#"><span class="badge badge-warning">7</span></a>
-                    </li>
                     
-                    <li class="divider-vertical"></li>
                     
                     <li class="dropdown">
                         
-                        <a data-toggle="dropdown" class="dropdown-toggle " href="#">
-                            Rod Howard <b class="caret"></b>                            
-                        </a>
-                        
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="./account.html"><i class="icon-user"></i> Account Setting  </a>
-                            </li>
-                            
-                            <li>
-                                <a href="./change_password.html"><i class="icon-lock"></i> Change Password</a>
-                            </li>
-                            
-                            <li class="divider"></li>
-                            
-                            <li>
-                                <a href="./"><i class="icon-off"></i> Logout</a>
-                            </li>
-                        </ul>
+                    <div class="input-group">
+                     <form action="search_info.php" style="margin:0px">
+                      <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
+                      <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
+                     </form>
+                    </div><!-- /input-group -->
+
                     </li>
                 </ul>
                 

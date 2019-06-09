@@ -54,37 +54,20 @@ $pub_count= count($pub_list);
 
 
             <?php echo "<a class=\"brand\" href=\"./affiliation_info.php?affiliation_id=$affiliation_id\">Affiliations</a>";?>
-            
-            <div class="nav-collapse">
+                        <div class="nav-collapse">
             
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="#"><span class="badge badge-warning">7</span></a>
-                    </li>
                     
-                    <li class="divider-vertical"></li>
                     
                     <li class="dropdown">
                         
-                        <a data-toggle="dropdown" class="dropdown-toggle " href="#">
-                            Rod Howard <b class="caret"></b>                            
-                        </a>
-                        
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="./account.html"><i class="icon-user"></i> Account Setting  </a>
-                            </li>
-                            
-                            <li>
-                                <a href="./change_password.html"><i class="icon-lock"></i> Change Password</a>
-                            </li>
-                            
-                            <li class="divider"></li>
-                            
-                            <li>
-                                <a href="./"><i class="icon-off"></i> Logout</a>
-                            </li>
-                        </ul>
+                    <div class="input-group">
+                     <form action="search_info.php" style="margin:0px">
+                      <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
+                      <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
+                     </form>
+                    </div><!-- /input-group -->
+
                     </li>
                 </ul>
                 
@@ -146,41 +129,46 @@ $pub_count= count($pub_list);
 
             <!-- 右栏内容 -->
             <div class="span9">
-                
                 <h1 class="page-title">
                     <i class="icon-user"></i>
-                   Affiliation Information               
+                    Affiliation Authors of <?php echo $affiliation_name2; ?>              
                 </h1>
-
-                <!-- 放置affiliation相关信息 -->
-                <div class="row">
+                
+                <div class="stat-container">
+                                        
+                    <div class="stat-holder">                       
+                        <div class="stat">                          
+                            <span><?php echo $author_count;?></span>                            
+                            Authors                         
+                        </div> <!-- /stat -->                       
+                    </div> <!-- /stat-holder -->
                     
-                    <div class="span9">
-                                    
-                        <div class="widget">
-                            
-                            <div class="widget-header">
-                                <h3><?php echo $affiliation_name2;?></h3>
-                            </div> <!-- /widget-header -->
-                                                                
-                            <div class="widget-content">
-<?php   
-
-        echo "<table>";
-        echo "<tr><td width = '120'>Authors:</td><td>";
-        echo ($author_count);
-        echo "</td></tr>";
-        echo "<tr><td>Publications:</td><td>";
-        echo ($pub_count);
-        echo "</td></tr>";
-        echo "</table>";?>
-                            </div> <!-- /widget-content -->
-                            
-                        </div> <!-- /widget -->
-                        
-                    </div> <!-- /span5 -->
+                    <div class="stat-holder">                       
+                        <div class="stat">                          
+                            <span><?php
+                $pubresult = mysqli_query($link, "SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID='$affiliation_id' group by PaperID");
+                echo $pubresult->num_rows;?>
+                            </span>                            
+                            Total of Publications                         
+                        </div> <!-- /stat -->                       
+                    </div> <!-- /stat-holder -->
                     
-                </div> <!-- /row -->        
+                    <div class="stat-holder">                       
+                        <div class="stat">                          
+                            <span><?php
+
+                $result =mysqli_query($link,"SELECT count(*) from (SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID='$affiliation_id' group by PaperID) A INNER JOIN paper_reference2 B on A.PaperID = B.PaperID");
+                $result = mysqli_fetch_all($result)[0][0];
+                echo $result;
+                ?>
+
+                            </span>                         
+                            Total of References                          
+                        </div> <!-- /stat -->                       
+                    </div> <!-- /stat-holder -->
+
+                    
+                </div> <!-- /stat-container -->
 
                 <div class="row">
                     <div class="span9">
@@ -213,7 +201,7 @@ $pub_count= count($pub_list);
                                         
                     <div class=\"widget-header\">
                         <i class=\"icon-th-list\"></i>
-                        <h3>Reference Table</h3>
+                        <h3>Author Table</h3>
                     </div> <!-- /widget-header -->
                     
                     <div class=\"widget-content\">
@@ -241,10 +229,9 @@ echo"                                </tr>
                             // 对第一行信息的操作
                             $idx = 1;
                             echo "<tr><td>$idx</td><td>"."<a href=\"../authors/author_info.php?author_id=".$result[0][0]."\">".get_author_name($link,$result[0][0])."</a></td>";
-                            echo $result[0][2];
                             echo "<td>";
                             if ($result[0][2]!=NULL) {
-                                array_push($last_author,$result[0][2]);
+                                array_push($last_affiliation,$result[0][2]);
                             echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[0][2]."Affi_id\">".get_affiliation_name($link,$result[0][2])."</a>;\n";}
 
                             $pub_count=1;
