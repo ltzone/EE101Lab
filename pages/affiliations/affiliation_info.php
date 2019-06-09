@@ -62,7 +62,7 @@ $pub_count= count($pub_list);
                     <li class="dropdown">
                         
                     <div class="input-group">
-                     <form action="search_info.php" style="margin:0px">
+                     <form action="../search/search_info.php" style="margin:0px">
                       <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
                       <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
                      </form>
@@ -232,7 +232,7 @@ echo"                                </tr>
                             echo "<td>";
                             if ($result[0][2]!=NULL) {
                                 array_push($last_affiliation,$result[0][2]);
-                            echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[0][2]."Affi_id\">".get_affiliation_name($link,$result[0][2])."</a>;\n";}
+                            echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[0][2]."\">".get_affiliation_name($link,$result[0][2])."</a>;\n";}
 
                             $pub_count=1;
 
@@ -247,14 +247,14 @@ echo"                                </tr>
                                     echo "<td>";
                                     if ($result[$i][2]!=NULL) {
                                         array_push($last_affiliation,$result[$i][2]);
-                                        echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[$i][2]."Affi_id\">".get_affiliation_name($link,$result[$i][2])."</a>;\n";}
+                                        echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[$i][2]."\">".get_affiliation_name($link,$result[$i][2])."</a>;\n";}
 
 
                                 }
                                 else {
                                     if (!(in_array($result[$i][2],$last_affiliation)) AND $result[$i][2]!=NULL) {
                                     array_push($last_affiliation,$result[$i][2]);
-                                    echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[$i][2]."Affi_id\">".get_affiliation_name($link,$result[$i][2])."</a>;\n";}
+                                    echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[$i][2]."\">".get_affiliation_name($link,$result[$i][2])."</a>;\n";}
                                     $pub_count+=1;
                                     
 
@@ -262,7 +262,12 @@ echo"                                </tr>
 
 
 
-                                }                               
+                                }
+
+
+
+
+                                                               
                                 }
                             echo "<td>$pub_count</td></tr>";
 

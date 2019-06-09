@@ -54,7 +54,7 @@ if ($result) {
                     <li class="dropdown">
                         
                     <div class="input-group">
-                     <form action="search_info.php" style="margin:0px">
+                     <form action="../search/search_info.php" style="margin:0px">
                       <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
                       <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
                      </form>
@@ -200,7 +200,6 @@ if ($result) {
                                     <th>Authors</th>
                                     <th>Conference</th>
                                     <th>Year</th>
-                                    <th>&nbsp;</th>
                                 </tr>
                             </thead>  <tbody>";
 
@@ -240,14 +239,7 @@ if ($result) {
                     echo "</td><td>";
                     echo $yr; echo "</td>";
 
-                    echo "              <td class=\"action-td\">
-                                        <a href=\"javascript:;\" class=\"btn btn-small btn-warning\">
-                                            <i class=\"icon-ok\"></i>                             
-                                        </a>                    
-                                        <a href=\"javascript:;\" class=\"btn btn-small\">
-                                            <i class=\"icon-remove\"></i>                     
-                                        </a>
-                                    </td></tr>";
+                    echo "       </tr>";
                     $idx +=1;
                 }
             }
