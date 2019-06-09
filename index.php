@@ -76,8 +76,8 @@
 	  <div class="col-md-8 col-md-offset-2 probootstrap-section-heading">
 		<h2 class="mb30 text-black probootstrap-heading">Charts</h2>
 	  </div>
-	  <div class='col-md-offset-2'>
-	  	<div id="conference_chart" style="width: 900px;height:750px;"></div>
+	  <div class='col-md-offset-1'>
+	  	<div id="conference_chart" style="width: 1000px;height:800px;"></div>
 	  </div>
 	</div>
 	<!-- END row -->
