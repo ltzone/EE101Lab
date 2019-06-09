@@ -232,7 +232,7 @@ echo"                                </tr>
                             echo "<td>";
                             if ($result[0][2]!=NULL) {
                                 array_push($last_affiliation,$result[0][2]);
-                            echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[0][2]."Affi_id\">".get_affiliation_name($link,$result[0][2])."</a>;\n";}
+                            echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[0][2]."\">".get_affiliation_name($link,$result[0][2])."</a>;\n";}
 
                             $pub_count=1;
 
@@ -247,14 +247,14 @@ echo"                                </tr>
                                     echo "<td>";
                                     if ($result[$i][2]!=NULL) {
                                         array_push($last_affiliation,$result[$i][2]);
-                                        echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[$i][2]."Affi_id\">".get_affiliation_name($link,$result[$i][2])."</a>;\n";}
+                                        echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[$i][2]."\">".get_affiliation_name($link,$result[$i][2])."</a>;\n";}
 
 
                                 }
                                 else {
                                     if (!(in_array($result[$i][2],$last_affiliation)) AND $result[$i][2]!=NULL) {
                                     array_push($last_affiliation,$result[$i][2]);
-                                    echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[$i][2]."Affi_id\">".get_affiliation_name($link,$result[$i][2])."</a>;\n";}
+                                    echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[$i][2]."\">".get_affiliation_name($link,$result[$i][2])."</a>;\n";}
                                     $pub_count+=1;
                                     
 
