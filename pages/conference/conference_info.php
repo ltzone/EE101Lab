@@ -329,7 +329,6 @@ $("#but4").click(function(){
 </script>';
 echo"<div>";
 echo"<style type=\"text/css\">
-body{ text-align:center} 
 .button {
     
     display: inline-block;
