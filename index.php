@@ -117,8 +117,8 @@ option = {
         trigger: 'item',
         formatter: function(a){
         	var b =a['data']['value'];
-        	var yr=years[b[1]];
-        	var conf=years[b[0]];
+        	var yr=years[b[0]];
+        	var conf=conferences[b[1]];
         	var nm=b[2];
         	return 'Conference: '+conf+'<br>Year: '+yr+'<br>Papers: '+nm;
 
