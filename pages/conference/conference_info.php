@@ -208,7 +208,7 @@ echo "
                                         
                     <div class=\"widget-header\">
                         <i class=\"icon-th-list\"></i>
-                        <h3>Reference Table</h3>
+                        <h3>Paper Table</h3>
                     </div> <!-- /widget-header -->
                     
                     <div class=\"widget-content\">";

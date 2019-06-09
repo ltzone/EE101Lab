@@ -22,6 +22,9 @@
 <body>
 
 
+
+
+
 <?php
 set_time_limit(0);
 $affiliation_id = $_GET["affiliation_id"];
@@ -70,19 +73,46 @@ $years = json_encode($years);
 $count_year = json_encode($count_year);
 
 //top authors 需要数组authors1, author_num1, authors2, author_num2
+
+
+// 通过一次查询，获得作者和作者的被引用数的表
+$author_list2 = mysqli_fetch_all(mysqli_query($link,"SELECT AuthorID, count(distinct F.PaperID) FROM (SELECT B.AuthorID, PaperID from (SELECT AuthorID from paper_author_affiliation WHERE AffiliationID = '$affiliation_id') A INNER JOIN paper_author_affiliation B on A.AuthorID = B.AuthorID GROUP BY B.AuthorID, PaperID) E INNER JOIN paper_reference2 F on E.PaperID = F.ReferenceID GROUP BY AuthorID"));
+$author_list1 = mysqli_fetch_all(mysqli_query($link,"SELECT AuthorID, count(distinct PaperID) FROM (SELECT B.AuthorID, PaperID from (SELECT AuthorID from paper_author_affiliation WHERE AffiliationID = '$affiliation_id') A INNER JOIN paper_author_affiliation B on A.AuthorID = B.AuthorID GROUP BY B.AuthorID, PaperID) G GROUP BY AuthorID"));
 $authors_data1 = array();
 $authors_data2 = array();
+$author_count = count($author_list1);
 for ($i=0;$i<$author_count;$i+=1){
-    $author_id = $author_list[$i][0];
-    $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$author_id'");
-    $author_name = mysqli_fetch_array($result)['AuthorName'];
-    $result = mysqli_query($link, "SELECT count(PaperID) from paper_author_affiliation where AuthorID='$author_id'");
-    $pub_count =  mysqli_fetch_array($result)[0];
-    $result = mysqli_query($link, "SELECT count(*) from paper_reference2 A INNER JOIN (SELECT PaperID from paper_author_affiliation where AuthorID='$author_id') B on A.PaperID = B.PaperID");
-    $ref_count =  mysqli_fetch_array($result)[0];
-    $authors_data1[$author_name] = $pub_count;
-    $authors_data2[$author_name] = $ref_count;
-    }
+    $author_id1 = $author_list1[$i][0];
+    $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$author_id1'");
+    $author_name1 = mysqli_fetch_array($result)['AuthorName'];    
+    $pub_count = $author_list1[$i][1];
+    $authors_data1[$author_name1] = $pub_count;
+}
+$author_count = count($author_list2);
+for ($i=0;$i<$author_count;$i+=1){
+    $author_id2 = $author_list2[$i][0];
+    $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$author_id2'");
+    $author_name2 = mysqli_fetch_array($result)['AuthorName'];    
+    $ref_count = $author_list2[$i][1];
+    $authors_data2[$author_name2] = $ref_count;
+}
+
+
+
+
+// $authors_data1 = array();
+// $authors_data2 = array();
+// for ($i=0;$i<$author_count;$i+=1){
+//     $author_id = $author_list[$i][0];
+//     $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$author_id'");
+//     $author_name = mysqli_fetch_array($result)['AuthorName'];
+//     $result = mysqli_query($link, "SELECT count(PaperID) from paper_author_affiliation where AuthorID='$author_id'");
+//     $pub_count =  mysqli_fetch_array($result)[0];
+//     $result = mysqli_query($link, "SELECT count(*) from paper_reference2 A INNER JOIN (SELECT PaperID from paper_author_affiliation where AuthorID='$author_id') B on A.PaperID = B.PaperID");
+//     $ref_count =  mysqli_fetch_array($result)[0];
+//     $authors_data1[$author_name] = $pub_count;
+//     $authors_data2[$author_name] = $ref_count;
+//     }
 arsort($authors_data1);
 $all_authors1 = array_keys($authors_data1);
 $authors1 = array();
