@@ -279,16 +279,17 @@ echo"<style type=\"text/css\">
     
     display: inline-block;
 }</style>";
-echo "<div class=\"button\"><button id=\"but1\">First</button></div>";
+echo"<div class=\"btn-group\">
+<div class=\"button\"><button type=\"button\" class=\"btn btn-default \"id=\"but1\">First</button></div>
 
-echo "<div class=\"button\"><button id=\"but3\">Previous</button></div>";
-echo"     ";
+<div class=\"button\"><button type=\"button\" class=\"btn btn-default \"id=\"but3\">Previous</button></div>";
+
 for($j=1;$j<=$totalpage;++$j){
     $jj=(string)$j;
-    echo "<div class =\"button\"><button id=\"b$jj\">$jj</button></div>";}
-    echo"     ";
-echo "<div class=\"button\"><button id=\"but2\">Next</button></div>";
-echo "<div class=\"button\"><button id=\"but4\">Last</button></div>";echo"</div>";
+    echo"<div class =\"button\"><button type=\"button\" class=\"btn btn-default \"id=\"b$jj\">$jj</button></div>";}
+  
+echo"<div class=\"button\"><button type=\"button\" class=\"btn btn-default \"id=\"but2\">Next</button></div>
+<div class=\"button\"><button type=\"button\" class=\"btn btn-default \"id=\"but4\">Last</button></div></div>";
 echo"
 <script  type=\"text/javascript\">
  var oBtn=document.getElementsByClassName(\"button\");
