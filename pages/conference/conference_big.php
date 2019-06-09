@@ -20,11 +20,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 
 <body>
-
-
+    <script src="../../js/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="https://cdn.bootcss.com/svg.pan-zoom.js/2.8.0/svg.pan-zoom.js"></script>
 <?php
 $conference_id = $_GET["conference_id"];
-$link = mysqli_connect("localhost:3306", 'root', '770528', 'FINAL');
+$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 
 ?>
 
@@ -132,8 +132,9 @@ $link = mysqli_connect("localhost:3306", 'root', '770528', 'FINAL');
                     <div class="widget-content">
                     
                         
-						<div id="dragDiv">
-					<svg><script src="../../img/<?php echo $conference_id;?>.svg"></script> </svg>
+					<div id="dragDiv">
+                    <object data="../../img/<?php echo $conference_id;?>.svg" class="show-style" onload="zoom(this)"></object>
+                    
 					</div>
 						
 						
@@ -146,21 +147,19 @@ $link = mysqli_connect("localhost:3306", 'root', '770528', 'FINAL');
                     </div> <!-- /widget-content -->
                     
                 </div> <!-- /widget -->
-                
-<script 
-    window.onload = function () {
-    const zoom = $solway.zoom({
-        ele: document.getElementById('zoomSvg'),
-        scale: 0.6,
-        minScale: 0.1
-    });
 
+    <script type="text/javascript">
+        function zoom(obj) {
+            // 此处获取的元素Id是SVG文件中的<g>标签的id值
+            $(obj.getSVGDocument().getElementById('edges')).show();
+            svgPanZoom(obj, {
+                zoomEnabled: true,         //开启缩放功能
+                controlIconsEnabled: true  //开启右下角缩放控件功能
+            });
+        }
+        $('object').attr('onload', 'zoom(this)');
+    </script>
 
-    $solway.drag({
-        ele: document.getElementById('dragDiv')
-    });
-};
-                
                 
                 
                 
