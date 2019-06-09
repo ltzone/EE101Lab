@@ -19,9 +19,11 @@
     <script src="../../js/echarts.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 
+
+
+
 <body>
-    <script src="../../js/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <script src="https://cdn.bootcss.com/svg.pan-zoom.js/2.8.0/svg.pan-zoom.js"></script>
+
 <?php
 $conference_id = $_GET["conference_id"];
 $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
@@ -132,10 +134,26 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
                     <div class="widget-content">
                     
                         
-					<div id="dragDiv">
-                    <object data="../../img/<?php echo $conference_id;?>.svg" class="show-style" onload="zoom(this)"></object>
-                    
-					</div>
+
+
+                    <object id="graph" data="../../img/<?php echo $conference_id;?>.svg" type="image/svg+xml" height=800 style="width:100%"></object>
+    <script src="../../js/svg-pan-zoom.js" type="text/javascript"></script>                   
+    <script>
+      // Don't use window.onLoad like this in production, because it can only listen to one function.
+      window.onload = function() {
+        svgPanZoom('#graph', {
+          zoomEnabled: true,
+          controlIconsEnabled: true,
+        preventMouseEventsDefault: false,
+          fit: true,
+          center: true        });
+
+
+        
+      };
+    </script>
+
+
 						
 						
 						
@@ -147,18 +165,6 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
                     </div> <!-- /widget-content -->
                     
                 </div> <!-- /widget -->
-
-    <script type="text/javascript">
-        function zoom(obj) {
-            // 此处获取的元素Id是SVG文件中的<g>标签的id值
-            $(obj.getSVGDocument().getElementById('edges')).show();
-            svgPanZoom(obj, {
-                zoomEnabled: true,         //开启缩放功能
-                controlIconsEnabled: true  //开启右下角缩放控件功能
-            });
-        }
-        $('object').attr('onload', 'zoom(this)');
-    </script>
 
                 
                 
@@ -192,8 +198,6 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 
 
 
-
-
 <!-- Le javascript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
@@ -205,7 +209,15 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 <script src="../../js/jquery.flot.resize.js"></script>
 
 
+
+
 <script src="../../js/bootstrap.js"></script>
+
+
+
+
+
+
 
   </body>
 </html>
