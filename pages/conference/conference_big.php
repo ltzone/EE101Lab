@@ -26,32 +26,6 @@
 $conference_id = $_GET["conference_id"];
 $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 
-//创建$years,$number
-$years=array();
-$data=array();
-$number1=array();
-$result = mysqli_query($link, "SELECT PaperID,PaperPublishYear from papers where ConferenceID='$conference_id' ");
-if($result) {
-    while($row = mysqli_fetch_array($result)){
-        $paper_id = $row['PaperID'];
-        $paper_year = $row['PaperPublishYear'];
-        //
-        if(array_key_exists($paper_year, $data)){
-            $data[$paper_year]++;
-        }else{
-            $data[$paper_year]=1;
-        }
-    }
-}
-//创建years,number1
-ksort($data);
-foreach ($data as $key => $value) {
-    $years[]=$key;
-    $number[]=$value;
-}
-
-$years = json_encode($years);
-$number = json_encode($number);
 ?>
 
 
@@ -110,14 +84,13 @@ $number = json_encode($number);
                             Conference Information      
                         </a>
                     </li>
-                    
-                    <li  class="active">
+                    <li>
                         <?php echo "<a href=\"./conference_charts.php?conference_id=$conference_id\">" ?>
                             <i class="icon-signal"></i>
                             Conference Charts
                         </a>
                     </li>
-                    <li>
+                    <li  class="active">
                         <?php echo "<a href=\"./conference_big.php?conference_id=$conference_id\">" ?>
                             <i class="icon-signal"></i>
                             Big Graph
@@ -153,11 +126,11 @@ $number = json_encode($number);
                 <div class="widget">
                     
                     <div class="widget-header">
-                        <h3>Year</h3>
+                        <h3>Overall Picture</h3>
                     </div> <!-- /widget-header -->
                                                         
                     <div class="widget-content">
-                        <div id="main" style="width: 600px;height:400px;"></div>
+                    <iframe src="../../img/<?php echo $conference_id;?>.svg" width="700" height="800"></iframe>
                         
                                         
                     </div> <!-- /widget-content -->
@@ -183,43 +156,7 @@ $number = json_encode($number);
             
         </div> <!-- /row -->
 
-        <!-- echarts画图，需要数组 years1,number1 -->
-        <!--div id="main" style="width: 600px;height:400px;"></div-->
-        <script type="text/javascript">
-            // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('main'));
 
-            var years1 = eval(decodeURIComponent('<?php echo urlencode($years);?>'));
-            var number1 = eval(decodeURIComponent('<?php echo urlencode($number);?>'));
-
-            // 指定图表的配置项和数据
-            option = {
-                tooltip: {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data:['number of papers']
-                },
-                xAxis: {
-                    type: 'category',
-                    data: years1
-                },
-                yAxis: {
-                    type: 'value',
-                    minInterval: 1
-                },
-                series: [
-                {
-                    name:'papers',
-                    type: 'line',
-                    data: number1
-                },
-                ]
-            };
-            
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
-        </script>
         
     </div> <!-- /container -->
     

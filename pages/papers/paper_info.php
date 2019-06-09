@@ -47,37 +47,20 @@ if ($result) {
             
             <?php echo "<a class=\"brand\" href=\"./paper_info.php?paper_id=$paper_id\">";
              ?>Papers</a>
-            
-            <div class="nav-collapse">
+                        <div class="nav-collapse">
             
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="#"><span class="badge badge-warning">7</span></a>
-                    </li>
                     
-                    <li class="divider-vertical"></li>
                     
                     <li class="dropdown">
                         
-                        <a data-toggle="dropdown" class="dropdown-toggle " href="#">
-                            Rod Howard <b class="caret"></b>                            
-                        </a>
-                        
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="./account.html"><i class="icon-user"></i> Account Setting  </a>
-                            </li>
-                            
-                            <li>
-                                <a href="./change_password.html"><i class="icon-lock"></i> Change Password</a>
-                            </li>
-                            
-                            <li class="divider"></li>
-                            
-                            <li>
-                                <a href="./"><i class="icon-off"></i> Logout</a>
-                            </li>
-                        </ul>
+                    <div class="input-group">
+                     <form action="search_info.php" style="margin:0px">
+                      <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
+                      <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
+                     </form>
+                    </div><!-- /input-group -->
+
                     </li>
                 </ul>
                 
@@ -127,7 +110,6 @@ if ($result) {
                         <?php echo "<a href=\"./paper_citation.php?paper_id=$paper_id\">" ?>
                             <i class="icon-th-large"></i>
                             Citations
-                            <span class="label label-warning pull-right">5</span>
                         </a>
                     </li>
                     
@@ -162,18 +144,19 @@ if ($result) {
                 
                 <h1 class="page-title">
                     <i class="icon-user"></i>
-                    Paper Information                   
+                             <?php echo $paper_name2;?>         
                 </h1>
 
                 <!-- 放置paper相关信息 -->
                 <div class="row">
                     
-                    <div class="span5">
+                    <div class="span4">
                                     
                         <div class="widget">
                             
                             <div class="widget-header">
-                                <h3><?php echo $paper_name2;?></h3>
+                                
+                                <h3>Paper Information </h3>
                             </div> <!-- /widget-header -->
                                                                 
                             <div class="widget-content">
@@ -216,6 +199,11 @@ if ($result) {
                     echo ($refer_count[0]);
                     echo "</td></tr>";
 
+                    echo "<tr><td><b> Details: </b></td><td>";
+                    echo "<a href='https://www.acemap.info/paper?paperID=$paper_id'>See Acemap</a>";
+                    echo "</td></tr>";
+                    
+
             echo "</table>";
             ?>
                             </div> <!-- /widget-content -->
@@ -224,7 +212,7 @@ if ($result) {
                         
                     </div> <!-- /span5 -->
         
-                    <div class="span4">
+                    <div class="span5">
                         
                         <div class="widget">
                <div class="widget widget-table">
@@ -242,7 +230,6 @@ if ($result) {
                                     <th>#</th>
                                     <th>Author Name</th>
                                     <th>Affiliation</th>
-                                    <th>&nbsp;</th>
                                 </tr>
                             </thead>
                             
@@ -252,9 +239,10 @@ if ($result) {
                     while ($author_row = mysqli_fetch_array($author_info)){
                         echo "<tr>"; echo "<td>$idx</td>";
                         $author_name = $author_row['AuthorName'];
-                        echo "<td>".ucwords($author_name)."</td>";
-                        $author_aff = $author_row['AffiliationID'];
                         $author_another_id = $author_row['AuthorID'];
+                        echo "<td>"."<a href=\"../authors/author_info.php?author_id=$author_another_id\">".ucwords($author_name)."</a></td>";
+                        $author_aff = $author_row['AffiliationID'];
+                        
                         $Affresult = mysqli_query($link, "SELECT Affiliations.AffiliationID, Affiliations.AffiliationName from (select AffiliationID, count(*) as cnt from paper_author_affiliation where AuthorID='$author_another_id' and AffiliationID is not null group by AffiliationID order by cnt desc) as tmp inner join Affiliations on tmp.AffiliationID = Affiliations.AffiliationID");
                         echo "<td>";
                         if ($Affresult->num_rows!=0){
@@ -264,7 +252,6 @@ if ($result) {
                                 echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=$Affi_id\">$Affi_name</a>;\n";}
                             echo "</td>";
                             }
-                        echo "<td></td>";
                         echo "</tr>";
                         $idx += 1;
                     }

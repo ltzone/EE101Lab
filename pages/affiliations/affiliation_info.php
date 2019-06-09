@@ -32,9 +32,11 @@ $result = mysqli_query($link, "SELECT AffiliationName from affiliations where Af
 $result = mysqli_query($link, "SELECT AuthorID, count(distinct AuthorID) from paper_author_affiliation where AffiliationID='$affiliation_id' group by AuthorID");
 $author_list = mysqli_fetch_all($result);
 $author_count= count($author_list );
-
+$result = mysqli_query($link, "SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID= '$affiliation_id' group by PaperID");
+$pub_list = mysqli_fetch_all($result);
+$pub_count= count($pub_list);
 # 查询本机构所有文章 （不重复）
-# SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID='01109E6D' group by PaperID
+# 
 ?>
 
 
@@ -52,37 +54,20 @@ $author_count= count($author_list );
 
 
             <?php echo "<a class=\"brand\" href=\"./affiliation_info.php?affiliation_id=$affiliation_id\">Affiliations</a>";?>
-            
-            <div class="nav-collapse">
+                        <div class="nav-collapse">
             
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="#"><span class="badge badge-warning">7</span></a>
-                    </li>
                     
-                    <li class="divider-vertical"></li>
                     
                     <li class="dropdown">
                         
-                        <a data-toggle="dropdown" class="dropdown-toggle " href="#">
-                            Rod Howard <b class="caret"></b>                            
-                        </a>
-                        
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="./account.html"><i class="icon-user"></i> Account Setting  </a>
-                            </li>
-                            
-                            <li>
-                                <a href="./change_password.html"><i class="icon-lock"></i> Change Password</a>
-                            </li>
-                            
-                            <li class="divider"></li>
-                            
-                            <li>
-                                <a href="./"><i class="icon-off"></i> Logout</a>
-                            </li>
-                        </ul>
+                    <div class="input-group">
+                     <form action="search_info.php" style="margin:0px">
+                      <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
+                      <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
+                     </form>
+                    </div><!-- /input-group -->
+
                     </li>
                 </ul>
                 
@@ -144,38 +129,46 @@ $author_count= count($author_list );
 
             <!-- 右栏内容 -->
             <div class="span9">
-                
                 <h1 class="page-title">
                     <i class="icon-user"></i>
-                   Affiliation Information               
+                    Affiliation Authors of <?php echo $affiliation_name2; ?>              
                 </h1>
-
-                <!-- 放置affiliation相关信息 -->
-                <div class="row">
+                
+                <div class="stat-container">
+                                        
+                    <div class="stat-holder">                       
+                        <div class="stat">                          
+                            <span><?php echo $author_count;?></span>                            
+                            Authors                         
+                        </div> <!-- /stat -->                       
+                    </div> <!-- /stat-holder -->
                     
-                    <div class="span9">
-                                    
-                        <div class="widget">
-                            
-                            <div class="widget-header">
-                                <h3><?php echo $affiliation_name2;?></h3>
-                            </div> <!-- /widget-header -->
-                                                                
-                            <div class="widget-content">
-<?php   
-
-        echo "<table>";
-        echo "<tr><td width = '120'>Authors:</td><td>";
-        echo ($author_count);
-        echo "</td></tr>";
-        echo "</table>";?>
-                            </div> <!-- /widget-content -->
-                            
-                        </div> <!-- /widget -->
-                        
-                    </div> <!-- /span5 -->
+                    <div class="stat-holder">                       
+                        <div class="stat">                          
+                            <span><?php
+                $pubresult = mysqli_query($link, "SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID='$affiliation_id' group by PaperID");
+                echo $pubresult->num_rows;?>
+                            </span>                            
+                            Total of Publications                         
+                        </div> <!-- /stat -->                       
+                    </div> <!-- /stat-holder -->
                     
-                </div> <!-- /row -->        
+                    <div class="stat-holder">                       
+                        <div class="stat">                          
+                            <span><?php
+
+                $result =mysqli_query($link,"SELECT count(*) from (SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID='$affiliation_id' group by PaperID) A INNER JOIN paper_reference2 B on A.PaperID = B.PaperID");
+                $result = mysqli_fetch_all($result)[0][0];
+                echo $result;
+                ?>
+
+                            </span>                         
+                            Total of References                          
+                        </div> <!-- /stat -->                       
+                    </div> <!-- /stat-holder -->
+
+                    
+                </div> <!-- /stat-container -->
 
                 <div class="row">
                     <div class="span9">
@@ -183,13 +176,32 @@ $author_count= count($author_list );
 
 <?php
 
+
+    function get_author_name($link,$author_id){
+        $res = mysqli_query($link,"SELECT AuthorName from authors where AuthorID='$author_id'");
+        if ($res) {
+                return ucwords(mysqli_fetch_array($res)['AuthorName']);
+            }
+        else return ('Author Not Found');
+    }
+
+    function get_affiliation_name($link,$affiliation_id){
+        $res = mysqli_query($link,"SELECT AffiliationName from affiliations where AffiliationID='$affiliation_id'");
+        if ($res) {
+                return ucwords(mysqli_fetch_array($res)['AffiliationName']);
+            }
+        else return ('Affiliation Not Found');
+    }
+
+
+
                 if ($author_count>0) {              
                 echo "
                 <div class=\"widget widget-table\">
                                         
                     <div class=\"widget-header\">
                         <i class=\"icon-th-list\"></i>
-                        <h3>Reference Table</h3>
+                        <h3>Author Table</h3>
                     </div> <!-- /widget-header -->
                     
                     <div class=\"widget-content\">
@@ -200,42 +212,100 @@ $author_count= count($author_list );
                                     <th>#</th>
                                     <th>Author Name</th>
                                     <th>Affiliations</th>
-                                    <th>Publications</th>
-                                    <th>Citations</th>
-                                </tr>
+                                    <th>Publications</th>";
+     //                               <th>Citations</th>
+echo"                                </tr>
                             </thead>  <tbody>";
 
+# result 查询机构所有文章
+
+                            $result = mysqli_query($link, "SELECT B.AuthorID, PaperID, AffiliationID from (SELECT AuthorID from paper_author_affiliation WHERE AffiliationID = '$affiliation_id') A INNER JOIN paper_author_affiliation B on A.AuthorID = B.AuthorID GROUP BY B.AuthorID, PaperID");
+                            // 通过一次查询，获得了一张包含该机构所有作者+作者所有著作+所在会议的表
+                            $result = (mysqli_fetch_all($result));
+                            $result_rows=count($result);
+                            $last_author = $result[0][0];
+                            $last_affiliation = array();
+
+                            // 对第一行信息的操作
+                            $idx = 1;
+                            echo "<tr><td>$idx</td><td>"."<a href=\"../authors/author_info.php?author_id=".$result[0][0]."\">".get_author_name($link,$result[0][0])."</a></td>";
+                            echo "<td>";
+                            if ($result[0][2]!=NULL) {
+                                array_push($last_affiliation,$result[0][2]);
+                            echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[0][2]."Affi_id\">".get_affiliation_name($link,$result[0][2])."</a>;\n";}
+
+                            $pub_count=1;
 
 
 
-            for ($i=0;$i<$author_count;$i+=1){
-                $author_id = $author_list[$i][0];
-                $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$author_id'");
-                $author_name = mysqli_fetch_array($result)['AuthorName'];
-                echo "<tr>";
-                echo "<td>";
-                echo $i+1;
-                echo "</td>";
-                echo "<td>".ucwords($author_name)."</td>";
-                $Affresult = mysqli_query($link, "SELECT Affiliations.AffiliationID, Affiliations.AffiliationName from (select AffiliationID, count(*) as cnt from paper_author_affiliation where AuthorID='$author_id' and AffiliationID is not null group by AffiliationID order by cnt desc) as tmp inner join Affiliations on tmp.AffiliationID = Affiliations.AffiliationID");
-                echo "<td>";
-                if ($Affresult->num_rows!=0){
-                    foreach ($Affresult as $affline){
-                        $Affi_name = ucwords($affline['AffiliationName']);
-                        echo "$Affi_name;\n";}
-                    echo "</td>";
-                    }
-                echo "<td>";
-                $result = mysqli_query($link, "SELECT count(PaperID) from paper_author_affiliation where AuthorID='$author_id'");
-                $pub_count =  mysqli_fetch_array($result)[0];
-                echo $pub_count;echo "</td>";
-                echo "<td>";
-                $result = mysqli_query($link, "SELECT count(*) from paper_reference2 A INNER JOIN (SELECT PaperID from paper_author_affiliation where AuthorID='$author_id') B on A.PaperID = B.PaperID");
-                $ref_count =  mysqli_fetch_array($result)[0];
-                echo $ref_count;
-                echo "</td>";
-                echo "</tr>";
-                }
+                            for ($i=1;$i<$result_rows;$i+=1){ // 从第二行开始
+                                if ($result[$i][0]!=$last_author) {$idx+=1; $last_author=$result[$i][0];$last_affiliation=array();// 另一位作者开始了
+                                    echo "</td>";
+                                    echo "<td>";echo $pub_count; echo "</td></tr>";$pub_count=1;//输出上一位作者的count
+                                    // 新作者的信息
+                                    echo "<tr><td>$idx</td><td>"."<a href=\"../authors/author_info.php?author_id=".$result[$i][0]."\">".get_author_name($link,$result[$i][0])."</a></td>";
+                                    echo "<td>";
+                                    if ($result[$i][2]!=NULL) {
+                                        array_push($last_affiliation,$result[$i][2]);
+                                        echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[$i][2]."Affi_id\">".get_affiliation_name($link,$result[$i][2])."</a>;\n";}
+
+
+                                }
+                                else {
+                                    if (!(in_array($result[$i][2],$last_affiliation)) AND $result[$i][2]!=NULL) {
+                                    array_push($last_affiliation,$result[$i][2]);
+                                    echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=".$result[$i][2]."Affi_id\">".get_affiliation_name($link,$result[$i][2])."</a>;\n";}
+                                    $pub_count+=1;
+                                    
+
+                                    // 还是这位作者
+
+
+
+                                }                               
+                                }
+                            echo "<td>$pub_count</td></tr>";
+
+
+
+
+
+
+
+
+                            
+
+
+
+//             for ($i=0;$i<$author_count;$i+=1){
+//                 $author_id = $author_list[$i][0];
+//                 $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$author_id'");
+//                 $author_name = mysqli_fetch_array($result)['AuthorName'];
+//                 echo "<tr>";
+//                 echo "<td>";
+//                 echo $i+1;
+//                 echo "</td>";
+//                 echo "<td>"."<a href=\"../authors/author_info.php?author_id=$author_id\">".ucwords($author_name)."</a></td>";
+//                 $Affresult = mysqli_query($link, "SELECT Affiliations.AffiliationID, Affiliations.AffiliationName from (select AffiliationID, count(*) as cnt from paper_author_affiliation where AuthorID='$author_id' and AffiliationID is not null group by AffiliationID order by cnt desc) as tmp inner join Affiliations on tmp.AffiliationID = Affiliations.AffiliationID");
+//                 echo "<td>";
+//                 if ($Affresult->num_rows!=0){
+//                     foreach ($Affresult as $affline){
+//                         $Affi_id = $affline['AffiliationID'];
+//                         $Affi_name = ucwords($affline['AffiliationName']);
+//                         echo "<a href=\"../affiliations/affiliation_info.php?affiliation_id=$Affi_id\">$Affi_name</a>;\n";}
+//                     echo "</td>";
+//                     }
+//                 echo "<td>";
+//                 $result = mysqli_query($link, "SELECT count(PaperID) from paper_author_affiliation where AuthorID='$author_id'");
+//                 $pub_count =  mysqli_fetch_array($result)[0];
+//                 echo $pub_count;echo "</td>";
+//     //            echo "<td>";
+// //                $result = mysqli_query($link, "SELECT count(*) from paper_reference2 A INNER JOIN (SELECT PaperID from paper_author_affiliation where AuthorID='$author_id') B on A.PaperID = B.PaperID");
+// //                $ref_count =  mysqli_fetch_array($result)[0];
+//  //               echo $ref_count;
+//   //              echo "</td>";
+//                 echo "</tr>";
+//                 }
             echo "</tbody></table>";
             echo "  </div> <!-- /widget-content -->";
         }

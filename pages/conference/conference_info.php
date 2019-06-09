@@ -16,11 +16,13 @@
     <link href="../../css/adminia.css" rel="stylesheet" /> 
     <link href="../../css/adminia-responsive.css" rel="stylesheet" /> 
     <link href="../../css/pages/dashboard.css" rel="stylesheet" /> 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+</head>
 
 <body>
-
-
+<script TYPE="TEXT/JAVASCRIPT" src="http://localhost/js/jquery-1.7.2.min.js"></script>
 <?php
 $conference_id = $_GET["conference_id"];
 $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
@@ -43,37 +45,20 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
 
 
             <?php echo "<a class=\"brand\" href=\"./conference_info.php?conference_id=$conference_id\">Conferences</a>";?>
-            
-            <div class="nav-collapse">
+                        <div class="nav-collapse">
             
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="#"><span class="badge badge-warning">7</span></a>
-                    </li>
                     
-                    <li class="divider-vertical"></li>
                     
                     <li class="dropdown">
                         
-                        <a data-toggle="dropdown" class="dropdown-toggle " href="#">
-                            Rod Howard <b class="caret"></b>                            
-                        </a>
-                        
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="./account.html"><i class="icon-user"></i> Account Setting  </a>
-                            </li>
-                            
-                            <li>
-                                <a href="./change_password.html"><i class="icon-lock"></i> Change Password</a>
-                            </li>
-                            
-                            <li class="divider"></li>
-                            
-                            <li>
-                                <a href="./"><i class="icon-off"></i> Logout</a>
-                            </li>
-                        </ul>
+                    <div class="input-group">
+                     <form action="search_info.php" style="margin:0px">
+                      <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
+                      <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
+                     </form>
+                    </div><!-- /input-group -->
+
                     </li>
                 </ul>
                 
@@ -109,6 +94,12 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                         </a>
                     </li>
                     <li>
+                        <?php echo "<a href=\"./conference_big.php?conference_id=$conference_id\">" ?>
+                            <i class="icon-signal"></i>
+                            Big Graph
+                        </a>
+                    </li>
+                    <li>
                         <a href="../../index.php">
                             <i class="icon-home"></i>
                             Back to Home                     
@@ -141,31 +132,51 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                     
                     <div class="span9">
                                     
-                        <div class="widget">
-                            
-                            <div class="widget-header">
-                                <h3><?php echo $conference_name;?></h3>
-                            </div> <!-- /widget-header -->
-                                                                
-                            <div class="widget-content">
-<?php   
 
 
-        $result = mysqli_query($link, "SELECT count(PaperID) from papers where ConferenceID='$conference_id' ");
-        $row = $result->fetch_array();
-        $num_results = $row[0];
+                <div class="stat-container">
+                                        
+                    <div class="stat-holder">                       
+                        <div class="stat">                          
+                            <span><?php 
 
-        echo "<table>";
-        echo "<tr><td width = '120'>Papers:</td><td>";
-        echo ($num_results);
-        echo "</td></tr>";
+                $result =mysqli_query($link,"SELECT AuthorID, count(distinct AuthorID) from (SELECT PaperID from papers where ConferenceID='$conference_id') A INNER JOIN paper_author_affiliation B on A.PaperID = B.PaperID GROUP BY AuthorID");
+                $result = mysqli_fetch_all($result);
+                echo count($result);
 
+                            ?></span>                            
+                            Total of Authors                       
+                        </div> <!-- /stat -->                       
+                    </div> <!-- /stat-holder -->
+                    
+                    <div class="stat-holder">                       
+                        <div class="stat">                          
+                            <span><?php
+                $pubresult = mysqli_query($link, "SELECT count(*) from papers where ConferenceID='$conference_id'");
+                $pubresult = mysqli_fetch_all($pubresult)[0][0];
+                echo $pubresult; ?>
+                            </span>                            
+                            Total of Papers                        
+                        </div> <!-- /stat -->                       
+                    </div> <!-- /stat-holder -->
+                    
+                    <div class="stat-holder">                       
+                        <div class="stat">                          
+                            <span><?php
 
-        echo "</table>";?>
-                            </div> <!-- /widget-content -->
-                            
-                        </div> <!-- /widget -->
-                        
+                $result =mysqli_query($link,"SELECT count(*) from (SELECT PaperID, count(distinct PaperID) from papers where ConferenceID='$conference_id' group by PaperID) A INNER JOIN paper_reference2 B on A.PaperID = B.PaperID");
+                $result = mysqli_fetch_all($result)[0][0];
+                echo $result;
+                ?>
+
+                            </span>                         
+                            Total of References                          
+                        </div> <!-- /stat -->                       
+                    </div> <!-- /stat-holder -->
+
+                    
+                </div> <!-- /stat-container -->
+
                     </div> <!-- /span5 -->
                     
                 </div> <!-- /row -->        
@@ -176,18 +187,29 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
 
 <?php
                     $result = mysqli_query($link, "SELECT PaperID  from papers where ConferenceID='$conference_id'");
+                    $num_results = $result->num_rows;
                 if ($result->num_rows) {              
-                echo "
+                
+
+
+echo "
                 <div class=\"widget widget-table\">
                                         
                     <div class=\"widget-header\">
                         <i class=\"icon-th-list\"></i>
-                        <h3>Reference Table</h3>
+                        <h3>Paper Table</h3>
                     </div> <!-- /widget-header -->
                     
-                    <div class=\"widget-content\">
-                    
-                        <table class=\"table table-striped table-bordered\">
+                    <div class=\"widget-content\">";
+            $idx = 1;
+            $page=1;
+
+            while ($row = mysqli_fetch_array($result)) {
+
+                
+                if($idx%10==1){echo"<div id=\"$page\"style=\"display:none\">";
+                  
+                       echo" <table class=\"table table-striped table-bordered\">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -195,14 +217,9 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                                     <th>Authors</th>
                                     <th>Conference</th>
                                     <th>Year</th>
-                                    <th>&nbsp;</th>
                                 </tr>
-                            </thead>  <tbody>";
+                            </thead>  <tbody>";}
 
-
-
-            $idx = 1;
-            while ($row = mysqli_fetch_array($result)) {
                 $paper_id_ref = $row['PaperID'];
                 $paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID, PaperPublishYear from papers where PaperID='$paper_id_ref'"));
                 if ($paper_info){
@@ -233,18 +250,198 @@ $result = mysqli_query($link, "SELECT ConferenceName from conferences where Conf
                     echo "</td><td>";
                     echo $yr; echo "</td>";
 
-                    echo "              <td class=\"action-td\">
-                                        <a href=\"javascript:;\" class=\"btn btn-small btn-warning\">
-                                            <i class=\"icon-ok\"></i>                             
-                                        </a>                    
-                                        <a href=\"javascript:;\" class=\"btn btn-small\">
-                                            <i class=\"icon-remove\"></i>                     
-                                        </a>
-                                    </td></tr>";
+
                     $idx +=1;
-                }
+
+                }if($idx%10==1&&$idx>1){echo "</tbody></table>";echo"当前第";echo$page;echo"页，共";echo(int)(($num_results-1)/10+1);echo"页";$page+=1;echo"</div>";}
+
+                if ($idx==$num_results+1){echo "</tbody></table>";echo"当前第";echo$page;echo"页，共";echo(int)(($num_results-1)/10+1);echo"页";echo"</div>";}
             }
-            echo "</tbody></table>";
+$totalpage=(int)(($num_results-1)/10+1);
+            echo'
+<script type="text/javascript">
+var now=1; var pp =1;
+var totalpage =' .$totalpage.';
+
+
+var pa=new Array();
+if(totalpage==1)pa[0]=1;
+else if (totalpage==2){pa[0]=1;pa[1]=2;}
+else if (totalpage==3){pa[0]=1;pa[1]=2;pa[2]=3;}
+else if (totalpage==4){pa[0]=1;pa[1]=2;pa[2]=3;pa[3]=4;}
+else if (totalpage==5||now==1||now==2){pa[0]=1;pa[1]=2;pa[2]=3;pa[3]=4;pa[4]=5;}
+else if(now==(totalpage-1)){pa[0]=totalpage-4;pa[1]=totalpage-3;pa[2]=totalpage-2;pa[3]=totalpage-1;pa[4]=totalpage;}
+else if(now==totalpage){pa[0]=totalpage-4;pa[1]=totalpage-3;pa[2]=totalpage-2;pa[3]=totalpage-1;pa[4]=totalpage;}
+else {pa[0]=now-2;pa[1]=now-1;pa[2]=now;pa[3]=now+1;pa[4]=now+2;}
+ document.getElementById("1").style.display="";
+</script>';
+           echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#but1").click(function(){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById("1").style.display="";
+    now=1;
+      });});
+</script>';
+
+            
+            echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#but2").click(function(){
+    if(now<totalpage){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById((now+1).toString()).style.display="";
+    now+=1;
+       }else document.getElementById((totalpage).toString()).style.display=""; });});
+</script>';
+
+ echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#but3").click(function(){
+   if(now>1){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById((now-1).toString()).style.display="";
+    now-=1;}else  document.getElementById("1").style.display=""; 
+        });});
+</script>';
+
+echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#but4").click(function(){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById(totalpage.toString()).style.display="";
+    now=totalpage;
+        });});
+</script>';
+echo"<div>";
+echo"<style type=\"text/css\">
+.button {
+    
+    display: inline-block;
+}</style>";
+echo "<div class=\"button\"><button id=\"but1\">First</button></div>";
+
+echo "<div class=\"button\"><button id=\"but3\">Previous</button></div>";
+echo "<div class=\"button\"><button id=\"but2\">Next</button></div>";
+echo "<div class=\"button\"><button id=\"but4\">Last</button></div>";echo"</div>";
+/*if($totalpage>=2&&$totalpage<=5){
+    echo "<div class=\"button\"><button id=\"b1\">1</button></div>";
+echo "<div class=\"button\"><button id=\"b2\">2</button></div>";
+echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#b1").click(function(){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById("1").style.display="";
+    now=1;
+        });});
+</script>';
+echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#b2").click(function(){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById("2").style.display="";
+    now=2;
+        });});
+</script>';
+}
+if($totalpage>=3&&$totalpage<=5){
+    echo "<div class=\"button\"><button id=\"b3\">3</button></div>";
+echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#b3").click(function(){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById("3").style.display="";
+    now=3;
+        });});
+</script>';
+}
+if($totalpage>=4&&$totalpage<=5){
+    echo "<div class=\"button\"><button id=\"b4\">4</button></div>";
+echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#b4").click(function(){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById("4").style.display="";
+    now=4;
+        });});
+</script>';
+}
+if($totalpage==5){
+    echo "<div class=\"button\"><button id=\"b5\">5</button></div>";
+echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#b5").click(function(){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById("5").style.display="";
+    now=5;
+        });});
+</script>';
+}
+$np = "<script>document.writeln(now.toString());</script>";
+function qli($tx){preg_match_all('/[\x{4e00}-\x{9fa5}a-zA-Z0-9]/u',$tx,$jg);return join('',$jg[0]);}qli($np);
+$np=trim($np);var_dump($np);
+$np=(int)$np;echo$np;*/
+
+
+/*
+if($totalpage>5){
+    for($j=1;$j<=$totalpage;++$j){
+    $jj=(string)$j;
+    echo "<div class =\"button\"><button id=\"b$jj\">$jj</button></div>";}
+    echo"
+<script  type=\"text/javascript\">
+ 
+for(var t=1;t<=totalpage;++t){
+ $(document).ready(function(){
+
+document.write(c);
+var ppp=\"#b\"+(parseInt((this.id))/10000).toString();
+ var pppp=(parseInt((this.id))/10000).toString();
+
+$(ppp).click(function(){
+    
+    document.getElementById(now.toString()).style.display=\"none\";
+    document.getElementById(pppp).style.display=\"\";
+    now=(parseInt((this.id))/10000);
+        });});pp+=1;
+</script>";
+}
+
+*/
+
+
+
+
+
+
+/*for($i=1;$i<6;++$i){
+    $ii=(string)$i;$nnp=$np+$i-3;$nnp=(string)$nnp;
+    echo "<div class=\"button\"><button id=\"$nnp\">$i</button></div>";
+    echo"
+<script type=\"text/javascript\">
+var pp =\"<?php echo $ii;?>\";document.write(pp);
+var nu =\"<?php echo $i;?>\";document.write(nu);
+ $(document).ready(function(){
+
+    var ppp=\"#b\"+pp;
+$(ppp).click(function(){
+    $(ppp).html(pa[nu-1].toString());
+    document.getElementById(now.toString()).style.display=\"none\";
+    document.getElementById(pa[nu-1].toString()).style.display=\"\";
+    now=pa[nu-1];
+        });});
+</script>";
+}*/
+
             echo "  </div> <!-- /widget-content -->";
         }
         else {

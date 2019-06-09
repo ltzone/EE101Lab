@@ -52,37 +52,20 @@ $author_count= count($author_list );
 
 
             <?php echo "<a class=\"brand\" href=\"./affiliation_info.php?affiliation_id=$affiliation_id\">Affiliations</a>";?>
-            
-            <div class="nav-collapse">
+                        <div class="nav-collapse">
             
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="#"><span class="badge badge-warning">7</span></a>
-                    </li>
                     
-                    <li class="divider-vertical"></li>
                     
                     <li class="dropdown">
                         
-                        <a data-toggle="dropdown" class="dropdown-toggle " href="#">
-                            Rod Howard <b class="caret"></b>                            
-                        </a>
-                        
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="./account.html"><i class="icon-user"></i> Account Setting  </a>
-                            </li>
-                            
-                            <li>
-                                <a href="./change_password.html"><i class="icon-lock"></i> Change Password</a>
-                            </li>
-                            
-                            <li class="divider"></li>
-                            
-                            <li>
-                                <a href="./"><i class="icon-off"></i> Logout</a>
-                            </li>
-                        </ul>
+                    <div class="input-group">
+                     <form action="search_info.php" style="margin:0px">
+                      <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
+                      <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
+                     </form>
+                    </div><!-- /input-group -->
+
                     </li>
                 </ul>
                 
@@ -155,30 +138,40 @@ $author_count= count($author_list );
                                         
                     <div class="stat-holder">                       
                         <div class="stat">                          
-                            <span>564</span>                            
-                            Completed Sales                         
+                            <span><?php echo $author_count;?></span>                            
+                            Authors                         
                         </div> <!-- /stat -->                       
                     </div> <!-- /stat-holder -->
                     
                     <div class="stat-holder">                       
                         <div class="stat">                          
-                            <span>423</span>                            
-                            Pending Sales                           
+                            <span><?php
+                $pubresult = mysqli_query($link, "SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID='$affiliation_id' group by PaperID");
+                echo $pubresult->num_rows;?>
+                            </span>                            
+                            Total of Publications                         
                         </div> <!-- /stat -->                       
                     </div> <!-- /stat-holder -->
                     
                     <div class="stat-holder">                       
                         <div class="stat">                          
-                            <span>96</span>                         
-                            Returned Sales                          
+                            <span><?php
+
+                $result =mysqli_query($link,"SELECT count(*) from (SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID='$affiliation_id' group by PaperID) A INNER JOIN paper_reference2 B on A.PaperID = B.PaperID");
+                $result = mysqli_fetch_all($result)[0][0];
+                echo $result;
+                ?>
+
+                            </span>                         
+                            Total of References                          
                         </div> <!-- /stat -->                       
                     </div> <!-- /stat-holder -->
 
                     
                 </div> <!-- /stat-container -->
 <?php
-                $result = mysqli_query($link, "SELECT PaperID, count(distinct PaperID) from paper_author_affiliation where AffiliationID='$affiliation_id' group by PaperID");
-                if ($result->num_rows) {              
+
+                if ($pubresult->num_rows) {              
                 echo "
                 <div class=\"widget widget-table\">
                                         
@@ -197,14 +190,13 @@ $author_count= count($author_list );
                                     <th>Authors</th>
                                     <th>Conference</th>
                                     <th>Year</th>
-                                    <th>&nbsp;</th>
                                 </tr>
                             </thead>  <tbody>";
 
 
 
             $idx = 1;
-            while ($row = mysqli_fetch_array($result)) {
+            while ($row = mysqli_fetch_array($pubresult)) {
                 $paper_id_ref = $row['PaperID'];
                 $paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID, PaperPublishYear from papers where PaperID='$paper_id_ref'"));
                 if ($paper_info){
@@ -213,7 +205,7 @@ $author_count= count($author_list );
                     $yr = $paper_info['PaperPublishYear'];
                     $paper_title2 = ucwords($paper_title);
                     echo "<tr><td>$idx</td><td>";
-                    echo "<a href=\"paper_info.php?paper_id=$paper_id_ref\"><h3>$paper_title2</h3></a>";
+                    echo "<a href=\"../papers/paper_info.php?paper_id=$paper_id_ref\"><h3>$paper_title2</h3></a>";
                     echo "</td>";
                     echo "<td>";
                     $author_info = mysqli_query($link, "SELECT A.AuthorID, AuthorName FROM paper_author_affiliation A LEFT JOIN authors B ON A.AuthorID = B.AuthorID WHERE PaperID = '$paper_id_ref' ORDER BY AuthorSequence ASC");
@@ -235,14 +227,7 @@ $author_count= count($author_list );
                     echo "</td><td>";
                     echo $yr; echo "</td>";
 
-                    echo "              <td class=\"action-td\">
-                                        <a href=\"javascript:;\" class=\"btn btn-small btn-warning\">
-                                            <i class=\"icon-ok\"></i>                             
-                                        </a>                    
-                                        <a href=\"javascript:;\" class=\"btn btn-small\">
-                                            <i class=\"icon-remove\"></i>                     
-                                        </a>
-                                    </td></tr>";
+                    echo "</tr>";
                     $idx +=1;
                 }
             }
@@ -255,57 +240,8 @@ $author_count= count($author_list );
 
                     
 
-                    
-                </div> <!-- /widget -->
+
                 
-                
-                <div class="widget">
-                                        
-                    <div class="widget-header">
-                        <i class="icon-signal"></i>
-                        <h3>Area Chart</h3>
-                    </div> <!-- /widget-header -->
-                                                        
-                    <div class="widget-content">                    
-                        <div id="bar-chart" class="chart-holder"></div> <!-- /bar-chart -->             
-                    </div> <!-- /widget-content -->
-                    
-                </div> <!-- /widget -->
-                
-                <div class="row">
-                    
-                    <div class="span5">
-                                    
-                        <div class="widget">
-                            
-                            <div class="widget-header">
-                                <h3>5 Column</h3>
-                            </div> <!-- /widget-header -->
-                                                                
-                            <div class="widget-content">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                            </div> <!-- /widget-content -->
-                            
-                        </div> <!-- /widget -->
-                        
-                    </div> <!-- /span5 -->
-        
-                    <div class="span4">
-                        
-                        <div class="widget">
-                            
-                            <div class="widget-header">
-                                <h3>4 Column</h3>
-                            </div> <!-- /widget-header -->
-                                                                
-                            <div class="widget-content">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                            </div> <!-- /widget-content -->
-                            
-                        </div> <!-- /widget -->
-                    </div> <!-- /span4 -->
-                    
-                </div> <!-- /row -->
                 
             </div> <!-- /span9 -->
             
