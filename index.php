@@ -49,7 +49,7 @@
 	<div class="row intro-text">
 	  <div class="col-md-8 col-md-offset-2 text-center">
 		<h1 class="probootstrap-heading probootstrap-animate">Search Engine</h1>
-			<form class="form-horizontal" action="/EE101_final/pages/search/search_info.php">
+			<form class="form-horizontal" action="../pages/search/search_info.php">
 			  <div class="form-group">
 			    <div class="col-md-12 text-center">
 			      <p class="probootstrap-animate"><input type="text" class="form-control" id="keyword" name="keyword" placeholder="Enter the keyword: Paper/Conference/Author"></p>
