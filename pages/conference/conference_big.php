@@ -19,8 +19,10 @@
     <script src="../../js/echarts.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 
-<body>
 
+
+
+<body>
 
 <?php
 $conference_id = $_GET["conference_id"];
@@ -130,17 +132,40 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
                     </div> <!-- /widget-header -->
                                                         
                     <div class="widget-content">
-                    <iframe src="../../img/<?php echo $conference_id;?>.svg" width="700" height="800"></iframe>
+                    
                         
+
+
+                    <object id="graph" data="../../img/<?php echo $conference_id;?>.svg" type="image/svg+xml" height=800 style="width:100%"></object>
+    <script src="../../js/svg-pan-zoom.js" type="text/javascript"></script>                   
+    <script>
+      // Don't use window.onLoad like this in production, because it can only listen to one function.
+      window.onload = function() {
+        svgPanZoom('#graph', {
+          zoomEnabled: true,
+          controlIconsEnabled: true,
+        preventMouseEventsDefault: false,
+          fit: true,
+          center: true        });
+
+
+        
+      };
+    </script>
+
+
+						
+						
+						
+						
+						
+						
+						
                                         
                     </div> <!-- /widget-content -->
                     
                 </div> <!-- /widget -->
-                
-                
-                
-                
-                
+
                 
                 
                 
@@ -173,8 +198,6 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 
 
 
-
-
 <!-- Le javascript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
@@ -186,7 +209,15 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
 <script src="../../js/jquery.flot.resize.js"></script>
 
 
+
+
 <script src="../../js/bootstrap.js"></script>
+
+
+
+
+
+
 
   </body>
 </html>
