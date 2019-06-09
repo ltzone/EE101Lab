@@ -24,7 +24,7 @@
 
 <?php
 $conference_id = $_GET["conference_id"];
-$link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
+$link = mysqli_connect("localhost:3306", 'root', '770528', 'FINAL');
 
 ?>
 
@@ -130,16 +130,36 @@ $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
                     </div> <!-- /widget-header -->
                                                         
                     <div class="widget-content">
-                    <iframe src="../../img/<?php echo $conference_id;?>.svg" width="700" height="800"></iframe>
+                    
                         
+						<div id="dragDiv">
+					<svg><script src="../../img/<?php echo $conference_id;?>.svg"></script> </svg>
+					</div>
+						
+						
+						
+						
+						
+						
+						
                                         
                     </div> <!-- /widget-content -->
                     
                 </div> <!-- /widget -->
                 
-                
-                
-                
+<script 
+    window.onload = function () {
+    const zoom = $solway.zoom({
+        ele: document.getElementById('zoomSvg'),
+        scale: 0.6,
+        minScale: 0.1
+    });
+
+
+    $solway.drag({
+        ele: document.getElementById('dragDiv')
+    });
+};
                 
                 
                 
