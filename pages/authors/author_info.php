@@ -20,7 +20,7 @@
 
 <body>
 
-
+<script TYPE="TEXT/JAVASCRIPT" src="http://localhost/js/jquery-1.7.2.min.js"></script>
 <?php
 $author_id = $_GET["author_id"];
 $link = mysqli_connect("localhost:3306", 'root', '', 'FINAL');
@@ -44,37 +44,20 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
 
 
             <?php echo "<a class=\"brand\" href=\"./author_info.php?author_id=$author_id\">Authors</a>";?>
-            
-            <div class="nav-collapse">
+                        <div class="nav-collapse">
             
                 <ul class="nav pull-right">
-                    <li>
-                        <a href="#"><span class="badge badge-warning">7</span></a>
-                    </li>
                     
-                    <li class="divider-vertical"></li>
                     
                     <li class="dropdown">
                         
-                        <a data-toggle="dropdown" class="dropdown-toggle " href="#">
-                            Rod Howard <b class="caret"></b>                            
-                        </a>
-                        
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="./account.html"><i class="icon-user"></i> Account Setting  </a>
-                            </li>
-                            
-                            <li>
-                                <a href="./change_password.html"><i class="icon-lock"></i> Change Password</a>
-                            </li>
-                            
-                            <li class="divider"></li>
-                            
-                            <li>
-                                <a href="./"><i class="icon-off"></i> Logout</a>
-                            </li>
-                        </ul>
+                    <div class="input-group">
+                     <form action="search_info.php" style="margin:0px">
+                      <input type="text" class="form-control" placeholder="Search for more" name="keyword" style="margin:auto;margin-bottom:0px;margin-top:6px">
+                      <button class="btn btn-default" type="submit" style="margin:auto;margin-bottom:0px;margin-top:6px" >Go!</button>
+                     </form>
+                    </div><!-- /input-group -->
+
                     </li>
                 </ul>
                 
@@ -192,9 +175,16 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                         <h3>Publications</h3>
                     </div> <!-- /widget-header -->
                     
-                    <div class=\"widget-content\">
+                    <div class=\"widget-content\">";
                     
-                        <table class=\"table table-striped table-bordered\">
+                        
+
+
+
+            $idx = 1;$page=1;
+            while ($row = mysqli_fetch_array($result)) {
+                if($idx%10==1){echo"<div id=\"$page\"style=\"display:none\">";
+                echo"<table class=\"table table-striped table-bordered\">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -203,12 +193,7 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                                     <th>Conference</th>
                                     <th>Year</th>
                                 </tr>
-                            </thead>  <tbody>";
-
-
-
-            $idx = 1;
-            while ($row = mysqli_fetch_array($result)) {
+                            </thead>  <tbody>";}
                 $paper_id_ref = $row['PaperID'];
                 $paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID, PaperPublishYear from papers where PaperID='$paper_id_ref'"));
                 if ($paper_info){
@@ -240,11 +225,83 @@ $result = mysqli_query($link, "SELECT AuthorName from authors where AuthorID='$a
                     echo $yr; echo "</td>";
 
                     $idx +=1;
-                }
+                }if($idx%10==1&&$idx>1){echo "</tbody></table>";echo"当前第";echo$page;echo"页，共";echo(int)(($num_results-1)/10+1);echo"页";$page+=1;echo"</div>";}
+                if ($idx==$num_results+1){echo "</tbody></table>";echo"当前第";echo$page;echo"页，共";echo(int)(($num_results-1)/10+1);echo"页";echo"</div>";}
             }
-            echo "</tbody></table>";
+            
             echo "  </div> <!-- /widget-content -->";
-        }
+        $totalpage=(int)(($num_results-1)/10+1);
+            echo'
+<script type="text/javascript">
+var now=1; var pp =1;
+var totalpage =' .$totalpage.';
+
+
+var pa=new Array();
+if(totalpage==1)pa[0]=1;
+else if (totalpage==2){pa[0]=1;pa[1]=2;}
+else if (totalpage==3){pa[0]=1;pa[1]=2;pa[2]=3;}
+else if (totalpage==4){pa[0]=1;pa[1]=2;pa[2]=3;pa[3]=4;}
+else if (totalpage==5||now==1||now==2){pa[0]=1;pa[1]=2;pa[2]=3;pa[3]=4;pa[4]=5;}
+else if(now==(totalpage-1)){pa[0]=totalpage-4;pa[1]=totalpage-3;pa[2]=totalpage-2;pa[3]=totalpage-1;pa[4]=totalpage;}
+else if(now==totalpage){pa[0]=totalpage-4;pa[1]=totalpage-3;pa[2]=totalpage-2;pa[3]=totalpage-1;pa[4]=totalpage;}
+else {pa[0]=now-2;pa[1]=now-1;pa[2]=now;pa[3]=now+1;pa[4]=now+2;}
+ document.getElementById("1").style.display="";
+</script>';
+           echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#but1").click(function(){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById("1").style.display="";
+    now=1;
+      });});
+</script>';
+
+            
+            echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#but2").click(function(){
+    if(now<totalpage){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById((now+1).toString()).style.display="";
+    now+=1;
+       }else document.getElementById((totalpage).toString()).style.display=""; });});
+</script>';
+
+ echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#but3").click(function(){
+   if(now>1){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById((now-1).toString()).style.display="";
+    now-=1;}else  document.getElementById("1").style.display=""; 
+        });});
+</script>';
+
+echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#but4").click(function(){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById(totalpage.toString()).style.display="";
+    now=totalpage;
+        });});
+</script>';
+echo"<div>";
+echo"<style type=\"text/css\">
+
+.button {
+    
+    display: inline-block;
+}</style>";
+echo "<div class=\"button\"><button id=\"but1\">First</button></div>";
+
+echo "<div class=\"button\"><button id=\"but3\">Previous</button></div>";
+echo "<div class=\"button\"><button id=\"but2\">Next</button></div>";
+echo "<div class=\"button\"><button id=\"but4\">Last</button></div>";echo"</div>";}
         else {
                 echo "<div class='widget-content'><h4>Papers not found</h4></div>";
         }   ?>
