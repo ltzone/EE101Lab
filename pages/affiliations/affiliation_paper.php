@@ -19,7 +19,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 
 <body>
-
+<script TYPE="TEXT/JAVASCRIPT" src="http://localhost/js/jquery-1.7.2.min.js"></script>
 
 <?php
 $affiliation_id = $_GET["affiliation_id"];
@@ -180,9 +180,17 @@ $author_count= count($author_list );
                         <h3>Paper Table</h3>
                     </div> <!-- /widget-header -->
                     
-                    <div class=\"widget-content\">
+                    <div class=\"widget-content\">";
                     
-                        <table class=\"table table-striped table-bordered\">
+                        
+
+
+
+            $idx = 1;$page=1;
+            while ($row = mysqli_fetch_array($pubresult)) {
+                if($idx%10==1){echo"<div id=\"$page\"style=\"display:none\">";
+                  
+                       echo" <table class=\"table table-striped table-bordered\">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -191,12 +199,7 @@ $author_count= count($author_list );
                                     <th>Conference</th>
                                     <th>Year</th>
                                 </tr>
-                            </thead>  <tbody>";
-
-
-
-            $idx = 1;
-            while ($row = mysqli_fetch_array($pubresult)) {
+                            </thead>  <tbody>";}
                 $paper_id_ref = $row['PaperID'];
                 $paper_info = mysqli_fetch_array(mysqli_query($link, "SELECT Title, ConferenceID, PaperPublishYear from papers where PaperID='$paper_id_ref'"));
                 if ($paper_info){
@@ -230,8 +233,155 @@ $author_count= count($author_list );
                     echo "</tr>";
                     $idx +=1;
                 }
+                if($idx%10==1&&$idx>1){echo "</tbody></table>";echo"Page: ";echo$page;echo"<br>";echo"         Total of Pages: ";echo(int)(($pubresult->num_rows-1)/10+1);$page+=1;echo"</div>";}
+                else if ($idx==$pubresult->num_rows+1){echo "</tbody></table>";echo"Page: ";echo$page;echo"<br>";echo"        Total of Pages: ";echo(int)(($pubresult->num_rows-1)/10+1);echo"</div>";}
             }
-            echo "</tbody></table>";
+         $totalpage=(int)(($pubresult->num_rows-1)/10+1);
+            //分页
+            echo'
+<script type="text/javascript">
+var now=1; 
+var totalpage =' .$totalpage.';
+
+
+ document.getElementById("1").style.display="";
+</script>';
+           echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#but1").click(function(){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById("1").style.display="";
+    now=1;
+
+    for (var it=1;it<=totalpage;++it){
+        var itit="b"+it.toString();
+        if(it>5)document.getElementById(itit).style.display="none";
+        else document.getElementById(itit).style.display="";
+        
+    } 
+      });});
+</script>';
+
+            
+            echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#but2").click(function(){
+    if(now<totalpage){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById((now+1).toString()).style.display="";
+    now+=1;
+       }else document.getElementById((totalpage).toString()).style.display="";
+for (var it=1;it<=totalpage;++it){
+        var itit="b"+it.toString();
+        if(it<(now-2)||it>(now+2))document.getElementById(itit).style.display="none";
+        else document.getElementById(itit).style.display="";
+        
+    }if(now>=1&&now<=2){document.getElementById("b4").style.display="";
+     document.getElementById("b5").style.display="";}
+     if(now>totalpage-2)document.getElementById("b"+(totalpage-4).toString()).style.display="";   
+     if(now>totalpage-1)document.getElementById("b"+(totalpage-3).toString()).style.display="";  
+        });});
+
+</script>';
+
+ echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#but3").click(function(){
+   if(now>1){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById((now-1).toString()).style.display="";
+    now-=1;}else  document.getElementById("1").style.display=""; 
+    for (var it=1;it<=totalpage;++it){
+        var itit=\'b\'+it.toString();
+        if(it<(now-2)||it>(now+2))document.getElementById(itit).style.display="none";
+        else document.getElementById(itit).style.display="";
+        
+    }if(now>=1&&now<=2){document.getElementById(\'b4\').style.display="";
+     document.getElementById(\'b5\').style.display="";}
+     if(now>totalpage-2)document.getElementById(\'b\'+(totalpage-4).toString()).style.display="";   
+     if(now>totalpage-1)document.getElementById(\'b\'+(totalpage-3).toString()).style.display="";  
+
+        });});
+</script>';
+
+echo'
+<script type="text/javascript">
+ $(document).ready(function(){
+$("#but4").click(function(){
+    document.getElementById(now.toString()).style.display="none";
+    document.getElementById(totalpage.toString()).style.display="";
+    now=totalpage;
+    for (var it=1;it<=totalpage;++it){
+        var itit=\'b\'+it.toString();
+        if(it<totalpage-4)document.getElementById(itit).style.display="none";
+        else document.getElementById(itit).style.display="";
+        
+    }
+        });});
+</script>';
+echo"<div>";
+echo"<style type=\"text/css\">
+.button {
+    
+    display: inline-block;
+}</style>";
+echo "<div class=\"button\"><button type=\"button\" class=\"btn btn-default\"id=\"but1\">First</button></div>";
+
+echo "<div class=\"button\"><button type=\"button\" class=\"btn btn-default\"id=\"but3\">Previous</button></div>";
+
+echo"     ";
+for($j=1;$j<=$totalpage;++$j){
+    $jj=(string)$j;
+    echo "<div class =\"button\"><button type=\"button\" class=\"btn btn-default\"id=\"b$jj\">$jj</button></div>";}
+    echo"     ";
+echo "<div class=\"button\"><button type=\"button\" class=\"btn btn-default\"id=\"but2\">Next</button></div>";
+echo "<div class=\"button\"><button type=\"button\" class=\"btn btn-default\"id=\"but4\">Last</button></div>";echo"</div>";
+
+    echo"
+<script  type=\"text/javascript\">
+ var oBtn=document.getElementsByClassName(\"button\");
+ for (var it=6;it<=totalpage;++it){
+        var itit='b'+it.toString();
+        document.getElementById(itit).style.display=\"none\";
+        
+        
+    }
+
+for(var t=1;t<=totalpage;++t){
+    oBtn[t+1].index=t;
+    oBtn[t+1].onclick=function(){
+       var pppp=(this.index).toString();
+       document.getElementById(now.toString()).style.display=\"none\";
+       document.getElementById(pppp).style.display=\"\"; 
+       now=this.index;
+       for (var it=1;it<=totalpage;++it){
+        var itit='b'+it.toString();
+        if(it<(now-2)||it>(now+2))document.getElementById(itit).style.display=\"none\";
+        else document.getElementById(itit).style.display=\"\";
+        
+    }if(now>=1&&now<=2){document.getElementById('b4').style.display=\"\";
+     document.getElementById('b5').style.display=\"\";}
+     if(now>totalpage-2)document.getElementById('b'+(totalpage-4).toString()).style.display=\"\";   
+     if(now>totalpage-1)document.getElementById('b'+(totalpage-3).toString()).style.display=\"\";  
+    }}
+ /*$(document).ready(function(){
+
+document.write(c);
+var ppp=\"#b\"+(parseInt((this.id))/10000).toString();
+ var pppp=(parseInt((this.id))/10000).toString();
+
+$(ppp).click(function(){
+    
+    document.getElementById(now.toString()).style.display=\"none\";
+    document.getElementById(pppp).style.display=\"\";
+
+
+    now=(parseInt((this.id))/10000);
+        });});pp+=1;*/
+</script>";
             echo "  </div> <!-- /widget-content -->";
         }
         else {

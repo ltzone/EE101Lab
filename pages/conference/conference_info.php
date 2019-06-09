@@ -252,8 +252,8 @@ echo "
 
                     $idx +=1;
 
-                }if($idx%10==1&&$idx>1){echo "</tbody></table>";echo"Page: ";echo$page;echo"         Total of Pages: ";echo(int)(($num_results-1)/10+1);$page+=1;echo"</div>";}
-                else if ($idx==$num_results+1){echo "</tbody></table>";echo"Page: ";echo$page;echo"        Total of Pages: ";echo(int)(($num_results-1)/10+1);echo"</div>";}
+                }if($idx%10==1&&$idx>1){echo "</tbody></table>";echo"Page: ";echo$page;echo"<br>";echo"         Total of Pages: ";echo(int)(($num_results-1)/10+1);$page+=1;echo"</div>";}
+                else if ($idx==$num_results+1){echo "</tbody></table>";echo"Page: ";echo$page;echo"<br>";echo"        Total of Pages: ";echo(int)(($num_results-1)/10+1);echo"</div>";}
             }
     $totalpage=(int)(($num_results-1)/10+1);
             //分页
@@ -347,17 +347,17 @@ echo"<style type=\"text/css\">
     
     display: inline-block;
 }</style>";
-echo "<div class=\"button\"><button id=\"but1\">First</button></div>";
+echo "<div class=\"button\"><button type=\"button\" class=\"btn btn-default\"id=\"but1\">First</button></div>";
 
-echo "<div class=\"button\"><button id=\"but3\">Previous</button></div>";
+echo "<div class=\"button\"><button type=\"button\" class=\"btn btn-default\"id=\"but3\">Previous</button></div>";
 
 echo"     ";
 for($j=1;$j<=$totalpage;++$j){
     $jj=(string)$j;
-    echo "<div class =\"button\"><button id=\"b$jj\">$jj</button></div>";}
+    echo "<div class =\"button\"><button type=\"button\" class=\"btn btn-default\"id=\"b$jj\">$jj</button></div>";}
     echo"     ";
-echo "<div class=\"button\"><button id=\"but2\">Next</button></div>";
-echo "<div class=\"button\"><button id=\"but4\">Last</button></div>";echo"</div>";
+echo "<div class=\"button\"><button type=\"button\" class=\"btn btn-default\"id=\"but2\">Next</button></div>";
+echo "<div class=\"button\"><button type=\"button\" class=\"btn btn-default\"id=\"but4\">Last</button></div>";echo"</div>";
 
     echo"
 <script  type=\"text/javascript\">
