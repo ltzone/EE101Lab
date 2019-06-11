@@ -124,9 +124,6 @@ option = {
 
 
         }},
-    title: {
-    	text: 'Conference Publication'
-    },
     visualMap: {
         max: 1200,
         inRange: {
