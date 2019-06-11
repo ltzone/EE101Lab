@@ -197,6 +197,22 @@ $number = json_encode($number);
                 tooltip: {
                     trigger: 'axis'
                 },
+                dataZoom:[
+        {
+            type: 'slider',
+            show: true,
+            xAxisIndex: [0],
+            start: 1,
+            end: 100
+        },
+        {
+            type: 'inside',
+            xAxisIndex: [0],
+            start: 1,
+            end: 35
+        },
+    ],
+
                 legend: {
                     data:['number of papers']
                 },
