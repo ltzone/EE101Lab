@@ -31,7 +31,7 @@
 		<span class="icon-bar"></span>
 		<span class="icon-bar"></span>
 	  </button>
-	  <a class="navbar-brand" href="index.php" title="uiCookies:Frame">Search Engine</a>
+	  <a class="navbar-brand" href="index.php" title="uiCookies:Frame">Smart Boy</a>
 	</div>
 
 	<div id="navbar-collapse" class="navbar-collapse collapse">
@@ -48,7 +48,7 @@
   <div class="container">
 	<div class="row intro-text">
 	  <div class="col-md-8 col-md-offset-2 text-center">
-		<h1 class="probootstrap-heading probootstrap-animate">Search Engine</h1>
+		<h1 class="probootstrap-heading probootstrap-animate">Smart Boy</h1>
 			<form class="form-horizontal" action="../pages/search/search_info.php">
 			  <div class="form-group">
 			    <div class="col-md-12 text-center">
