@@ -81,32 +81,46 @@ short code example
 We'd like to add a new series of pages to show affiliation information to users. Since we didn't do any previous work about affiliation information in the previous labs except that the affiliation table was input into the database, we have to write new SQL commands in search of affiliation information, and echo them out on the pages. The paper table and charts on other pages can be of help in showing the affiliation related information. Also, we have already got the author table written in the paper information page. Generally speaking, the work here is to collect the affiliation data and arrange them in order on the pages.
 
 
-\subsection {Description}
+\subsection {General Description}
 
 The final version of the affiliation section include 3 concrete pages. On the affiliation\_info.php page, we will give three numbers on top of the page, counting all the authors, papers, and references in the affiliation. Then the authors in the affiliation will be listed below, together with their own affiliation information (hyper-links included) and number of publications. Affiliation\_paper.php shows all the papers related to the affiliation. The affiliation\_charts.php, where three charts are displayed, will be reported in detail in the Statistical Graph Section.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{img/zlt_aff_demo1.png}
+\caption{affiliation\_info.php page}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{img/zlt_aff_demo2.png}
+\caption{affiliation\_paper.php page}
+\end{figure}
 
 In fact, for the same function to be displayed on the page, we did two versions of code to implement them. The first one was very basic, just like those in the paper/author/search pages. However, since all the affiliation data are selected from the big paper\_author\_affiliation table, the first version didn't perform well in loading speed. Our optimization will be introduced in the Optimization Chapter.
 
 
-\subsection{Solution \& Codes}
 
-\subsubsection {Total Counts}
+\subsection {Total Counts}
 On top of every affiliation page, we've counted all the authors, papers and references concerned. For authors and papers, we can directly count them in the paper\_author\_affiliation table. For references, we first select the papers and then join the selected results to the paper\_reference table in order to count the results. The MySQL commands are listed below.
 
 \begin{figure}[H]
 \centering
-\includegraphics{img/zlt_aff_authorcount.png}
+\includegraphics[scale=0.55]{img/zlt_aff_authorcount.png}
 \caption{Count Author Commands}
+\label{fig:aff_authorcount}
 \end{figure}
 \begin{figure}[H]
 \centering
-\includegraphics{img/zlt_aff_papercount.png}
+\includegraphics[scale=0.6]{img/zlt_aff_papercount.png}
 \caption{Count Paper Commands}
+\label{fig:aff_papercount}
 \end{figure}
 \begin{figure}[H]
 \centering
-\includegraphics{img/zlt_aff_refcount.png}
+\includegraphics[scale=0.55]{img/zlt_aff_refcount.png}
 \caption{Count Reference Commands}
+\label{fig:aff_refcount}
 \end{figure}
 
 Note that we've use some MySQL techniques such as DISTINCT (eliminate overlapping results) and GROUP BY (perform data counting job) in order to implement our function.
@@ -115,21 +129,28 @@ For the data display in our page, our template has already provided a well desig
 
 \begin{figure}[H]
 \centering
-\includegraphics{img/zlt_aff_countdisplay.png}
+\includegraphics[scale=0.8]{img/zlt_aff_countdisplay.png}
 \caption{Use Pre-defined Class to Display Numbers}
 \end{figure}
 
 
-\subsubsection{Authors List}
+\subsection{Authors List}
 
-The author we've found based on the given affiliaiton may have more than one affiliation where he publishes his paper. All of the data related to this problem can be selected from the paper\_author\_affiliation table. As a result, our first design is to first sort out all the authors where the affiliation column fits, then we search the table again for affiliation information based on the author's id, which can be realized by looping through the author array in PHP. The first step has been done when we count the authors, so we simply skip the first step, call the author selecting result in the counting section, and make further searching based on the previous result. During the second step, we've also used DISTINCT \& GROUP BY techniques in order to get the author's affiliation data right and unrepeated.
+The author we've found based on the given affiliaiton may have more than one affiliation where he publishes his paper. So one simple search work is not enough. Luckily, all of the data related to this problem can be selected from the paper\_author\_affiliation table. As a result, our first design is to first sort out all the authors where the affiliation column fits, then we search the table again for affiliation information based on the author's id, which can be realized by looping through the author array in PHP.
 
+In fact, the first step has been done when we count the authors (See Figure \ref{fig:aff_authorcount}), so we simply skip the first step, call the author selecting result in the counting section, and make further searching based on the previous result. During the second step, we've also used DISTINCT \& GROUP BY techniques in order to get the author's affiliation data right and unrepeated.
 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img/zlt_aff_authorloop.png}
+\caption{Use Loop to List Author\_Affiliation Information}
+\end{figure}
 
+The problem with this solution is that the searching work is too much. Imagine there are 100 authors related to one affiliation, we have to go through the big paper\_author\_affiliation table 100 times in order to get all the data. It turned out that it would take the webpage about half a minute to get completed loaded. The optimization work will be introduced in the Optimization Chapter.
 
+\subsection{Papers List}
 
-
-
+The general structure of this list is simlilar to those in citation/ reference/ author's paper list. We may just use MySQL to select all the paper's id related to the affiliation, keep this array storing the paperid we want to display, and the leave the rest of the work to the codes we've already written in the previous work. The selecting MySQL commands are listed below. Actually, just like the case in the author list section, the first step has also been completed in the counting section. (See Figure \ref{fig:aff_papercount}) So there are no codes left for this section to explain.
 
 \chapter{Leaf Turning}
 

@@ -1,0 +1,84 @@
+h4, h5, h6,
+h1, h2, h3 {margin-top: 0;}
+p {margin: 0;}
+html, body{
+   font-family: 'Open Sans', sans-serif;
+   font-size: 100%;
+   background:#fff; 
+}
+body a{
+	transition: 0.5s all;
+	-webkit-transition: 0.5s all;
+	-o-transition: 0.5s all;
+	-ms-transition: 0.5s all;
+	-moz-transition: 0.5s all;
+}
+
+.paperlis {
+	width: 70%;
+	float:left;
+}
+
+.paperlis table{
+	border:0;
+}
+
+/*作者名称*/
+.authorinfo h1{ 
+	font-family: Arial Black;
+	font-size: 30px;
+}
+
+/*机构*/
+.authorinfo h2{
+	font-family: Arial;
+	font-size:25px;
+	font-style:bold;
+}
+
+
+/*机构名称*/
+.authorinfo p{
+	font-size:20px;
+}
+
+
+.conferenceinfo h1{ 
+	font-family: Arial Black;
+	font-size: 30px;
+}
+.searchinfo h1{ 
+	font-family: Arial Black;
+	font-size: 30px;
+}
+
+
+
+
+.header{
+	background:#2F4F4F;
+	padding:1em 0;
+}
+
+.logo{
+	float: left;
+}
+.logo a{
+	text-decoration:none;
+}
+.logo h1{
+    font-size: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    font-family: 'Quicksand', sans-serif;
+}
+.logo h1 a{
+	color:#fff;
+}
+
+
+.chartlis {
+	width: 30%;
+	float:left;
+}
