@@ -323,13 +323,63 @@ gephi yhb
 
 fsh
 
-\section {Information Pages Beautification}
+\section {Pages Beautification}
 
 zlt
 
 
 \chapter {MySQL Optimization in Affiliation Pages}
 
-zlt
+The affiliation section is a section all made by ourselves. However, as has been briefly introduced in the Affiliation Pages section, new problems arise that the loading speed is too slow. This is because in our solution, the big paper\_author\_affiliation table will be searched everytime we display a new row in the webpage, which is clearly unnecessary. (See Figure \ref{fig:opt_basic})
+{}
+\begin{figure}[H]
+\centering{}
+\includegraphics[scale=0.45]{img/zlt_opt_code_basic.png}
+\caption{Base Version in Affiliation Pages}
+\label{fig:opt_basic}
+\end{figure}
+
+
+\section {Solution}
+Through practice, we found that the main factor dragging the loading time slow is the call by PHP for MySQL query. In order to reduce the loading time, we need to control the time we call a MySQL query. However, generally speaking, since we first need to get the authors based on the affiliation\_id, and then find the detail information based on the author we have found in the first query, there is an unavoidable iterating structure in the process. The solution to this problem is not as easy as we assumed.
+
+Eventually, we came up with the idea that all the searching work with MySQL can be integrated into one query. And we may just select the information we need from the total query results in order to display the information in the pages. This solution has restricted the searching query call to one single time. However, this will creat some difficulty when we want to echo the information onto the webpage.
+
+\section {Integrated MySQL Query in Authors List}
+
+Instead of searching the author information piece by piece, the searching query we write (See Figure \ref{fig:opt_query}) will return a group of rows showing the paper / affiliation information about one single author.
+
+The basic idea about this integrated query is join the paper\_author\_affiliation table to itself, with restricting conditions of course. Our final result is a simplified paper\_author\_affiliation table, containing the author directly linked to the affiliaiton and the papers which might not be published in this affiliation, but whose authors once belonged to the affiliation. With the GROUP BY technique, the rows of every author can be returned group by group.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img/zlt_opt_code_query.png}
+\includegraphics[scale=0.55]{img/zlt_opt_code_queryres.png}
+\caption{Integrated MySQL Query}
+\label{fig:opt_query}
+\end{figure}
+
+\section{Echoing Tricks in Authors List}
+
+Unlike what we did in the base version, where MySQL queries and PHP iterative loops are mixed together in an intuitive structure, here we are looping through the rows in the integrated searching results. (See Figure \ref{fig:opt_query}) So in every loop, we need to first judge whether this row is talking about the same author above or it starts a new one. Within the group corresponding to the same author, we just add one more affiliation into the webpage (before that we have to judge whether the affiliation is a new one, of course). While if the row marked the start of a new author, we have to end the previous row, begin a new row on the webpage. These tricks contribute to the whole author list, the final display on the webpage is just the same as the base version, but boasts a loading time within a second. The main part of the codes are listed below. (Initialization and Clean-up work omitted) The same tricks also apply to Paper List on the affiliation\_paper page. 
+
+
+\begin{figure}[H]
+\centering{}
+\includegraphics[scale=0.45]{img/zlt_opt_code_advanced.png}
+\caption{Echoing Tricks}
+\end{figure}
+
+\section{Integrated MySQL Query in Top Authors Charts}
+
+As has been discussed before in the Charts section, the top author charts require a list of author names and a list of numbers representing their publications counts. The same problem occurs that the data collecting work was taking too much time. We are also using MySQL joint search to replace PHP loops. We use count (DISTINCT ) + GROUP BY commands to directly get the result. The MySQL queries are listed below. Further processing on the searching results are fragile and hence omitted. 
+
+\begin{figure}[H]
+\centering{}
+\includegraphics[scale=0.55]{img/zlt_opt_code_chart.png}
+\caption{Integrated MySQL Query in Top Authors Charts}
+\end{figure}
+
+All the three parts introduced above make up our optimization of the affiliation section.
 
 \end{document}
