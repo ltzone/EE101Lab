@@ -46,7 +46,9 @@ Give thanks to our instructors and the codes we've copied (expected to give spec
 
 \section {Paper \& Conference Pages}
 
-yhb
+These parts are requred as a necessary part of final lab. We want to display useful information to users. So we added functions to search for more detailed relavant messages.
+Depending on the characteristics of each field, we used different methods to show information.
+
 
 \subsection{Description}
 
@@ -313,9 +315,42 @@ The labels of our nodes should show the paper's name and the labels of our links
 
 \section{Big Charts using Gephi}
 
-gephi yhb
+As the saying goes, ``One picture worths 1000 words.'', a visualization picture is vital to show the connection between objects in some scales. To show an overall relationship, we choose  \textbf{gephi} to visualize the data collected by MySQL. This method can help the part of E-charts to draw a better pictue in users' mind. 
+There was a problem that troubled us for a long time. That is: how can we put the picture onto the pages. And it is finally solved by using package ``ariutta/svg-pan-zoom
+'' from GitHub. 
+Here we'll give MySQL sequences and the way to draw a gephi picture(.svg).
 
+\subsection{MySQL Fetch}
 
+We choose to show the connection between authors in all 13 conferences. We established the connection by reference and citation. And this demands us to use `join search' in MySQL. Example codes are given below.(We take ConferenceID= `47c39427' for an example.)
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=4.0cm,width=18cm]{img/yhb_my_1.png}
+\caption{search example}
+\end{figure}
+
+Finally, remember to lead the data out in (.csv) format, in order that we can use the data in gephi easily.
+
+\subsection{Gephi Drawing}
+
+Gephi can use data in (.csv) format directly. After transmitting information into gephi, we can find a picture in the window. But this picture is so ugly and unclear that we cannot take it for visualization use derectly.  
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=7.0cm,width=18.0cm]{img/yhb_ge_1.png}
+\caption{geghi: original picture}
+\end{figure}
+We may turn to gragh-drawing methods such as ``force directed method'' and ``Fruchterman Reingold method'', to better display the characteristics of the relationship between authors.
+
+Next, we can adjust the  size of each node by degree, and give them different colors.
+It's much easier for us to see the relation.
+\begin{figure}[H]
+\centering
+\includegraphics[height=7.0cm,width=18.0cm]{img/yhb_ge_2.png}
+\caption{geghi: processed picture}
+\end{figure}
+Finally, we can transmit it as (.svg) file to load on the pages.
 
 \chapter {Beautify the Pages}
 
