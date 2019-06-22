@@ -163,74 +163,41 @@ Page turning is an indispensable part of web design. When there is more informat
 In this experiment, we have designed two versions of page turning function. And the detailed information of them are as follows.\\\\
 
 \section{Version I: by PHP parameters}
-In this version,we set the parameter 'page' for each page, and the show scope is determined according to the'page' parameter and each time we don't show all data. Actually, because of specific value of page, we only show 10 pieces of data.\\
+
 \subsection{Description}
-Now let's show the first version's page turning . We take the search results on the'search'page as an example, and the effect is shown in the following figure.\\\\
-
-\begin{figure}[H]
-\centering
-\includegraphics[height=6.0cm,width=10.0cm]{img/dsw_11.png}
-
-\end{figure}
-Ten pieces of information are displayed on each page. At the bottom of each page, the number of the current page, total data and total pages can be displayed. By clicking the'previous page's and 'next page's hyperlinks, the page can be turned up and down. By clicking the'first page's and 'last page's hyperlinks, the page can be turned to the first and last pages. In addition, we can also input the page number of the page we want to see in the blank and click the button 'jump to the page' to achieve the page jumping.\\
-
-In this way, we can search the data spending little time . But the disadvantage of this method is that every time we turn the page, we indeed open a new page, and everying needs to be queried and shown again, even though which maybe needn't the page turning function.\\
 
 \subsection{Solution}
 
-We set the parameter 'page' for each page, and the show scope is determined according to the'page' parameter to make sure that we get specific 10 pieces of data in order to achieve the page turning. Every page's query statments are different because they contain the 'page' paremeter. And the default value of the 'page' is 1.\\
-The page turning is achieved by hyperlinks, and each time we click the specific word or input the page jumping number, we will turn to a new page with different papremeter 'page'.\\
+\paragraph{point 1}
+
+\paragraph{point 2}
 
 \subsection{Source Codes}
-Now we still take the search page as an example to present the page turning.  The codes are as follows.\\
+
 \begin{minipage}[r]{15em}
 \begin{verbatim}
 
-
+short code example
 
 \end{verbatim}
 \end{minipage}
-\begin{figure}[H]
-\centering
-\includegraphics[height=3.0cm,width=10.0cm]{img/dsw_get.png}
-\caption{page parameter}
-\end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[height=7.0cm,width=10.0cm]{img/dsw_show.png}
-\caption{show}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[height=7.0cm,width=10.0cm]{img/dsw_chao.png}
-\caption{hyperlinks}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[height=2.0cm,width=10.0cm]{img/dsw_input.png}
-\caption{paper jumping}
-\end{figure}
 \subsection{Explanation}
-At first, we get the paremeter 'page' sent from other pages. Before we search information , we should know the number of total information we get and figure out the number of total pages which depends on how many pieces of data we want to show in a page. Then we use 'for' circle statement to show the data . The codes are shown in the figure'page parameter'and the figure 'show'.\\
-When setting the hyperlinks, what matters is that we should send the parameter 'keyword' besides the parameter 'page'. Another important thing is that sometimes some hyperlinks needn't be use. For example, if we are at the first page, the hyperlinks of the statement 'first page' is unnecessary.So we should write some specific 'if' statement to judge if we should use the hyperlinks.\\
-When it comes to the page jumping, what should be mentioned is that to reduce the error such as the number user entered is out of the limitation of the actual pages, we let the actual page you jump to is always the last page if you input a number that is greater than the number of total pages.\\ 
+
 \subsection{Demonstration}
-An example is as follows.
+
 \begin{figure}[H]
 \centering
-\includegraphics[height=6.0cm,width=8.0cm]{img/dsw_ex.png}
-\caption{AUTHOR EXAMPLE}
+\includegraphics[height=4.0cm,width=4.0cm]{img/dsw_1.jpg}
+\caption{IMG EXAMPLE}
 \end{figure}
-This is the last page of the author page.
+
 
 \section{Version II: by jQuery}
 In the first version of paging design, only PHP code is used, and the use of the 'Page' parameter means that the page would be reloaded every time the page was turned. Obviously, all that needs to be refreshed is the table that shows the data, and the rest of the page will remain unchanged. If we can only refresh the data table every time you turn the page, and keep the other parts unchanged, then we can further improve the efficiency of the web page. \\
 With this in mind, we started the second version of page turning design.\\\\
 \subsection{Description}
-First, let's show the second version's page turning . We take the search results on the'search'page as an example, and the effect is shown in the following figure.\\\\
+First, let's show the second version's page turning effect. We take the search results on the'search'page as an example, and the effect is shown in the following figure.\\\\
 
 \begin{figure}[H]
 \centering
@@ -248,7 +215,7 @@ Similarly, we can divide the buttons corresponding to different page numbers int
 
 
 \subsection{Source Codes}
-Now we still take the search page as an example to present the page turning.\\\\
+Now we still take the search gage as an example to present the page turning.\\\\
 \begin{minipage}[r]{15em}
 \begin{verbatim}
 
