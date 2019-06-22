@@ -292,7 +292,7 @@ The links and nodes arrays we've created above are just what the built-in echart
 \centering
 \includegraphics[scale=0.55]{img/zlt_rel_demo4.png}
 \includegraphics[scale=0.55]{img/zlt_rel_demo5.png}
-\caption{Higher-Level Data Collection}
+\caption{A Contrast between the Original and the Present Version of Paper Relation Charts}
 \label{fig:rel_contrast}
 \end{figure}
 
@@ -360,7 +360,49 @@ fsh
 
 \section {Pages Beautification}
 
-zlt
+Our original page styles were derived from LAB3, which were very basic. With more and more functions implemented, we found that one page was not enough to carry all the information. As a result, we decided to split one page into several subpages carrying out different functions. For example, we split the paper.php page into information page, charts page, reference page, citation page and recommendation page. With the help of online resources, we fit our contents into a well-defined template. (tribute to http://www.cssmoban.com)
+
+
+\begin{figure}[H]
+\centering{}
+\includegraphics[scale=0.35]{img/zlt_beau_demo.png}
+\caption{General Structure of the Pages}
+\end{figure}
+
+As the screenshot above reveals, all the pages share a similar layout - a top banner containing the page title and a small search bar, a right navigating column linked to all the related pages in this section and the right division where the main contents of the page are located.
+
+\subsection {Top Banner \& Small Search Bar}
+
+Our template was originally designed for backstage admin system. In order to better fit our webpages, we replace the user login button with a small search bar. The search bar was a simple <form> application, but it turned out to be very useful when we are testing and using our pages. Codes of this part are listed as follows.
+
+\begin{figure}[H]
+\centering{}
+\includegraphics[scale=0.35]{img/zlt_beau_codes.png}
+\caption{Top Banner}
+\end{figure}
+
+
+\subsection {Left Navigation Bar}
+
+The template has already provided a series of button icons (derived from bootstrap framework) and a well-formatted list of buttons. To make our own navigation bar, we just need to change the icons according to the given names, and get the name and hyper-links right. Also, we can specify the class to be ``active'' in order to highlighten the button representing the current page.
+
+\begin{figure}[H]
+\centering{}
+\includegraphics[scale=0.35]{img/zlt_beau_bar1.png}
+\includegraphics[scale=0.35]{img/zlt_beau_bar2.png}
+\caption{Left Navigation Bar}
+\end{figure}
+
+\subsection {Main Contents}
+
+Since the template is based on the framework of Bootstrap, in the main contents, it follows that we should obey the rules of Bootstrap, such as containers, row classes, and the twelve column layout. Take a particular page for example, the generating process of the table through PHP is omitted. The layout for other pages are simlar in principle.
+\begin{figure}[H]
+\centering{}
+\includegraphics[scale=0.35]{img/zlt_beau_cont1.png}
+\includegraphics[scale=0.35]{img/zlt_beau_cont2.png}
+\caption{Main Contents}
+\end{figure}
+
 
 
 \chapter {MySQL Optimization in Affiliation Pages}
