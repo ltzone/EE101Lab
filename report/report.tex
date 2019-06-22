@@ -12,6 +12,8 @@
 \date{\today}
 
 
+
+
 \maketitle
 
 
@@ -19,26 +21,100 @@
 
 
 
-
-
 \frontmatter
+
 \chapter {Preface}
 
-A brief introduction to our team and our project. .... 
+\section* {Who we are}
 
-Introduce all the functions of our pages in a list. 
+We are a group of freshman students at SJTU working for the 2019 Spring EE101 course final project. We are heading for a website which allows users to search for papers and learn more about the details from our webpage and visualized charts. Our website is a local one based on a local MySQL database and a local solr search engine. The programming and coding languages we've used in this project involves Python, PHP, javascript, HTML and CSS.
 
-\paragraph{index.php}..... function A completed by xxx
+\section* {What we have}
 
-\paragraph{search pages}.....
+Start from the index page, by typing the keywords you want to search about, you can access the search page. And then you can jump between all the information pages as you will. 
 
-\paragraph{affiliation pages}.....
+Based on the type of data and the way we present them, the contents of our web fall into 5 parts, namely search (result), papers, authors, affiliations and conferences. Every section is made up of several subpages demonstrating different functions. The main functions and features of every section are listed as follows. The name behind every row represents the person who mainly takes charge, but it should be decleared that all the team members have been helping address each other's probelms all the way through the project, and must have somehow contributed to the part that he is not in charge of.
 
-.....
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{img/zlt_pre_1.png}
+\caption{General Structure of our Web}
+\end{figure}
 
-Show how we use github to help with our work.
+\paragraph{index.php}
 
-Give thanks to our instructors and the codes we've copied (expected to give specific links)
+\begin{itemize}
+\item An Integrated Search Bar \textit{by Shaoheng Fang}
+\item A 3D-Graph Showing the Distribution of Years and Conferences \textit{by Shaoheng Fang}
+\item The Transplantation \& modification of an online Template  \textit{by Shaoheng Fang}
+\end{itemize}
+
+\paragraph{Search Section}
+\begin{itemize}
+\item Search Results Formatting \textit{by Litao Zhou}
+\item Visulized Graphs \textit{by Shaoheng Fang}
+\begin{itemize}
+	\item Publish Year
+	\item Conference
+	\item Top Authors
+\end{itemize}
+\item Leaf Flipping in Search Results \textit{by Shiwen Dong}
+\end{itemize}
+
+\paragraph{Paper Section}
+\begin{itemize}
+\item Paper Information \textit{by Litao Zhou}
+\item Paper Relation Chart \textit{by Litao Zhou}
+\item Leaf Flipping in multiple Pages \textit{by Shiwen Dong}
+\item Paper Reference/Citations/Recommendation  \textit{by Hongbo Yang}
+\end{itemize}
+
+\paragraph{Author Section}
+\begin{itemize}
+\item Author Information \textit{by Litao Zhou}
+\item Visulized Graphs \textit{by Shaoheng Fang}
+\begin{itemize}
+	\item Publish Year (Pie Chart \& Bar Chart)
+	\item Conference (Pie Chart \& Bar Chart)
+\end{itemize}
+\item Leaf Flipping in Author Publications \textit{by Shiwen Dong}
+\end{itemize}
+
+\paragraph{Affiliation Section}
+\begin{itemize}
+\item Affiliation Author List \& Conference List \textit{by Litao Zhou}
+\item Visulized Graphs \textit{by Shaoheng Fang}
+\begin{itemize}
+	\item Publish Year
+	\item Top Author by Reference
+	\item Top Author by Publication
+\end{itemize}
+\item Leaf Flipping in Author List and Conference List \textit{by Shiwen Dong}
+\end{itemize}
+
+\paragraph{Conference Section}
+\begin{itemize}
+\item Paper Table \textit{by Litao Zhou}
+\item Paper Publish Year Graph \textit{by Shaoheng Fang}
+\item Author Relation Big Graph by Gephi \textit{by Hongbo Yang}
+\item Leaf Flipping in Paper Table \textit{by Shiwen Dong}
+\end{itemize}
+
+
+\section* {How we work together}
+
+The making of a website requires frequent communication of source codes. In response, we use Github as a platform to exchange our codes. At the beginning of our project, we took some time to learn how Git works and created a uniform database and solr engine to make our codes work on everyone's computer. Then every member will be working and making progress on his own branch. We can use the Git system to merge our progress onto the master branch when necessary, and distribute the new version to everyone's branch. With the help of the Git system, we no longer have to bother comparing different codes written by multiple collaborators or having trouble with the inconsistency in others' codes. The network graph was derived from our Github repository homepage, where our commits and branches are displayed.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.25]{img/zlt_pre_2.png}
+\caption{Our Developing Story}
+\end{figure}
+
+\section* {How to Check our Work}
+
+To see our source codes, you can visit our github repository homepage (https://github.com/ltzone/EE101Lab) and clone our repository. You can also see the LaTeX source codes in the report folder. In order to make our website work on your computer, you have to follow our guide in the configguide.txt. This guide will help you initialize your MySQL database and Solr engine and write all the information into them. You may also check our presentation slides to see the detail of our developing story.
+
 
 
 \mainmatter
