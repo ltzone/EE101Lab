@@ -51,32 +51,161 @@ Depending on the characteristics of each field, we used different methods to sho
 
 
 \subsection{Description}
+In our final version, there are 5 concrete pages about paper information and 3 about conferences. We tried to display the information in all directions. There are blanks to show basic information, E-charts of papers, citations and references and relavant recommedations. 
 
-\subsection{Solution}
+\subsection{Paper: Basic Information}
+In this page, we show basic messages of papers
+which is from MySQL table `papers' and ` paper\_author\_affiliation'.
+ And we offer the function to jump to Conference, Author, Affiliation Pages and Acemap.
+\begin{figure}[H]
+\centering
+\includegraphics[height=7.0cm,width=16.0cm]{img/yhb_paper_1.jpg}
+\caption{Page Example}
+\end{figure}
 
-\paragraph{point 1}
 
-\paragraph{point 2}
+Here we give code:
+(Realization of Paper Charts will be introduced in chapter visualization.)
+First, we have PaperID through ``Get'' method, then we can find result in MySQl. If result exists, we echo out all fields of paper-relavant  information. (Remember!  AuthorName is in the format of Arrays.)
+\begin{figure}[H]
+\centering
+\includegraphics[height=8.0cm,width=16.0cm]{img/yhb_mp_1.png}
+\caption{Code Example}
+\end{figure}
 
-\subsection{Source Codes}
+\begin{figure}[H]
+\centering
+\includegraphics[height=8.0cm,width=17.0cm]{img/yhb_mp_2.png}
+\caption{Code Example}
+\end{figure}
+
+
+
+\subsection{Paper: Citation and Reference}
+This part is quite similar to paper information part(just add a loop if->while).
+Before doing this, we should know what is thrown into MySQL. In the fuction above, that is PaperID, and in Reference part, it's ReferenceID while in Citation part, we swap paper and reference.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=6.0cm,width=16.0cm]{img/yhb_paper_2.jpg}
+\caption{Page Example}
+\end{figure}
+Here we give code: (just the first part, the followed part has been already introduced.)
+\begin{figure}[H]
+\centering
+\includegraphics[height=3.5cm,width=16.0cm]{img/yhb_re_2.png}
+\caption{Code Example}
+\end{figure}
+
+This is Citation Page example:
+\begin{figure}[H]
+\centering
+\includegraphics[height=7.0cm,width=16.0cm]{img/yhb_paper_3.jpg}
+\caption{Page Example}
+\end{figure}
+Here we give code:
+\begin{figure}[H]
+\centering
+\includegraphics[height=3.5cm,width=16.0cm]{img/yhb_re_1.png}
+\caption{Code Example}
+\end{figure}
+
+
+
 
 \begin{minipage}[r]{15em}
 \begin{verbatim}
 
-short code example
 
 \end{verbatim}
 \end{minipage}
 
-\subsection{Explanation}
+\subsection{Paper: Recommand}
+We came up with 2 method to recommend papers: 
 
-\subsection{Demonstration}
+\textbf{1) Recommend by relavant title}
+
+This method relies on solr. In solr, field Title is stored as `text-en' format. So we can do vigrous search to match related papers First, we should search in MySQL to find Title (at the beginning, we have paper\_id ).
+As the search result is in the format of (``    xxxxx   ''), 
+we should process it to xxxxx to transmit to solr-url.
+Specificly, we use   (var:)paper\_title4=substr((var:)paper\_title3,3,-2);
+
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=4.0cm,width=4.0cm]{img/yhb_1.jpg}
-\caption{IMG EXAMPLE}
+\includegraphics[height=6.0cm,width=16.0cm]{img/yhb_re_11.png}
+\caption{Code Example}
 \end{figure}
+
+Then similarly, we can echo result out.
+\begin{figure}[H]
+\centering
+\includegraphics[height=10.0cm,width=18.0cm]{img/yhb_re_12.png}
+\caption{Code Example}
+\end{figure}
+
+\textbf{2) Recommend by relavant Author}
+
+This method relies on MySQL. The central sentence of this part is the MySQL join-query sentence below:
+\begin{figure}[H]
+\centering
+\includegraphics[height=4.0cm,width=13.0cm]{img/yhb_mp_4.png}
+\caption{Code Example}
+\end{figure}
+
+
+
+Here we give complete codes:
+\begin{figure}[H]
+\centering
+\includegraphics[height=7.0cm,width=16.0cm]{img/yhb_mp_3.png}
+\caption{Code Example}
+\end{figure}
+
+
+Here we give exammple page:
+\begin{figure}[H]
+\centering
+\includegraphics[height=7.0cm,width=16.0cm]{img/yhb_paper_4.jpg}
+\caption{Page Example}
+\end{figure}
+
+
+
+\subsection{Conference Information}
+
+In conference page, we showed basic information of conferences nameiy the number of authors, papers and references. Then we listed the papers that are included in the distinct conference and gave hyperlinks to other pages.
+
+(The impletment of count function is shown in the next subsection.)
+\begin{figure}[H]
+\centering
+\includegraphics[height=7.0cm,width=16.0cm]{img/yhb_con_2.jpg}
+\caption{Page Example}
+\end{figure}
+There are 3 blanks on the right side, which show the total number of authors, papers and references. We call this ``count function''. We wrote 2 versions. The first version use counting varaible in loops to count number, which is not  so efficient. So we turned to another method, which will be introduced in detail in ``affiliation page''.
+
+Below these is a paper list.
+Here is the code to search for papers that are included in the conference, the process to achieve  it is similar to that of ``author.php'' in last homework. We used MySQL to find the information we want. 
+
+First, we have ConferenceID through `Get', then we can use code:
+\begin{figure}[H]
+\centering
+\includegraphics[height=4.0cm,width=16.0cm]{img/yhb_con_11.png}
+\caption{Code Example}
+\end{figure}
+
+
+to find PaperID. And problem comes to using PaperID to find paper information.  We just follow the approach that was used in last homework, and echo the needed messages out. There is a point that should be mentioned. AuthorID field has multiple value, so we have to process like an array.
+\begin{figure}[H]
+\centering
+\includegraphics[height=8.0cm,width=16.0cm]{img/yhb_con_1.png}
+\caption{Code Example}
+\end{figure}
+
+
+We also added E-charts and Gephi graphs in related pages to show the information of conference more clearly, which method will be discribed in detail in following chapters.
+
+
 
 \section {Affiliation Pages}
 
