@@ -24,7 +24,6 @@
 \tableofcontents
 
 
-
 \frontmatter
 
 \chapter {Preface}
@@ -119,7 +118,6 @@ The making of a website requires frequent communication of source codes. In resp
 \section* {How to Check our Work}
 
 To see our source codes, you can visit our github repository homepage (https://github.com/ltzone/EE101Lab) and clone our repository down to your computer. You may also find the LaTeX source codes of this report in our repository. In order to make our website work on your computer, you have to follow our guide in the configguide.txt. This guide will help you initialize your MySQL database and Solr engine and write all the information into them. You may also check our presentation slides to see the detail of our developing story.
-
 
 
 \mainmatter
@@ -565,45 +563,64 @@ Figure \ref{pict:dsw2} shows the last page of a conference.
 \label{pict:dsw2}
 \end{figure}
 
+
+
+
 \chapter {Integrated Searching Bar}
 
-fsh
+We use the copy field in solr to realize an integrated searching bar. By making copies of fields to one field, we can apply several distinct field types to a single piece of incoming information.
+
+To construct a copy field, we first add a new field, for example a field 'keyword'. Then we choose ``keyword'' as destination and 'AuthorName', 'ConferenceName' and 'PaperName' as sources. Now, a query to 'keyword' can search all related information in three fields. In this way, we only need one integrated searching bar and do the query for one time to get all reults.
 
 
 \chapter {Data Visualization}
 
 
 \section {Statistical Graph}
+In our website, we have 12 charts made by echarts altogether to visualize the data in the form of 3D histogram, pie chart, line chart and bar chart.
 
-fsh
-
-\subsection{Description}
-
-\subsection{Solution}
-
-\paragraph{point 1}
-
-\paragraph{point 2}
-
-\subsection{Source Codes}
-
-\begin{minipage}[r]{15em}
-\begin{verbatim}
-
-short code example
-
-\end{verbatim}
-\end{minipage}
-
-\subsection{Explanation}
-
-\subsection{Demonstration}
+\subsection {3D histogram}
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=4.0cm,width=4.0cm]{img/fsh_1.jpg}
-\caption{IMG EXAMPLE}
+\includegraphics[scale=0.55]{img/fsh_3d_hist.jpg}
+\caption{3D chart in the homepage}
 \end{figure}
+
+In the homepage, we have a 3D chart to show the publication tendency of every conferences. This is a static chart that we prepare the data in advance. To construct a 3D chart in echarts, we need an array that concludes three-dimension coordinates. The z-axis value refers to the publication.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45]{img/fsh_code_1.jpg}
+\caption{Get data form Mysql}
+\end{figure}
+
+\subsection {Bar chart, pie chart and line chart}
+
+The codes are similar when we construct a bar chart, pie chart or line chart. We need two arrays to show the x-axis coordinates and their values. We first get the data from Mysql database and then convert the php array to javascript. SQL languages 'GROUP BY' and 'count(*)' are massively used to get the data.
+\par The following three charts come from conference page, search page and author page respectively. All codes related to these charts are in file 'pages / XX / XX \_charts.php'.
+\par It's worth mentioning that to make all charts intelligible, we need to adjust the parameters in echarts option. For example, we set 'yAxis.minInterval: 1' so that decimal won't appear in y-axis labels. Also, we set 'xAxis.axisLabel.rotate: 40' so that all labels can all labels can be displayed(See Figure \ref{fig:bar chart example}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{img/fsh_line.jpg}
+\caption{Line chart example}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{img/fsh_bar.jpg}
+\caption{Bar chart example}
+\label{fig:bar chart example}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{img/fsh_pie.jpg}
+\caption{Pie chart example}
+\end{figure}
+
+
 
 
 
@@ -617,7 +634,7 @@ We've applied a built-in template in echarts when making the relation graph. Fir
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.4]{img/zlt_rel_demo.png}
+\includegraphics[width=11cm]{img/zlt_rel_demo.png}
 \caption{Relation Chart Page}
 \end{figure}
 
@@ -871,6 +888,8 @@ Index Page Templates from ...?
 
 \chapter{Epilogue}
 After a semester's study and a month's efforts on this project, we've worked out a well-formatted, information-rich, and smooth-running website on academic papers, as has been shown at full length in this report. Although our current website leaves much to be desired and more functions to be expected, due to the limitation of time, our developing story have to mark an end here. As the saying of Shakespeare goes, ‘What’s past, it’s prologue.’ The insightful, inspiring and illuminating course has become the past, so has the website project we’ve worked on during the past unforgettable days. However, our gratefulness to the instruction from our professor and teaching assistants and our appreciation of the inspirations from our excellent classmates will not be erased. Neither will our interest and passion in practicing and learning web-building fade away. These, in particular, will become the prologue of our future goals.
+
+
 
 
 \end{document}
