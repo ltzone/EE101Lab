@@ -35,7 +35,7 @@
 </nav>
 
 <!-- Search 页面 -->
-<section class="probootstrap-hero prohttp://localhost/probootstrap/frame/#featuresbootstrap-slant" style="background-image: url(img/background1.jpg);" background-size=80% data-section="home" data-stellar-background-ratio="0.7">
+<section class="probootstrap-hero prohttp://localhost/probootstrap/frame/#featuresbootstrap-slant" style="background-image: url(img/4.jpg);" background-size=80% data-section="home" data-stellar-background-ratio="0.7">
   <div class="container">
 	<div class="row intro-text">
 	  <div class="col-md-8 col-md-offset-2 text-center">
