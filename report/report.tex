@@ -40,7 +40,7 @@ Start from the index page, by typing the keywords you want to search about, you 
 
 Based on the type of data and the way we present them, the contents of our web fall into 5 parts, namely search (result), papers, authors, affiliations and conferences. Every section is made up of several subpages demonstrating different functions. The main functions and features of every section are listed as follows. The name behind every row represents the person who mainly takes charge, but it should be decleared that all the team members have been helping address each other's probelms all the way through the project, and must have somehow contributed to the part that he is not in charge of.
 
-\begin{figure}[H]
+\begin{figure}[htp]
 \centering
 \includegraphics[scale=0.5]{img/zlt_pre_1.png}
 \caption{General Structure of our Web}
@@ -127,31 +127,160 @@ To see our source codes, you can visit our github repository homepage (https://g
 
 \section {Paper \& Conference Pages}
 
-These parts are requred as a necessary part of final lab. We want to display useful information to users. So we added functions to search for more detailed relavant messages.
-Depending on the characteristics of each field, we used different methods to show information.
+These parts are required as a necessary part of final lab. We want to display useful information to users. So we added functions to search for more detailed relavant messages. According to the characteristics of each field, we used different methods to show information.
 
 
 \subsection{Description}
+In our final version, there are 5 concrete pages about paper information and 3 about conferences. We tried to display the information in all directions. There are blanks to show basic information, E-charts of papers, citations and references and relavant recommedations. 
 
-\subsection{Solution}
+\subsection{Paper: Basic Information}
+In this page, we show basic messages of papers
+which is from MySQL table `papers' and ` paper\_author\_affiliation'.
+ And we offer the function to jump to Conference, Author, Affiliation Pages and Acemap.
 
-\paragraph{point 1}
 
-\paragraph{point 2}
+The codes are listed below. (Realization of Paper Charts will be introduced in chapter visualization.)
 
-\subsection{Source Codes}
+First, we have PaperID through ``Get'' method, then we can find result in MySQl. If result exists, we echo out all fields of paper-relavant  information. (Remember that  AuthorName is in the format of Arrays.)
 
-\begin{minipage}[r]{15em}
-\begin{verbatim}
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_paper_1.jpg}
+\caption{Page Example}
+\end{figure}
 
-short code example
 
-\end{verbatim}
-\end{minipage}
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_mp_1.png}
+\caption{Code Example}
+\end{figure}
 
-\subsection{Explanation}
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_mp_2.png}
+\caption{Code Example}
+\end{figure}
 
-\subsection{Demonstration}
+
+
+\subsection{Paper: Citation and Reference}
+This part is quite similar to paper information part(just add a while loop).
+Before doing this, we should know what is thrown into MySQL. In the fuction above, that is PaperID, and in Reference part, it's ReferenceID while in Citation part, we swap paper and reference.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_paper_2.jpg}
+\caption{Page Example}
+\end{figure}
+Here we give code: (just the first part, the followed part has been already introduced.)
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_re_2.png}
+\caption{Code Example}
+\end{figure}
+
+This is Citation Page example:
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_paper_3.jpg}
+\caption{Page Example}
+\end{figure}
+Here we give code:
+\begin{figure}[htp]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_re_1.png}
+\caption{Code Example}
+\end{figure}
+
+
+\subsection{Paper: Recommendation}
+We came up with 2 method to recommend papers: 
+
+\textbf{1) Recommend by relavant title}
+
+This method relies on solr. In solr, field Title is stored as `text-en' format. So we can do vigrous search to match related papers First, we should search in MySQL to find Title (at the beginning, we have paper\_id ).
+As the search result is in the format of (``    xxxxx   ''), 
+we should process it to xxxxx to transmit to solr-url.
+Specificly, we use   (var:)paper\_title4=substr((var:)paper\_title3,3,-2);
+
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_re_11.png}
+\caption{Code Example}
+\end{figure}
+
+Then similarly, we can echo result out. (See Figure \ref{fig:yhb1} on the next Page)
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_re_12.png}
+\label{fig:yhb1}
+\caption{Code Example}
+\end{figure}
+
+
+\textbf{2) Recommend by relavant Author}
+
+This method relies on MySQL. The central sentence of this part is the MySQL join-query sentence below:
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_mp_4.png}
+\caption{Code Example}
+\end{figure}
+
+
+
+Here we give complete codes:
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_mp_3.png}
+\caption{Code Example}
+\end{figure}
+
+
+Here we give exammple page:
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_paper_4.jpg}
+\caption{Page Example}
+\end{figure}
+
+
+
+\subsection{Conference Information}
+
+In conference page, we showed basic information of conferences nameiy the number of authors, papers and references. Then we listed the papers that are included in the distinct conference and gave hyperlinks to other pages.
+
+(The impletment of count function is shown in the next subsection.)
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_con_2.jpg}
+\caption{Page Example}
+\end{figure}
+There are 3 blanks on the right side, which show the total number of authors, papers and references. We call this ``count function''. We wrote 2 versions. The first version use counting varaible in loops to count number, which is not  so efficient. So we turned to another method, which will be introduced in detail in ``affiliation page''.
+
+Below these is a paper list.
+Here is the code to search for papers that are included in the conference, the process to achieve  it is similar to that of ``author.php'' in last homework. We used MySQL to find the information we want. 
+
+First, we have ConferenceID through `Get', then we can use code:
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_con_11.png}
+\caption{Code Example}
+\end{figure}
+
+
+to find PaperID. And problem comes to using PaperID to find paper information.  We just follow the approach that was used in last homework, and echo the needed messages out. There is a point that should be mentioned. AuthorID field has multiple value, so we have to process like an array.
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm]{img/yhb_con_1.png}
+\caption{Code Example}
+\end{figure}
+
+
+We also added E-charts and Gephi graphs in related pages to show the information of conference more clearly, which method will be discribed in detail in following chapters.
 
 \section {Affiliation Pages}
 
@@ -161,17 +290,22 @@ We'd like to add a new series of pages to show affiliation information to users.
 \subsection {General Description}
 
 The final version of the affiliation section include 3 concrete pages. On the affiliation\_info.php page, we will give three numbers on top of the page, counting all the authors, papers, and references in the affiliation. Then the authors in the affiliation will be listed below, together with their own affiliation information (hyper-links included) and number of publications. Affiliation\_paper.php shows all the papers related to the affiliation. The affiliation\_charts.php, where three charts are displayed, will be reported in detail in the Statistical Graph Section.
+(See Figure \ref{fig:zlt1} and Figure \ref{fig:zlt2} on the next Page)
 
-\begin{figure}[H]
+
+
+\begin{figure}[h]
 \centering
 \includegraphics[scale=0.35]{img/zlt_aff_demo1.png}
 \caption{affiliation\_info.php page}
+\label{fig:zlt1}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 \includegraphics[scale=0.35]{img/zlt_aff_demo2.png}
 \caption{affiliation\_paper.php page}
+\label{fig:zlt2}
 \end{figure}
 
 In fact, for the same function to be displayed on the page, we did two versions of code to implement them. The first one was very basic, just like those in the paper/author/search pages. However, since all the affiliation data are selected from the big paper\_author\_affiliation table, the first version didn't perform well in loading speed. Our optimization will be introduced in the Optimization Chapter.
@@ -239,10 +373,13 @@ In this experiment, we have designed two versions of page turning function. And 
 In this version,we set the parameter 'page' for each page, and the show scope is determined according to the'page' parameter and each time we don't show all data. Actually, because of specific value of page, we only show 10 pieces of data.
 \subsection{Description}
 Now let's show the first version's page turning . We take the search results on the'search'page as an example, and the effect is shown in the following figure.
+(See Figure \ref{fig:dsw1})
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 \includegraphics[height=6.0cm,width=10.0cm]{img/dsw_11.png}
+\label{fig:dsw1}
+\caption{Base Version Demonstration}
 
 \end{figure}
 Ten pieces of information are displayed on each page. At the bottom of each page, the number of the current page, total data and total pages can be displayed. By clicking the'previous page's and 'next page's hyperlinks, the page can be turned up and down. By clicking the'first page's and 'last page's hyperlinks, the page can be turned to the first and last pages. In addition, we can also input the page number of the page we want to see in the blank and click the button 'jump to the page' to achieve the page jumping.
@@ -258,13 +395,13 @@ The page turning is achieved by hyperlinks, and each time we click the specific 
 \subsection{Source Codes}
 Now we still take the search page as an example to present the page turning.  The codes are as follows.
 
-\begin{figure}[H]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale=0.5]{img/dsw_get.png}
 \caption{Page Parameter}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale=0.35]{img/dsw_show.png}
 \caption{Show}
@@ -275,19 +412,21 @@ At first, we get the paremeter 'page' sent from other pages. Before we search in
 
 
 
-\begin{figure}[H]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale=0.3]{img/dsw_chao.png}
 \caption{Hyperlinks}
+\label{fig:dsw2}
 \end{figure}
+
+When setting the hyperlinks, what matters is that we should send the parameter 'keyword' besides the parameter 'page'. Another important thing is that sometimes some hyperlinks needn't be use. For example, if we are at the first page, the hyperlinks of the statement 'first page' is unnecessary.So we should write some specific 'if' statement to judge if we should use the hyperlinks.
+(See \ref{fig:dsw2} on the next Page)
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.35]{img/dsw_input.png}
 \caption{Paper Jumping}
 \end{figure}
-
-When setting the hyperlinks, what matters is that we should send the parameter 'keyword' besides the parameter 'page'. Another important thing is that sometimes some hyperlinks needn't be use. For example, if we are at the first page, the hyperlinks of the statement 'first page' is unnecessary.So we should write some specific 'if' statement to judge if we should use the hyperlinks.
 
 When it comes to the page jumping, what should be mentioned is that to reduce the error such as the number user entered is out of the limitation of the actual pages, we let the actual page you jump to is always the last page if you input a number that is greater than the number of total pages.
 
@@ -346,52 +485,54 @@ At the beginning, we should import the 'jquery'. The codes are shown in the figu
 \end{figure}
 
 
+
+
+Before we divide all information into different divs, we should know the number of total information we get and figure out the number of total pages which depends on how many pieces of data we want to show in a page. Then we use 'for' circle statement to divide the data into many divs. Every div's
+style is set as 'hidden' at first by using the statement 'display:none'. And at the end of each div, we show the number of total pages and the current page.The codes are shown in the figure'Dividing divs'
+
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=6.0cm]{img/dsw_3.png}
 \caption{Start}
 \end{figure}
 
-
-Before we divide all information into different divs, we should know the number of total information we get and figure out the number of total pages which depends on how many pieces of data we want to show in a page. Then we use 'for' circle statement to divide the data into many divs. Every div's
-style is set as 'hidden' at first by using the statement 'display:none'. And at the end of each div, we show the number of total pages and the current page.The codes are shown in the figure'Dividing divs'
-
 The codes in the figure 'Start' are to send the variable 'page' to the javascript and change the first page's display style from hidden into shown.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=10.0cm]{img/dsw_button.png}
+\includegraphics[width=11.0cm]{img/dsw_button.png}
 \caption{Buttons}
 \end{figure}
 
 
 Then as the figure 'Buttons' shows, we create four buttons 'first','previous','next' and 'last' which are used to realize the primary function of page turning. Then we create a corresponding button for each div, all of which are in the different divs, whose display style can also be changed by clicking. To make them look neater, we set their display style as 'inline block', which make sure that all buttons are shown in one line.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=7.0cm]{img/dsw_first1.png}
 \caption{First Button}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=7.0cm]{img/dsw_pr1.png}
 \caption{Previous Button}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=7.0cm]{img/dsw_next1.png}
 \caption{Next Button}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=7.0cm]{img/dsw_last1.png}
 \caption{Last Button}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=10.0cm]{img/dsw_fun.png}
 \caption{Button function}
