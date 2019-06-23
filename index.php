@@ -14,24 +14,15 @@
 <script src="js/echarts.js"></script>
 <script src="js/echarts-gl.js"></script>
 
-<!--[if lt IE 9]>
-  <script src="js/vendor/html5shiv.min.js"></script>
-  <script src="js/vendor/respond.min.js"></script>
-<![endif]-->
+
 </head>
 <body>
 
-<!-- Fixed navbar -->
+
 <nav class="navbar navbar-default probootstrap-navbar">
   <div class="container">
 	<div class="navbar-header">
-	  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false" aria-controls="navbar">
-		<span class="sr-only">Toggle navigation</span>
-		<span class="icon-bar"></span>
-		<span class="icon-bar"></span>
-		<span class="icon-bar"></span>
-	  </button>
-	  <a class="navbar-brand" href="index.php" title="uiCookies:Frame">Search Engine</a>
+	  <a class="navbar-brand" href="index.php" title="uiCookies:Frame">Smart Boy Search</a>
 	</div>
 
 	<div id="navbar-collapse" class="navbar-collapse collapse">
@@ -44,12 +35,12 @@
 </nav>
 
 <!-- Search 页面 -->
-<section class="probootstrap-hero prohttp://localhost/probootstrap/frame/#featuresbootstrap-slant" style="background-image: url(img/4.jpg);" data-section="home" data-stellar-background-ratio="0.9">
+<section class="probootstrap-hero prohttp://localhost/probootstrap/frame/#featuresbootstrap-slant" style="background-image: url(img/background1.jpg);" background-size=80% data-section="home" data-stellar-background-ratio="0.7">
   <div class="container">
 	<div class="row intro-text">
 	  <div class="col-md-8 col-md-offset-2 text-center">
-		<h1 class="probootstrap-heading probootstrap-animate">Search Engine</h1>
-			<form class="form-horizontal" action="../pages/search/search_info.php">
+		<h1 class="probootstrap-heading probootstrap-animate">Smart Boy Search</h1>
+			<form class="form-horizontal" action="../../pages/search/search_info.php">
 			  <div class="form-group">
 			    <div class="col-md-12 text-center">
 			      <p class="probootstrap-animate"><input type="text" class="form-control" id="keyword" name="keyword" placeholder="Enter the keyword: Paper/Conference/Author"></p>
@@ -76,8 +67,8 @@
 	  <div class="col-md-8 col-md-offset-2 probootstrap-section-heading">
 		<h2 class="mb30 text-black probootstrap-heading">Charts</h2>
 	  </div>
-	  <div class='col-md-offset-1'>
-	  	<div id="conference_chart" style="width: 1000px;height:800px;"></div>
+	  <div class='col-md-offset-2'>
+	  	<div id="conference_chart" style="width: 900px;height:750px;"></div>
 	  </div>
 	</div>
 	<!-- END row -->
