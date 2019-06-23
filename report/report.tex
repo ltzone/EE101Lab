@@ -352,16 +352,17 @@ At the beginning, we should import the 'jquery'. The codes are shown in the figu
 \end{figure}
 
 
-Before we divide all information into different divs, we should know the number of total information we get and figure out the number of total pages which depends on how many pieces of data we want to show in a page. Then we use 'for' circle statement to divide the data into many divs. Every div's
-style is set as 'hidden' at first by using the statement 'display:none'. And at the end of each div, we show the number of total pages and the current page.The codes are shown in the figure'Dividing divs'\\\\
-
 \begin{figure}[H]
 \centering
-\includegraphics[width=10.0cm]{img/dsw_3.png}
+\includegraphics[width=6.0cm]{img/dsw_3.png}
 \caption{Start}
 \end{figure}
 
-The codes in the figure 'Start' are to send the variable 'page' to the javascript and change the first page's display style from hidden into shown.\\\\
+
+Before we divide all information into different divs, we should know the number of total information we get and figure out the number of total pages which depends on how many pieces of data we want to show in a page. Then we use 'for' circle statement to divide the data into many divs. Every div's
+style is set as 'hidden' at first by using the statement 'display:none'. And at the end of each div, we show the number of total pages and the current page.The codes are shown in the figure'Dividing divs'
+
+The codes in the figure 'Start' are to send the variable 'page' to the javascript and change the first page's display style from hidden into shown.
 
 \begin{figure}[H]
 \centering
@@ -370,29 +371,29 @@ The codes in the figure 'Start' are to send the variable 'page' to the javascrip
 \end{figure}
 
 
-Then as the figure 'Buttons' shows, we create four buttons 'first','previous','next' and 'last' which are used to realize the primary function of page turning. Then we create a corresponding button for each div, all of which are in the different divs, whose display style can also be changed by clicking. To make them look neater, we set their display style as 'inline block', which make sure that all buttons are shown in one line.\\\\
+Then as the figure 'Buttons' shows, we create four buttons 'first','previous','next' and 'last' which are used to realize the primary function of page turning. Then we create a corresponding button for each div, all of which are in the different divs, whose display style can also be changed by clicking. To make them look neater, we set their display style as 'inline block', which make sure that all buttons are shown in one line.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=10.0cm]{img/dsw_first1.png}
+\includegraphics[width=7.0cm]{img/dsw_first1.png}
 \caption{First Button}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=10.0cm]{img/dsw_pr1.png}
+\includegraphics[width=7.0cm]{img/dsw_pr1.png}
 \caption{Previous Button}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=10.0cm]{img/dsw_next1.png}
+\includegraphics[width=7.0cm]{img/dsw_next1.png}
 \caption{Next Button}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=10.0cm]{img/dsw_last1.png}
+\includegraphics[width=7.0cm]{img/dsw_last1.png}
 \caption{Last Button}
 \end{figure}
 
@@ -402,28 +403,32 @@ Then as the figure 'Buttons' shows, we create four buttons 'first','previous','n
 \caption{Button function}
 \end{figure}
 
-Now we should set function for the buttons.In each button's function, we decide which divs should be shown and which divs should be hidden by the current page number. And we can change their display style by their div's id using the statement 'document.getElementById('b4').style.display='. Similarly, we also need to show or hide the buttons of each page. What should be mentioned is that when the total number of pages is less than 5, the function of pages' buttons' display should be write in different ways.\\\\
+Now we should set function for the buttons.In each button's function, we decide which divs should be shown and which divs should be hidden by the current page number. And we can change their display style by their div's id using the statement 'document.getElementById('b4').style.display='. Similarly, we also need to show or hide the buttons of each page. What should be mentioned is that when the total number of pages is less than 5, the function of pages' buttons' display should be write in different ways.
 
 
 
 
 
 \subsection{Demonstration}
-Some examples are as follows.\\\\
-\begin{figure}[H]
-\centering
-\includegraphics[width=10.0cm]{img/dsw_author.png}
-\caption{AUTHOR EXAMPLE}
-\end{figure}
-This figure shows the first page of an author.\\
-\begin{figure}[H]
-\centering
-\includegraphics[width=10.0cm]{img/dsw_con.png}
-\caption{AUTHOR EXAMPLE}
-\end{figure}
-And this figure shows the last page of an conference.\\
+Some examples are demonstrated as follows.
 
+Figure \ref{pict:dsw1} shows the first page of an author.
 
+Figure \ref{pict:dsw2} shows the last page of a conference.
+
+\begin{figure}[b]
+\centering
+\includegraphics[width=11.0cm]{img/dsw_author.png}
+\caption{AUTHOR EXAMPLE}
+\label{pict:dsw1}
+\end{figure}
+
+\begin{figure}[b]
+\centering
+\includegraphics[width=11.0cm]{img/dsw_con.png}
+\caption{AUTHOR EXAMPLE}
+\label{pict:dsw2}
+\end{figure}
 
 \chapter {Integrated Searching Bar}
 
