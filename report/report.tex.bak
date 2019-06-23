@@ -1,0 +1,449 @@
+\documentclass{book}
+
+\usepackage{indentfirst}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{framed}
+\usepackage{graphicx}
+\usepackage{float}
+
+
+\begin{document}
+
+
+\title{Final Project Report}
+\author{Zhou Litao, Fang Shaoheng, Dong Shiwen, Yang Hongbo}
+\date{\today}
+
+
+\maketitle
+
+
+\tableofcontents
+
+
+
+
+
+\frontmatter
+\chapter {Preface}
+
+A brief introduction to our team and our project. ....
+
+Introduce all the functions of our pages in a list.
+
+\paragraph{index.php}..... function A completed by xxx
+
+\paragraph{search pages}.....
+
+\paragraph{affiliation pages}.....
+
+.....
+
+Show how we use github to help with our work.
+
+Give thanks to our instructors and the codes we've copied (expected to give specific links)
+
+
+\mainmatter
+\chapter {Enrich the Contents}
+
+\section {Paper \& Conference Pages}
+
+yhb
+
+\subsection{Description}
+
+\subsection{Solution}
+
+\paragraph{point 1}
+
+\paragraph{point 2}
+
+\subsection{Source Codes}
+
+\begin{minipage}[r]{15em}
+\begin{verbatim}
+
+short code example
+
+\end{verbatim}
+\end{minipage}
+
+\subsection{Explanation}
+
+\subsection{Demonstration}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=4.0cm,width=4.0cm]{img/yhb_1.jpg}
+\caption{IMG EXAMPLE}
+\end{figure}
+
+\section {Affiliation Pages}
+
+We'd like to add a new series of pages to show affiliation information to users. Since we didn't do any previous work about affiliation information in the previous labs except that the affiliation table was input into the database, we have to write new SQL commands in search of affiliation information, and echo them out on the pages. The paper table and charts on other pages can be of help in showing the affiliation related information. Also, we have already got the author table written in the paper information page. Generally speaking, the work here is to collect the affiliation data and arrange them in order on the pages.
+
+
+\subsection {General Description}
+
+The final version of the affiliation section include 3 concrete pages. On the affiliation\_info.php page, we will give three numbers on top of the page, counting all the authors, papers, and references in the affiliation. Then the authors in the affiliation will be listed below, together with their own affiliation information (hyper-links included) and number of publications. Affiliation\_paper.php shows all the papers related to the affiliation. The affiliation\_charts.php, where three charts are displayed, will be reported in detail in the Statistical Graph Section.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{img/zlt_aff_demo1.png}
+\caption{affiliation\_info.php page}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{img/zlt_aff_demo2.png}
+\caption{affiliation\_paper.php page}
+\end{figure}
+
+In fact, for the same function to be displayed on the page, we did two versions of code to implement them. The first one was very basic, just like those in the paper/author/search pages. However, since all the affiliation data are selected from the big paper\_author\_affiliation table, the first version didn't perform well in loading speed. Our optimization will be introduced in the Optimization Chapter.
+
+
+
+\subsection {Total Counts}
+On top of every affiliation page, we've counted all the authors, papers and references concerned. For authors and papers, we can directly count them in the paper\_author\_affiliation table. For references, we first select the papers and then join the selected results to the paper\_reference table in order to count the results. The MySQL commands are listed below.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img/zlt_aff_authorcount.png}
+\caption{Count Author Commands}
+\label{fig:aff_authorcount}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{img/zlt_aff_papercount.png}
+\caption{Count Paper Commands}
+\label{fig:aff_papercount}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img/zlt_aff_refcount.png}
+\caption{Count Reference Commands}
+\label{fig:aff_refcount}
+\end{figure}
+
+Note that we've use some MySQL techniques such as DISTINCT (eliminate overlapping results) and GROUP BY (perform data counting job) in order to implement our function.
+
+For the data display in our page, our template has already provided a well designed data container in CSS, which can list different numbers in a row, with even width. We can simply apply this pre-defined class in a way demonstrated below.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{img/zlt_aff_countdisplay.png}
+\caption{Use Pre-defined Class to Display Numbers}
+\end{figure}
+
+
+\subsection{Authors List}
+
+The author we've found based on the given affiliaiton may have more than one affiliation where he publishes his paper. So one simple search work is not enough. Luckily, all of the data related to this problem can be selected from the paper\_author\_affiliation table. As a result, our first design is to first sort out all the authors where the affiliation column fits, then we search the table again for affiliation information based on the author's id, which can be realized by looping through the author array in PHP.
+
+In fact, the first step has been done when we count the authors (See Figure \ref{fig:aff_authorcount}), so we simply skip the first step, call the author selecting result in the counting section, and make further searching based on the previous result. During the second step, we've also used DISTINCT \& GROUP BY techniques in order to get the author's affiliation data right and unrepeated.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img/zlt_aff_authorloop.png}
+\caption{Use Loop to List Author\_Affiliation Information}
+\end{figure}
+
+The problem with this solution is that the searching work is too much. Imagine there are 100 authors related to one affiliation, we have to go through the big paper\_author\_affiliation table 100 times in order to get all the data. It turned out that it would take the webpage about half a minute to get completed loaded. The optimization work will be introduced in the Optimization Chapter.
+
+\subsection{Papers List}
+
+The general structure of this list is simlilar to those in citation/ reference/ author's paper list. We may just use MySQL to select all the paper's id related to the affiliation, keep this array storing the paperid we want to display, and the leave the rest of the work to the codes we've already written in the previous work. The selecting MySQL commands are listed below. Actually, just like the case in the author list section, the first step has also been completed in the counting section. (See Figure \ref{fig:aff_papercount}) So there are no codes left for this section to explain.
+
+\chapter{Leaf Turning}
+
+Page turning is an indispensable part of web design. When there is more information to be searched and displayed, the page turning function can reduce the number of information displayed on each page, which makes the whole page look more concise and beautiful, and also optimizes the user's experience.\\\\
+
+In this experiment, we have designed two versions of page turning function. And the detailed information of them are as follows.\\\\
+
+\section{Version I: by PHP parameters}
+
+\subsection{Description}
+
+\subsection{Solution}
+
+\paragraph{point 1}
+
+\paragraph{point 2}
+
+\subsection{Source Codes}
+
+\begin{minipage}[r]{15em}
+\begin{verbatim}
+
+short code example
+
+\end{verbatim}
+\end{minipage}
+
+\subsection{Explanation}
+
+\subsection{Demonstration}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=4.0cm,width=4.0cm]{img/dsw_1.jpg}
+\caption{IMG EXAMPLE}
+\end{figure}
+
+
+\section{Version II: by jQuery}
+In the first version of paging design, only PHP code is used, and the use of the 'Page' parameter means that the page would be reloaded every time the page was turned. Obviously, all that needs to be refreshed is the table that shows the data, and the rest of the page will remain unchanged. If we can only refresh the data table every time you turn the page, and keep the other parts unchanged, then we can further improve the efficiency of the web page. \\
+With this in mind, we started the second version of page turning design.\\\\
+\subsection{Description}
+First, let's show the second version's page turning effect. We take the search results on the'search'page as an example, and the effect is shown in the following figure.\\\\
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=6.0cm,width=10.0cm]{img/dsw_1.png}
+
+\end{figure}
+
+Ten pieces of information are displayed on each page. At the bottom of each page, the number of the current page and total pages can be displayed. By clicking the'previous'and'next' buttons, the page can be turned up and down. By clicking the'first'and'next' buttons, the page can be turned to the first and last pages. In addition, we can also click the button corresponding to the page numbers before or after the current page with a total of five pages.\\
+
+Because of the use of'jQuery'to achieve page turning , after a load, we can quickly change the page without refreshing, and after the page is turned, we still stay in the previous position, instead of moving back to the top of the page, which makes the page turning function more convenient and fast.\\\\
+\subsection{Solution}
+
+Unlike the first version where the search scope is determined according to the'page' parameter and each time we don't search all data, in this version, we can search all the results at one time and divide them into many parts. Each page turn shows the information of one part and hides the information of the rest. That is to say, we can divide the searched information into different'divs', add page turning function on the button, and change the display style of different divs when clicking. \\\\
+Similarly, we can divide the buttons corresponding to different page numbers into many divs, hide part and display part when clicking, and then we can achieve the page turning without refreshing.\\\\
+
+
+\subsection{Source Codes}
+Now we still take the search gage as an example to present the page turning.\\\\
+\begin{minipage}[r]{15em}
+\begin{verbatim}
+
+
+
+\end{verbatim}
+\end{minipage}
+\begin{figure}[H]
+\centering
+\includegraphics[height=1.0cm,width=10.0cm]{img/dsw_2.png}
+\caption{premise}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=6.0cm,width=10.0cm]{img/dsw_divide.png}
+\caption{Dividing divs}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=3.0cm,width=10.0cm]{img/dsw_3.png}
+\caption{Start}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=3.0cm,width=10.0cm]{img/dsw_button.png}
+\caption{Buttons}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=4.0cm,width=10.0cm]{img/dsw_first1.png}
+\caption{first}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=7.0cm,width=10.0cm]{img/dsw_pr1.png}
+\caption{previous}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=7.0cm,width=10.0cm]{img/dsw_next1.png}
+\caption{next}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=4.0cm,width=10.0cm]{img/dsw_last1.png}
+\caption{last}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=8.0cm,width=10.0cm]{img/dsw_fun.png}
+\caption{Button function}
+\end{figure}
+
+
+\subsection{Explanation}
+At the beginning, we should import the 'jquery'. The codes are as figure 'premise'.\\\\
+
+Before we divide all information into different divs, we should know the number of total information we get and figure out the number of total pages which depends on how many pieces of data we want to show in a page. Then we use 'for' circle statement to divide the data into many divs. Every div's
+style is set as 'hidden' at first by using the statement 'display:none'. And at the end of each div, we show the number of total pages and the current page.The codes are shown in the figure'Dividing divs'\\\\
+
+The codes in the figure 'Start' are to send the variable 'page' to the javascript and change the first page's display style from hidden into shown.\\\\
+
+Then as the figure 'Buttons' shows, we create four buttons 'first','previous','next' and 'last' which are used to realize the primary function of page turning. Then we create a corresponding button for each div, all of which are in the different divs, whose display style can also be changed by clicking. To make them look neater, we set their display style as 'inline block', which make sure that all buttons are shown in one line.\\\\
+
+Now we should set function for the buttons.In each button's function, we decide which divs should be shown and which divs should be hidden by the current page number. And we can change their display style by their div's id using the statement 'document.getElementById('b4').style.display='. Similarly, we also need to show or hide the buttons of each page. What should be mentioned is that when the total number of pages is less than 5, the function of pages' buttons' display should be write in different ways.\\\\
+
+
+\subsection{Demonstration}
+Some examples are as follows.\\\\
+\begin{figure}[H]
+\centering
+\includegraphics[height=5.0cm,width=10.0cm]{img/dsw_author.png}
+\caption{AUTHOR EXAMPLE}
+\end{figure}
+This figure shows the first page of an author.\\
+\begin{figure}[H]
+\centering
+\includegraphics[height=5.0cm,width=10.0cm]{img/dsw_con.png}
+\caption{AUTHOR EXAMPLE}
+\end{figure}
+And this figure shows the last page of an conference.\\
+\chapter {Integrated Searching Bar}
+
+fsh
+
+
+\chapter {Data Visualization}
+
+
+\section {Statistical Graph}
+
+fsh
+
+\subsection{Description}
+
+\subsection{Solution}
+
+\paragraph{point 1}
+
+\paragraph{point 2}
+
+\subsection{Source Codes}
+
+\begin{minipage}[r]{15em}
+\begin{verbatim}
+
+short code example
+
+\end{verbatim}
+\end{minipage}
+
+\subsection{Explanation}
+
+\subsection{Demonstration}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=4.0cm,width=4.0cm]{img/fsh_1.jpg}
+\caption{IMG EXAMPLE}
+\end{figure}
+
+
+
+\section {Paper Relation Graph}
+
+A relation graph can visually reveal the relationship between papers, which we believe will be of great help to the users. For every paper, we've prepared a relation graph to show its reference papers, and the reference papers of its reference papers. Visitors can have a clear picture of how the paper is derived by looking at multiple levels of reference papers.
+
+\subsection{Description}
+
+We've applied a built-in template in echarts when making the relation graph. First we've fetched all the paper\_reference relationship concerned, including multiple levels of reference relations, from the database. Then based on these data, we translate them into two arrays, namely nodes and links, which can be accepted by the echarts template. In the meantime, we add more information such as paper title, weight of the nodes and styles of the links into the array. Then the relation chart can be generated by echarts. In addition, we also wrote a jQuery function by ourselves in order to allow our users to visit the cited paper directly by clicking the nodes or the links. Some demo screenshots are listed below.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{img/zlt_rel_demo.png}
+\caption{Relation Chart Page}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{img/zlt_rel_demo1.png}
+\includegraphics[scale=0.3]{img/zlt_rel_demo2.png}
+\includegraphics[scale=0.3]{img/zlt_rel_demo3.png}
+\caption{Multiple Display Modes \& functions}
+\end{figure}
+
+\subsection{Collect the Data}
+
+For convenience's sake, we first wrote a function in order to integrate the search of a paper's name into a function call. The ucwords() is a useful function in PHP, which can turn the first letter of every word into upper case. This can give our information display a better look.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img/zlt_rel_code_func.png}
+\caption{get\_paper\_name function}
+\end{figure}
+
+Then we use MySQL to get the direct reference of the paper. For these referenceIDs, we wrote a loop to add them to the nodes array, and put these first-level relations directly into the links array.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img/zlt_rel_code_lev1.png}
+\caption{First Level Data Collection}
+\end{figure}
+
+After that, we wrote a nested loop. The first level is to loop through the depth (i.e. the reference level), the second level is to loop through reference papers of the last reference item. The searching structure is just like building a tree. Note that we've created a helping array storing the paperids that we've already added into the nodes array, so that we can avoid overlapping nodes. Theoretically, the reference level (depth) can be streatched to infinity, but for practical use, we assume the depth of 4 will be fine.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img/zlt_rel_code_lev2.png}
+\caption{Higher-Level Data Collection}
+\end{figure}
+
+
+\subsection{Set Echarts Options}
+
+The links and nodes arrays we've created above are just what the built-in echarts template requires. However, the initial graph configurations were not suitable for our information. (See Figure \ref{fig:rel_contrast}) We need to block the display of node ids and loosen the distance between dinstinct nodes. After some manual regulating work, we make the graph look a lot better. Our major configuration codes are listed below.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img/zlt_rel_demo4.png}
+\includegraphics[scale=0.55]{img/zlt_rel_demo5.png}
+\caption{Higher-Level Data Collection}
+\label{fig:rel_contrast}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img/zlt_rel_code_config.png}
+\caption{Echarts Options Configuration}
+\end{figure}
+
+\subsection{Node Labels}
+
+The labels of our nodes should show the paper's name and the labels of our links should show the name of the two papers in the reference relation. This work has already been finished when we are collecting the data. We set the label of the nodes to be exactly what we want to show to our users. A further step we took is to add hyper-links to every nodes and edges. Note that the name of every node is its PaperID, which can be directly applied to the URL, while the name of every link is composed of the reference node and the origin node. We use the string carving function in PHP to get the first 8 character, representing the reference node, so users can access the reference page by clicking the links.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img/zlt_rel_code_label.png}
+\caption{Create Hyper-links for Node Labels}
+\end{figure}
+
+
+\section{Big Charts using Gephi}
+
+gephi yhb
+
+
+
+\chapter {Beautify the Pages}
+
+\section {Index Beautification}
+
+fsh
+
+\section {Information Pages Beautification}
+
+zlt
+
+
+\chapter {MySQL Optimization in Affiliation Pages}
+
+zlt
+
+\end{document}
