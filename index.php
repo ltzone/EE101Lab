@@ -41,7 +41,7 @@
 	  <div class="col-md-8 col-md-offset-2 text-center">
 
 		<h1 class="probootstrap-heading probootstrap-animate">Smart Boy Search</h1>
-			<form class="form-horizontal" action="../../pages/search/search_info.php">
+			<form class="form-horizontal" action="pages/search/search_info.php">
 
 			  <div class="form-group">
 			    <div class="col-md-12 text-center">
