@@ -40,11 +40,12 @@ while True:
     if len(line) == 0 or len(line) ==1:
         break
     data = line[:-1].split('\t')
-    print(data)
+    # print(data)
     crusor.execute('INSERT INTO papers\
                     VALUES (%s, %s, %s, %s)', (data[0],data[1],data[2],data[3]))
     index += 1
-    if not (index % 1000):
+    if not (index % 5000):
+        print (("paper",index))
         conn.commit()
 f.close()
 conn.commit()
@@ -69,11 +70,12 @@ while True:
     if len(line) == 0 or len(line) ==1:
         break
     data = line[:-1].split('\t')
-    print(data)
+    # print(data)
     crusor.execute('INSERT INTO authors\
                     VALUES (%s, %s)', (data[0],data[1]))
     index += 1
-    if not (index % 1000):
+    if not (index % 5000):
+        print (("authors",index))
         conn.commit()
 f.close()
 conn.commit()
@@ -96,11 +98,12 @@ while True:
     if len(line) == 0 or len(line) ==1:
         break
     data = line[:-1].split('\t')
-    print(data)
+    # print(data)
     crusor.execute('INSERT INTO conferences\
                     VALUES (%s, %s)', (data[0],data[1]))
     index += 1
-    if not (index % 1000):
+    if not (index % 5000):
+        print (("conferences",index))
         conn.commit()
 f.close()
 conn.commit()
@@ -124,11 +127,12 @@ while True:
     if len(line) == 0 or len(line) ==1:
         break
     data = line[:-1].split('\t')
-    print(data)
+    # print(data)
     crusor.execute('INSERT INTO affiliations\
                     VALUES (%s, %s)', (data[0],data[1]))
     index += 1
-    if not (index % 1000):
+    if not (index % 5000):
+        print (("affiliations",index))
         conn.commit()
 f.close()
 conn.commit()
@@ -151,11 +155,12 @@ while True:
     if len(line) == 0 or len(line) ==1:
         break
     data = line[:-1].split('\t')
-    print(data)
+    # print(data)
     crusor.execute('INSERT INTO paper_reference2\
                     VALUES (%s, %s)', (data[0],data[1]))
     index += 1
-    if not (index % 1000):
+    if not (index % 5000):
+        print (("paper_reference",index))
         conn.commit()
 f.close()
 conn.commit()
@@ -180,7 +185,7 @@ while True:
     if len(line) == 0 or len(line) ==1:
         break
     data = line[:-1].split('\t')
-    print(data)
+    # print(data)
     if data[2] == 'None':
         crusor.execute('INSERT INTO paper_author_affiliation\
                        VALUES (%s, %s, NULL, %s)', (data[0],data[1],data[3]))
@@ -188,7 +193,8 @@ while True:
         crusor.execute('INSERT INTO paper_author_affiliation\
                        VALUES (%s, %s, %s, %s)', (data[0],data[1],data[2],data[3]))
     index += 1
-    if not (index % 1000):
+    if not (index % 5000):
+        print (("paper_author_affiliation",index))
         conn.commit()
 f.close()
 conn.commit()
