@@ -18,7 +18,7 @@ get_AuthorName_fromID = 'SELECT `AuthorName` FROM `authors` WHERE `AuthorID` = %
 
 solr.delete(q='*:*')
 solr.commit()
-f = open('D:/SQLLab/data/papers.txt','r', encoding='UTF-8')
+f = open('data/papers.txt','r', encoding='UTF-8')
 index = 0
 while True:
     line = f.readline()
