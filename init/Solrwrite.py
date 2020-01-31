@@ -1,5 +1,5 @@
 import pysolr
-solr = pysolr.Solr('http://localhost:8983/solr/FINAL',timeout=100)
+solr = pysolr.Solr('http://localhost:8983/solr/EELAB1',timeout=100)
 
 import pymysql
 
@@ -8,7 +8,7 @@ conn = pymysql.connect( host='127.0.0.1',
                         user='root',
                         passwd='',
                         charset='utf8',
-                        db='FINAL',)
+                        db='EELAB1',)
 crusor = conn.cursor()
 
 get_ConferenceName_fromID = 'SELECT `ConferenceName` FROM `conferences` WHERE `ConferenceID` = %s'

@@ -9,7 +9,7 @@ conn = pymysql.connect( host='127.0.0.1',
 crusor = conn.cursor()
 
 # create the database
-
+crusor.execute('drop database EELAB1')
 crusor.execute('create database EELAB1 character set UTF8mb4 collate utf8mb4_general_ci')
 
 conn = pymysql.connect( host='127.0.0.1',
