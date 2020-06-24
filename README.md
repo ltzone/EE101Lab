@@ -21,16 +21,17 @@ See https://github.com/ltzone/EE101Lab/blob/master/report/report.pdf
    - run Solr on your JVM
    - Copy `~\solr-8.0.0\solr-8.0.0\server\solr\configsets\_default` to `~\solr-8.0.0\solr-8.0.0\server\solr\new_core` which is just created.
    - login to the 8983 port in your browser, create a `new_core`, add the following schemas in the core
-FieldName	|Type	|Indexed	|Stored 	|Multi-valued	|Required
----|--|--|--|--|--
-PaperID 	|string 	|Y 	|Y 	|N 		|Y
-PaperName 	|text en 	|Y 	|Y 	|N 		|Y
-AuthorID 	|string 	|Y 	|Y 	|Y 		|Y
-AuthorName 	|text en 	|Y 	|Y 	|Y 		|Y
-ConferenceID 	|string 	|Y 	|Y 	|N 		|Y
-ConferenceName 	|text en 	|Y 	|Y 	|N 		|Y
-Year 		|string 	|Y 	|Y 	|N 		|Y
-keyword	| text_en | Y |Y |Y |N 
+
+|FieldName	|Type	|Indexed	|Stored 	|Multi-valued	|Required |
+|---|--|--|--|--|--|
+|PaperID 	|string 	|Y 	|Y 	|N 		|Y|
+|PaperName 	|text en 	|Y 	|Y 	|N 		|Y|
+|AuthorID 	|string 	|Y 	|Y 	|Y 		|Y|
+|AuthorName 	|text en 	|Y 	|Y 	|Y 		|Y|
+|ConferenceID 	|string 	|Y 	|Y 	|N 		|Y|
+|ConferenceName 	|text en 	|Y 	|Y 	|N 		|Y|
+|Year 		|string 	|Y 	|Y 	|N 		|Y|
+|keyword	| text_en | Y |Y |Y |N |
 
     - add copy field (3 times)
       - source: PaperName  destination: keyword
